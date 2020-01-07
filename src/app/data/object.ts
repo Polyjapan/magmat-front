@@ -6,6 +6,19 @@ export enum ObjectStatus {
   IN_STOCK = 'InStock', OUT = 'Out', LOST = 'Lost', RESTING = 'Resting'
 }
 
+export function statusToString(status: ObjectStatus) {
+  switch (status) {
+    case ObjectStatus.IN_STOCK:
+      return 'En stock';
+    case ObjectStatus.LOST:
+      return 'Perdu';
+    case ObjectStatus.OUT:
+      return 'Prêté';
+    case ObjectStatus.RESTING:
+      return 'Déposé';
+  }
+}
+
 export class SingleObject {
   objectId?: number;
   objectTypeId: number;

@@ -16,7 +16,6 @@ import Swal from 'sweetalert2';
 export class ShowObjectTypeComponent implements OnInit {
   objectType: CompleteObjectType;
   storageLocationToString = storageLocationToString;
-  externalLoanToString = externalLoanToString;
   objects = new MatTableDataSource<CompleteObject>();
   // Quick object creation
   prefix: string;

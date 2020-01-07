@@ -10,10 +10,11 @@ import {map} from 'rxjs/operators';
   styleUrls: ['./select-storage.component.css']
 })
 export class SelectStorageComponent implements OnInit {
-  @Input('label') label: string;
-  @Input('type') type: 'select' | 'input' = 'select';
-  @Input('selected') selected: number;
-  @Output('selectedChange') selectedChange = new EventEmitter<number>();
+  @Input() label: string;
+  @Input() emptyLabel: string = 'Aucun';
+  @Input() type: 'select' | 'input' = 'select';
+  @Input() selected: number;
+  @Output() selectedChange = new EventEmitter<number>();
   @Input('inconv') inconv: boolean = undefined;
 
   locations: StorageLocation[] = [];

@@ -21,11 +21,11 @@ export function loanStateToText(loanState: LoanState) {
   }
 }
 
-export function externalLoanToString(loan: CompleteExternalLoan) {
+export function externalLoanToString(loan: CompleteExternalLoan, defaultValue: string = '') {
   if (loan) {
     return loan.lender.name + ' (' + loan.lender.location + ')';
   }
-  return '';
+  return defaultValue;
 }
 
 export class ExternalLoan {

@@ -19,14 +19,8 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './create-object-type.component.html',
   styleUrls: ['./create-object-type.component.css']
 })
-export class CreateObjectTypeComponent implements OnInit, AfterViewInit {
+export class CreateObjectTypeComponent implements OnInit {
   type = new ObjectType();
-
-  inconvStorages: StorageLocation[] = [];
-
-  @ViewChild('inconvLocationInput', {static: false}) inconvLocationInput: NgModel;
-  @ViewChild('locationInput', {static: false}) locationInput: NgModel;
-  @ViewChild('loanInput', {static: false}) loanInput: NgModel;
   sending = false;
 
   constructor(private objects: ObjectsService, private storagesService: StorageLocationsService, private loansService: LoansService,
@@ -38,17 +32,6 @@ export class CreateObjectTypeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.storagesService.getStorageLocations().subscribe(storages => {
-      storages.forEach(s => {
-        if (s.inConv) {
-          this.inconvStorages.push(s);
-        } else {
-          this.storages.push(s);
-        }
-        this.storagesMap.set(s.storageLocationId, s);
-      });
-    });
-
     this.route.paramMap.subscribe(map => {
       if (map.has('typeId')) {
         this.type = undefined;
@@ -56,13 +39,6 @@ export class CreateObjectTypeComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-  ngAfterViewInit() {
-    this.inconvLocationInput.control.setValidators(this.validator(this.storagesMap));
-    this.locationInput.control.setValidators(this.validator(this.storagesMap));
-  }
-
-
 
   create(next: 'stay' | 'scan' | 'list' | 'page') {
     if (this.sending) {
@@ -100,9 +76,5 @@ export class CreateObjectTypeComponent implements OnInit, AfterViewInit {
         timerProgressBar: true
       });
     });
-  }
-
-  private validator(map: Map<number, any>) {
-    return (control) => control.value && (typeof (control.value) !== 'number' || !map.has(control.value as number)) ? {valid: false} : null;
   }
 }

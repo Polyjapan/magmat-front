@@ -11,6 +11,7 @@ import {map} from 'rxjs/operators';
 })
 export class SelectLoanComponent implements OnInit {
   @Input('label') label: string;
+  @Input('emptyLabel') emptyLabel: string = 'Aucun';
   @Input('type') type: 'select' | 'input' = 'select';
   @Input('selected') selected: number;
   @Output('selectedChange') selectedChange = new EventEmitter<number>();

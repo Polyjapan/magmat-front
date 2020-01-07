@@ -1,0 +1,6 @@
+<mat-form-field style="width: 100%;">
+  <mat-label>{{label}}</mat-label>
+  <input matInput placeholder="ID utilisateur (141) ou s + numéro staff (s19)" [ngModel]="selected" #input="ngModel" (ngModelChange)="update($event)" name="staff">
+  <mat-error>Aucun utilisateur trouvé avec cette identification</mat-error>
+</mat-form-field>
+<p *ngIf="currentProfile">Utilisateur trouvé : <b>{{currentProfile.details.firstName}} {{currentProfile.details.lastName}}</b> {{currentProfile.email}}</p>

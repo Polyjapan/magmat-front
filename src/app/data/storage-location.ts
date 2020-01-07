@@ -7,11 +7,11 @@ export class StorageLocation {
   location: string;
 }
 
-export function storageLocationToString(loc: StorageLocation) {
+export function storageLocationToString(loc: StorageLocation, defaultValue: string = '') {
   if (!loc) {
-    return '';
+    return defaultValue;
   }
 
   const level2 = loc.space + ' > ' + loc.location;
-  return loc.inConv ? level2 : loc.room + ' > ' + level2;
+  return loc.room ? loc.room + ' > ' + level2 : level2;
 }

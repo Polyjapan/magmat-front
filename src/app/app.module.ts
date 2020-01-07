@@ -32,6 +32,8 @@ import {FormsModule} from '@angular/forms';
 import { ShowObjectTypeComponent } from './components/show-object-type/show-object-type.component';
 import { SelectLoanComponent } from './components/selectors/select-loan/select-loan.component';
 import { SelectStorageComponent } from './components/selectors/select-storage/select-storage.component';
+import { ObjectComponent } from './components/object/object.component';
+import { SelectUserComponent } from './components/selectors/select-user/select-user.component';
 
 function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -49,7 +51,9 @@ function tokenGetter() {
     CreateExternalLoanComponent,
     ShowObjectTypeComponent,
     SelectLoanComponent,
-    SelectStorageComponent
+    SelectStorageComponent,
+    ObjectComponent,
+    SelectUserComponent
   ],
   imports: [
     BrowserModule,

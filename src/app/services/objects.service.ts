@@ -7,7 +7,8 @@ import {StorageLocationsService} from './storage-locations.service';
 import {of, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
-import {CompleteObject, ObjectCreateResult, SingleObject} from '../data/object';
+import {CompleteObject, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
+import {CompleteObjectLog} from '../data/object-log';
 
 @Injectable({providedIn: 'root'})
 export class ObjectsService {
@@ -38,10 +39,22 @@ export class ObjectsService {
   // Objects
   getObjectsForType(typeId: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-type/complete/' + typeId);
+  }
 
+  getObjectLogs(typeId: number): Observable<CompleteObjectLog[]> {
+    return this.http.get<CompleteObjectLog[]>(environment.apiurl + '/objects/logs/' + typeId);
+  }
+
+  getObjectById(objectId: number): Observable<CompleteObject> {
+    return this.http.get<CompleteObject>(environment.apiurl + '/objects/complete/' + objectId);
   }
 
   createObjects(objects: SingleObject[]): Observable<ObjectCreateResult> {
     return this.http.post<ObjectCreateResult>(environment.apiurl + '/objects/', objects);
+  }
+
+  changeState(objectId: number, targetState: ObjectStatus, user: number): Observable<void> {
+    return this.http.put<void>(environment.apiurl + '/objects/state/' + objectId,
+      {targetState, userId: user});
   }
 }

@@ -8,6 +8,7 @@ import {ObjectTypesComponent} from './components/object-types/object-types.compo
 import {CreateObjectTypeComponent} from './components/create-object-type/create-object-type.component';
 import {CreateExternalLoanComponent} from './components/create-external-loan/create-external-loan.component';
 import {ShowObjectTypeComponent} from './components/show-object-type/show-object-type.component';
+import {ObjectComponent} from './components/object/object.component';
 
 
 const routes: Routes = [
@@ -18,9 +19,13 @@ const routes: Routes = [
   // Protected paths
 
   {path: 'object-types', component: ObjectTypesComponent, canActivate: [PermissionAuthGuard]},
+  {path: 'objects/:id', component: ObjectComponent, canActivate: [PermissionAuthGuard]},
   {path: 'object-types/create', component: CreateObjectTypeComponent, canActivate: [PermissionAuthGuard]},
   {path: 'object-types/:typeId', component: ShowObjectTypeComponent, canActivate: [PermissionAuthGuard]},
   {path: 'object-types/edit/:typeId', component: CreateObjectTypeComponent, canActivate: [PermissionAuthGuard]},
+
+
+
   {path: 'external-loans', component: ObjectTypesComponent, canActivate: [PermissionAuthGuard]},
   {path: 'external-loans/create', component: CreateExternalLoanComponent, canActivate: [PermissionAuthGuard]},
   {
