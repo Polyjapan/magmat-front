@@ -1,0 +1,23 @@
+<mat-nav-list>
+  <a mat-list-item [class.active]="subUrl === ''" [routerLink]="['.']">
+    <mat-icon>home</mat-icon>
+    Homepage</a>
+  <a mat-list-item [class.active]="subUrl === 'object-types'" [routerLink]="['object-types']">
+    <mat-icon>emoji_objects</mat-icon>
+    Objets</a>
+  <a mat-list-item [class.active]="subUrl === 'loans'" [routerLink]="['loans']">
+    <mat-icon>receipt</mat-icon>
+    Prêts</a>
+  <a mat-list-item [class.active]="subUrl === 'staffs'" [routerLink]="['staffs']">
+    <mat-icon>storage</mat-icon>
+    Stockages</a>
+  <a mat-list-item [class.active]="subUrl === 'staffs'" [routerLink]="['staffs']">
+    <mat-icon>calendar_today</mat-icon>
+    Rendus</a>
+  <a mat-list-item [class.active]="subUrl === 'staffs'" [routerLink]="['staffs']">
+    <mat-icon>archive</mat-icon>
+    Rangement</a>
+  <a mat-list-item [class.active]="subUrl === 'staffs'" [routerLink]="['staffs']">
+    <mat-icon>event_seat</mat-icon>
+    Événements</a>
+</mat-nav-list>

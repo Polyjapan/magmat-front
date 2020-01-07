@@ -1,0 +1,14 @@
+<mat-form-field style="width: 100%;">
+<mat-label>{{label ? label : 'Lieu de rangement'}}</mat-label>
+  <ng-container *ngIf="type === 'select'">
+    <mat-select [ngModel]="selected" (ngModelChange)="selectedChange.emit($event)" name="storageLocation">
+      <mat-option [value]="null">
+        Aucun
+      </mat-option>
+      <mat-option *ngFor="let option of locations" [value]="option.storageLocationId">
+        {{ displayLocation(option) }}
+      </mat-option>
+    </mat-select>
+  </ng-container>
+
+</mat-form-field>

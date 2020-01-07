@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  apiurl: 'http://localhost:9000',
+  apidomain: 'localhost:9000',
+  baseUrl: 'http://localhost:4200',
+
+  auth: {
+    apiurl: 'https://auth.japan-impact.ch/',
+    clientId: '3lHGENIo0Kn0s1ynR2Q508E3ae000PLkIcgrNtKsUGs'
+  },
 };
 
 /*
