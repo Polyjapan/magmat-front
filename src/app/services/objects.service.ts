@@ -19,6 +19,10 @@ export class ObjectsService {
     return this.http.get<CompleteObjectType[]>(environment.apiurl + '/objects/types/complete');
   }
 
+  getObjectTypesForLoan(loan: number): Observable<ObjectType[]> {
+    return this.http.get<ObjectType[]>(environment.apiurl + '/objects/types/by-loan/' + loan);
+  }
+
   createOrUpdateObjectType(type: ObjectType): Observable<number> {
     if (type.objectTypeId) {
       const id = type.objectTypeId;
@@ -43,6 +47,10 @@ export class ObjectsService {
 
   getObjectsForLocation(location: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-location/complete/' + location);
+  }
+
+  getObjectsForLoan(loan: number): Observable<CompleteObject[]> {
+    return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-loan/complete/' + loan);
   }
 
   getObjectLogs(typeId: number): Observable<CompleteObjectLog[]> {

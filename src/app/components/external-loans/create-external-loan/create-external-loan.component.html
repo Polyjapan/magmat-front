@@ -13,7 +13,7 @@
 
     <mat-form-field>
       <mat-label>Description et détails sur le prêt</mat-label>
-      <textarea matInput placeholder="Attendu: 4 ordinateurs + 4 chargeurs"></textarea>
+      <textarea matInput placeholder="Attendu: 4 ordinateurs + 4 chargeurs" name="details" [(ngModel)]="loan.loanDetails"></textarea>
     </mat-form-field>
 
     <app-select-datetime [(selected)]="loan.pickupTime" label="Prise"></app-select-datetime>

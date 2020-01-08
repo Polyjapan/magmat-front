@@ -1,0 +1,152 @@
+<mat-spinner *ngIf="!loan"></mat-spinner>
+
+<ng-container *ngIf="loan">
+  <h1>Prêt de {{loan.lender.name}}</h1>
+
+  <div fxLayout.lt-md="column" fxLayout="row" fxLayoutGap="30px">
+    <div fxFlex.lt-md fxFlexOrder="2" fxFlexOrder.lt-md="0" [fxFlex]="isReturned ? '100%' : '30%'">
+      <mat-card>
+        <mat-card-title>Informations sur le prêt</mat-card-title>
+        <ul>
+          <li *ngIf="loan.externalLoan.loanDetails"><b>Description :</b> {{loan.externalLoan.loanDetails}}</li>
+          <li *ngIf="!isPickedUp"><b>Heure de prise :</b> {{dateFormat(loan.externalLoan.pickupTime)}}</li>
+          <li *ngIf="!isPickedUp"><b>Lieu de prise :</b> {{loan.externalLoan.pickupPlace}}</li>
+          <li *ngIf="isPickedUp && !isReturned"><b>Heure de retour :</b> {{dateFormat(loan.externalLoan.returnTime)}}
+          </li>
+          <li *ngIf="isPickedUp && !isReturned"><b>Lieu de retour :</b> {{loan.externalLoan.returnPlace}}</li>
+          <li><b>Etat :</b> {{loanStateToText(loan.externalLoan.status)}}</li>
+        </ul>
+
+        <br>
+
+        <ng-container *ngIf="isPickedUp && !isReturned">
+          <p *ngIf="!canGiveBack">Pour pouvoir rendre un prêt, tous ses objets doivent être en stock ou perdus. Assurez
+            vous de récupérer tous les objets avant de rendre !</p>
+
+          <button [disabled]="!canGiveBack || changingState" (click)="closeLoan()" mat-stroked-button>Marquer le prêt comme rendu</button>
+        </ng-container>
+
+        <ng-container *ngIf="!isPickedUp">
+          <button (click)="takeLoan()" [disabled]="changingState" mat-stroked-button>Marquer le prêt comme récupéré</button>
+        </ng-container>
+
+        <p *ngIf="isReturned">
+          Ce prêt a été retourné. Vous n'avez plus rien à faire !
+        </p>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-title>Informations sur le prêteur</mat-card-title>
+        <ul>
+          <li><b>Nom :</b> {{loan.lender.name}}</li>
+          <li *ngIf="loan.lender.description"><b>Description :</b> {{loan.lender.description}}</li>
+          <li><b>Téléphone :</b> {{loan.lender.phoneNumber}}</li>
+          <li><b>Email :</b> {{loan.lender.email}}</li>
+          <li><b>Localisation :</b> {{loan.lender.location}}</li>
+        </ul>
+      </mat-card>
+    </div>
+
+    <div fxFlex *ngIf="!isReturned">
+      <mat-card>
+        <mat-card-title>Objets du prêt</mat-card-title>
+
+        <table *ngIf="items" mat-table style="width: 100%;" [dataSource]="items">
+          <ng-container matColumnDef="tag">
+            <th mat-header-cell *matHeaderCellDef> Tag</th>
+            <td mat-cell *matCellDef="let elem"> {{elem.object.assetTag}} </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nom</th>
+            <td mat-cell *matCellDef="let elem"> {{elem.objectType.name}} {{elem.object.suffix}}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Etat</th>
+            <td mat-cell *matCellDef="let elem"> {{statusToString(elem.object.status)}} </td>
+          </ng-container>
+          <ng-container matColumnDef="see">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let elem">
+              <button [routerLink]="['/', 'objects', elem.object.objectId]" mat-button>Voir</button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['tag', 'name', 'status', 'see']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['tag', 'name', 'status','see'];"></tr>
+
+        </table>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-title>Ajout rapide d'objets</mat-card-title>
+        <p>Très pratique lors de la récupération d'un prêt, vous permet de rapidement inventorier le contenu d'un
+          prêt.</p>
+
+        <mat-form-field *ngIf="types" style="width: 100%;">
+          <mat-label>Choisissez un type d'objet...</mat-label>
+          <mat-select [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}">
+            <mat-option [value]="null">Choisir...</mat-option>
+            <mat-option *ngFor="let tpe of types" [value]="tpe">{{tpe.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <app-quick-item-create *ngIf="selectedType" [objectType]="selectedType"
+                               (createSuccess)="selectedType = undefined; refreshObjects()"></app-quick-item-create>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-title>Types d'objets du prêt</mat-card-title>
+        <p>Vous permet de lister ou créer rapidement des types d'objets qui sont directement liés à ce prêt. Si vous ne
+          connaissez pas encore la localisation, vous pourrez la modifier plus tard.</p>
+
+
+        <table *ngIf="types" mat-table [dataSource]="types" style="width: 100%;">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nom</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="inConvStorage">
+            <th mat-header-cell *matHeaderCellDef> Stockage en convention</th>
+            <td mat-cell *matCellDef="let element"> {{getStorageLocation(element.inconvStorageLocation)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-stroked-button [routerLink]="['/', 'object-types', element.objectTypeId]">Voir</button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['name', 'inConvStorage', 'actions']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['name', 'inConvStorage', 'actions'];"></tr>
+        </table>
+      </mat-card>
+      <mat-card>
+        <mat-card-title>Ajout rapide de type d'objet</mat-card-title>
+        <p>Utilisez le formulaire suivant pour créer rapidement un type d'objet qui sera directement ajouté au prêt.</p>
+
+        <form fxLayout="row" fxLayoutGap="20px" (ngSubmit)="create()">
+          <mat-form-field fxFlex>
+            <mat-label>Nom de l'objet</mat-label>
+            <input matInput placeholder="Transpalette" required [(ngModel)]="createdType.name" name="name">
+          </mat-form-field>
+
+          <mat-form-field fxFlex>
+            <mat-label>Description</mat-label>
+            <input matInput [(ngModel)]="createdType.description" name="description"/>
+          </mat-form-field>
+
+          <app-select-storage fxFlex [(selected)]="createdType.inconvStorageLocation" [inconv]="true"
+                              label="Rangement pendant JI (opt.)"></app-select-storage>
+
+          <button mat-button [disabled]="creating" (click)="create()">Créer</button>
+        </form>
+
+      </mat-card>
+
+    </div>
+  </div>
+
+
+</ng-container>

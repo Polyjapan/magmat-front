@@ -48,6 +48,10 @@ import { ExternalLoansComponent } from './components/external-loans/external-loa
 import { SelectLenderComponent } from './components/selectors/select-lender/select-lender.component';
 import { SelectDatetimeComponent } from './components/selectors/select-datetime/select-datetime.component';
 import { CreateLenderComponent } from './components/external-loans/create-lender/create-lender.component';
+import { ViewExternalLoanComponent } from './components/external-loans/view-external-loan/view-external-loan.component';
+import { QuickItemCreateComponent } from './components/quickboxes/quick-item-create/quick-item-create.component';
+import { QuickmoveComponent } from './components/quickboxes/quickmove/quickmove.component';
+import { ReturnsComponent } from './components/returns/returns.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -74,7 +78,11 @@ export function tokenGetter() {
     ExternalLoansComponent,
     SelectLenderComponent,
     SelectDatetimeComponent,
-    CreateLenderComponent
+    CreateLenderComponent,
+    ViewExternalLoanComponent,
+    QuickItemCreateComponent,
+    QuickmoveComponent,
+    ReturnsComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,

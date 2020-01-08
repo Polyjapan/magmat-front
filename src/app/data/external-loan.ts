@@ -34,8 +34,9 @@ export class ExternalLoan {
   eventId: number;
   pickupTime: Date;
   returnTime: Date;
-  pickupPlace: string;
-  returnPlace: string;
+  pickupPlace?: string;
+  returnPlace?: string;
+  loanDetails: string;
   status: LoanState;
 }
 

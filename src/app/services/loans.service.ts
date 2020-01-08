@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AsyncSubject, BehaviorSubject, Observable} from 'rxjs';
-import {CompleteExternalLoan, ExternalLoan} from '../data/external-loan';
+import {CompleteExternalLoan, ExternalLoan, LoanState} from '../data/external-loan';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 
@@ -27,6 +27,15 @@ export class LoansService {
     this.pullIfNeeded();
 
     return this.loans.pipe(map(loans => loans.filter(loan => loan.externalLoan.externalLoanId === id)[0]));
+  }
+
+  changeState(loan: number, targetState: LoanState): Observable<void> {
+    return this.http.put<void>(environment.apiurl + '/external-loans/' + loan + '/state',
+      {targetState});
+  }
+
+  getLoanDirect(id: number): Observable<CompleteExternalLoan> {
+    return this.http.get<CompleteExternalLoan>(environment.apiurl + '/external-loans/complete/' + id);
   }
 
   createLoan(loan: ExternalLoan): Observable<number> {

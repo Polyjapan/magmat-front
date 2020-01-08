@@ -48,25 +48,6 @@
   <h2>Ajout rapide d'objets</h2>
   <p>Les objets ainsi ajoutés auront tous leurs paramètres par défaut. Le suffixe de l'objet est généré à partir du préfixe de suffixe, et d'un numéro qui est incrémenté pour chaque objet ajouté. Le préfixe de suffixe est facultatif.</p>
   <p><i>Exemple: si le préfixe de suffixe est "Asus" et le numéro de départ "03", les objets auront pour nom <b>{{objectType.objectType.name}} Asus 03</b>, <b>{{objectType.objectType.name}} Asus 04</b>, ...</i></p>
-  <form>
-
-    <mat-form-field style="width: 80%">
-      <input matInput type="text" placeholder="Préfixe du suffixe" name="name" [(ngModel)]="prefix">
-    </mat-form-field>
-
-    <mat-form-field style="width: 80%">
-      <input matInput type="number" placeholder="Numéro de départ du suffixe" required name="startNumber" [(ngModel)]="suffixStart">
-    </mat-form-field>
-
-    <mat-form-field style="width: 80%">
-      <textarea matInput placeholder="Liste des asset tags (1 par ligne)" required name="assetTags" [(ngModel)]="tags"></textarea>
-    </mat-form-field>
-
-    <br>
-
-    <pre *ngIf="simulation">{{simulation}}</pre>
-
-    <button type="submit" (click)="postObjects()" [disabled]="sending" mat-raised-button color="primary">Créer les objets</button>
-  </form>
+  <app-quick-item-create [objectType]="objectType.objectType" (createSuccess)="refreshObjects()"></app-quick-item-create>
 
 </ng-container>
