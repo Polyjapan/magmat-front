@@ -9,6 +9,7 @@ import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {CompleteObject, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
 import {CompleteObjectLog} from '../data/object-log';
+import {TopTidyingTree} from '../data/tidying';
 
 @Injectable({providedIn: 'root'})
 export class ObjectsService {
@@ -17,6 +18,10 @@ export class ObjectsService {
 
   getObjectTypes(): Observable<CompleteObjectType[]> {
     return this.http.get<CompleteObjectType[]>(environment.apiurl + '/objects/types/complete');
+  }
+
+  getTidyingData(): Observable<TopTidyingTree> {
+    return this.http.get<TopTidyingTree>(environment.apiurl + '/objects/tidying');
   }
 
   getObjectTypesForLoan(loan: number): Observable<ObjectType[]> {
@@ -68,5 +73,9 @@ export class ObjectsService {
   changeState(objectId: number, targetState: ObjectStatus, user: number): Observable<void> {
     return this.http.put<void>(environment.apiurl + '/objects/state/' + objectId,
       {targetState, userId: user});
+  }
+
+  getObjects(): Observable<CompleteObject[]> {
+    return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/');
   }
 }

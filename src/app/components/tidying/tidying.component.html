@@ -1,0 +1,54 @@
+<h1>Aide au rangement</h1>
+
+<!-- Granularity 3 and 6 are probably safe to ignore -->
+
+<mat-spinner *ngIf="!tree"></mat-spinner>
+
+<ng-container *ngIf="tree">
+
+  <ng-container *ngFor="let line of tree.stored | keyvalue">
+    <h2>Salle : {{line.key}}</h2>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+
+      <div *ngFor="let space of line.value | keyvalue" fxFlex>
+        <mat-card>
+          <mat-card-title>{{space.key}}</mat-card-title>
+
+          <table>
+
+            <ng-container *ngFor="let loc of space.value | keyvalue">
+              <ng-container *ngFor="let storRoom of loc.value.stored | keyvalue">
+                <ng-container *ngFor="let storSpace of storRoom.value | keyvalue">
+                  <ng-container *ngFor="let storLoc of storSpace.value | keyvalue">
+                    <tr *ngFor="let item of storLoc.value">
+                      <td>{{displayObject(item)}}</td>
+                      <td><b>&rArr;</b></td>
+                      <td>{{storRoom.key}} > {{storSpace.key}} > {{storLoc.key}}</td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngFor="let loan of loc.value.loaned | keyvalue">
+                <tr *ngFor="let item of loan.value.objects">
+                  <td>{{displayObject(item)}}</td>
+                  <td><b>&rArr;</b></td>
+                  <td>Prêt de <i>{{loan.value.loan.lender.name}}</i> (<a [routerLink]="['/', 'external-loans', loan.value.loan.externalLoan.externalLoanId]">voir</a>) </td>
+                </tr>
+              </ng-container>
+              <tr *ngFor="let item of loc.value.unstored | keyvalue">
+                <td>{{displayObject(item)}}</td>
+                <td><b>&rArr;</b></td>
+                <td><i>emplacement inconnu</i></td>
+              </tr>
+            </ng-container>
+          </table>
+        </mat-card>
+
+      </div>
+    </div>
+
+    <br><hr><br>
+  </ng-container>
+
+</ng-container>

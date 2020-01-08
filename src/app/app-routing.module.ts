@@ -14,6 +14,7 @@ import {ShowStorageLocationComponent} from './components/storage-locations/show-
 import {ExternalLoansComponent} from './components/external-loans/external-loans.component';
 import {ViewExternalLoanComponent} from './components/external-loans/view-external-loan/view-external-loan.component';
 import {ReturnsComponent} from './components/returns/returns.component';
+import {TidyingComponent} from './components/tidying/tidying.component';
 
 
 const routes: Routes = [
@@ -33,6 +34,7 @@ const routes: Routes = [
 
   {path: 'objects/:id', component: ObjectComponent, canActivate: [PermissionAuthGuard]},
 
+  {path: 'tidying', component: TidyingComponent, canActivate: [PermissionAuthGuard]},
   {path: 'returns', component: ReturnsComponent, canActivate: [PermissionAuthGuard]},
 
   {path: 'external-loans', component: ExternalLoansComponent, canActivate: [PermissionAuthGuard]},

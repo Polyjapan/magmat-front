@@ -52,6 +52,7 @@ import { ViewExternalLoanComponent } from './components/external-loans/view-exte
 import { QuickItemCreateComponent } from './components/quickboxes/quick-item-create/quick-item-create.component';
 import { QuickmoveComponent } from './components/quickboxes/quickmove/quickmove.component';
 import { ReturnsComponent } from './components/returns/returns.component';
+import { TidyingComponent } from './components/tidying/tidying.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -82,7 +83,8 @@ export function tokenGetter() {
     ViewExternalLoanComponent,
     QuickItemCreateComponent,
     QuickmoveComponent,
-    ReturnsComponent
+    ReturnsComponent,
+    TidyingComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,

@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./show-storage-location.component.css']
 })
 export class ShowStorageLocationComponent implements OnInit {
-  private id: number;
+  id: number;
   location: StorageLocation;
   items: Observable<CompleteObject[]>;
   statusToString = statusToString;
