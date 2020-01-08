@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ObjectsService} from '../../services/objects.service';
-import {CompleteObjectType} from '../../data/object-type';
-import {storageLocationToString} from '../../data/storage-location';
-import {CompleteObject, ObjectStatus, SingleObject} from '../../data/object';
+import {ObjectsService} from '../../../services/objects.service';
+import {CompleteObjectType} from '../../../data/object-type';
+import {storageLocationToString} from '../../../data/storage-location';
+import {CompleteObject, ObjectStatus, SingleObject} from '../../../data/object';
 import {externalLoanToString} from 'src/app/data/external-loan';
 import {MatTableDataSource} from '@angular/material';
 import Swal from 'sweetalert2';

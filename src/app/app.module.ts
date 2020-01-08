@@ -16,7 +16,7 @@ import {
   MatSidenavModule,
   MatToolbarModule,
   MatListModule,
-  MatInputModule, MatAutocompleteModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, MatDialogModule
+  MatInputModule, MatAutocompleteModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, MatDialogModule, MatCheckboxModule
 }
   from '@angular/material';
 import {AppRoutingModule} from './app-routing.module';
@@ -26,14 +26,17 @@ import {FlexModule} from '@angular/flex-layout';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ObjectTypesComponent } from './components/object-types/object-types.component';
-import { CreateObjectTypeComponent } from './components/create-object-type/create-object-type.component';
+import { CreateObjectTypeComponent } from './components/object-types/create-object-type/create-object-type.component';
 import { CreateExternalLoanComponent } from './components/create-external-loan/create-external-loan.component';
 import {FormsModule} from '@angular/forms';
-import { ShowObjectTypeComponent } from './components/show-object-type/show-object-type.component';
+import { ShowObjectTypeComponent } from './components/object-types/show-object-type/show-object-type.component';
 import { SelectLoanComponent } from './components/selectors/select-loan/select-loan.component';
 import { SelectStorageComponent } from './components/selectors/select-storage/select-storage.component';
-import { ObjectComponent } from './components/object/object.component';
+import { ObjectComponent } from './components/object-types/object/object.component';
 import { SelectUserComponent } from './components/selectors/select-user/select-user.component';
+import { StorageLocationsComponent } from './components/storage-locations/storage-locations.component';
+import { CreateStorageLocationComponent } from './components/storage-locations/create-storage-location/create-storage-location.component';
+import { ShowStorageLocationComponent } from './components/storage-locations/show-storage-location/show-storage-location.component';
 
 function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -53,7 +56,13 @@ function tokenGetter() {
     SelectLoanComponent,
     SelectStorageComponent,
     ObjectComponent,
-    SelectUserComponent
+    SelectUserComponent,
+    StorageLocationsComponent,
+    CreateStorageLocationComponent,
+    ShowStorageLocationComponent
+  ],
+  entryComponents: [
+    CreateStorageLocationComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +91,7 @@ function tokenGetter() {
     MatTableModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatCheckboxModule,
 
   ],
   providers: [

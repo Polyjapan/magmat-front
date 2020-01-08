@@ -41,6 +41,10 @@ export class ObjectsService {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-type/complete/' + typeId);
   }
 
+  getObjectsForLocation(location: number): Observable<CompleteObject[]> {
+    return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-location/complete/' + location);
+  }
+
   getObjectLogs(typeId: number): Observable<CompleteObjectLog[]> {
     return this.http.get<CompleteObjectLog[]>(environment.apiurl + '/objects/logs/' + typeId);
   }

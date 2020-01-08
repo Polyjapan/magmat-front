@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {CompleteObject, ObjectStatus, statusToString} from '../../data/object';
-import {ObjectsService} from '../../services/objects.service';
+import {CompleteObject, ObjectStatus, statusToString} from '../../../data/object';
+import {ObjectsService} from '../../../services/objects.service';
 import {ActivatedRoute} from '@angular/router';
-import {storageLocationToString} from '../../data/storage-location';
+import {storageLocationToString} from '../../../data/storage-location';
 import {externalLoanToString} from 'src/app/data/external-loan';
-import {CompleteObjectLog, ObjectLog} from '../../data/object-log';
-import {UserProfile} from '../../data/user';
+import {CompleteObjectLog, ObjectLog} from '../../../data/object-log';
+import {UserProfile} from '../../../data/user';
 import Swal from 'sweetalert2';
 
 @Component({

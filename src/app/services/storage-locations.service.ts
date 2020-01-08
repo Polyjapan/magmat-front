@@ -38,6 +38,16 @@ export class StorageLocationsService {
     return this.locations.pipe(map(locations => locations.filter(loc => loc.storageLocationId === num)[0]));
   }
 
+  createStorage(loc: StorageLocation): Observable<void> {
+    return this.http.post<void>(environment.apiurl + '/locations', loc);
+  }
+
+  moveItems(loc: number, items: string[], moveType: boolean, moveAll: boolean): Observable<void> {
+    return this.http.post<void>(environment.apiurl + '/locations/move/' + loc, {
+      items, moveType, moveAll
+    });
+  }
+
   getStorageLocations(inConv?: boolean): Observable<StorageLocation[]> {
     this.pullIfNeeded();
 

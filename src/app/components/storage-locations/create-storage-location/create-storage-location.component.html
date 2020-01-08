@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Créer un nouveau stockage</h2>
+
+<form mat-dialog-content (ngSubmit)="submit($event)" #ngform="ngForm">
+
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Pièce" [(ngModel)]="storageLocation.room" name="room" required maxlength="100">
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Stockage (armoire...)" [(ngModel)]="storageLocation.space" name="space" required maxlength="100">
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Lieu précis (étagère, boite, ...)" [(ngModel)]="storageLocation.location" name="location" required maxlength="100">
+  </mat-form-field>
+
+  <mat-checkbox name="inConv" [(ngModel)]="storageLocation.inConv">
+    Lieu de stockage durant la convention
+  </mat-checkbox>
+
+  <br><br>
+
+  <button mat-raised-button color="primary" type="submit" style="width: 100%;" [disabled]="sending || !ngform.form.valid">
+    Créer
+    <mat-progress-spinner *ngIf="sending" mode="indeterminate" diameter="20" class="spinner"></mat-progress-spinner>
+  </button>
+
+</form>

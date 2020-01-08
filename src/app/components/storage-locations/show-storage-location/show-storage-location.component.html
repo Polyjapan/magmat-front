@@ -1,0 +1,90 @@
+<mat-spinner *ngIf="!location"></mat-spinner>
+
+<ng-container *ngIf="location">
+  <h1>Emplacement {{location.room}} > {{location.space}} > {{location.location}}</h1>
+
+  <p>Cet emplacement est un emplacement de stockage
+    <b>{{location.inConv ? 'durant la convention' : 'hors de la convention'}}</b>.</p>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="25px">
+    <div fxFlex>
+      <mat-card>
+        <mat-card-title>Liste des objets présents</mat-card-title>
+
+        <table mat-table style="width: 100%;" [dataSource]="items | async">
+          <ng-container matColumnDef="tag">
+            <th mat-header-cell *matHeaderCellDef> Tag</th>
+            <td mat-cell *matCellDef="let elem"> {{elem.object.assetTag}} </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nom</th>
+            <td mat-cell *matCellDef="let elem"> {{elem.objectType.name}} {{elem.object.suffix}}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Etat</th>
+            <td mat-cell *matCellDef="let elem"> {{statusToString(elem.object.status)}} </td>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Type</th>
+            <td mat-cell *matCellDef="let elem"> {{isInherited(elem) ? 'Emplacement hérité' : 'Emplacement fixé sur l\'objet'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="see">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let elem">
+              <button [routerLink]="['/', 'objects', elem.object.objectId]" mat-button>Voir</button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['tag', 'name', 'status', 'type', 'see']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['tag', 'name', 'status', 'type','see'];"></tr>
+
+        </table>
+      </mat-card>
+    </div>
+
+    <div fxFlex>
+      <mat-card>
+        <mat-card-title>Déplacement rapide</mat-card-title>
+
+        <p>Utilisez le formulaire suivant pour rapidement déplacer des objets dans ce nouveau stockage.
+          Scannez les asset tag des objets à déplacer dans le champ de texte suivant (un par ligne), et envoyez pour
+          déplacer tous ces objets d'un coup.</p>
+        <p>
+          Si vous souhaitez changer l'emplacement du type d'objet et pas seulement de l'objet scanné (exemple : changer
+          l'emplacement du type Laptop en scannant le laptop 10), cochez "Changer l'emplacement du type d'objet".
+          <br>Cela ne déplacera cependant pas les objets dont l'emplacement a été défini manuellement (par exemple, si
+          le laptop 10 a précédemment été indiqué à un emplacement différent du type Laptop, alors il ne sera pas
+          déplacé). Si vous voulez que ces objets soient déplacés aussi, alors cochez la case "Déplacer tous les objets
+          du même type".
+        </p>
+
+        <form (ngSubmit)="moveObjects()">
+          <mat-form-field style="width: 100%;">
+            <textarea placeholder="Objets à déplacer (un code par ligne)" name="quickMoveArea" [(ngModel)]="quickMoveArea" matInput></textarea>
+          </mat-form-field>
+
+          <mat-checkbox name="moveType" [(ngModel)]="moveType">
+            Changer l'emplacement du type d'objet
+          </mat-checkbox>
+
+          <br>
+
+          <mat-checkbox name="moveAll" [disabled]="!moveType" [(ngModel)]="moveAllOfType">
+            Déplacer tous les objets du même type
+          </mat-checkbox>
+
+          <br><br>
+
+          <button mat-raised-button color="accent" type="submit" style="width: 100%;" [disabled]="sending">
+            Déplacer les {{ moveType ? 'types d\'objets' : 'objets'}}
+            <mat-progress-spinner *ngIf="sending" mode="indeterminate" diameter="20"
+                                  class="spinner"></mat-progress-spinner>
+          </button>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+
+  <br>
+
+</ng-container>
