@@ -29,8 +29,8 @@ export function externalLoanToString(loan: CompleteExternalLoan, defaultValue: s
 }
 
 export class ExternalLoan {
-  externalLoanId: number;
-  externalLender?: number;
+  externalLoanId?: number;
+  externalLenderId?: number;
   eventId: number;
   pickupTime: Date;
   returnTime: Date;

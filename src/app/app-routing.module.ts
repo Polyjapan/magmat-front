@@ -6,11 +6,12 @@ import {PermissionAuthGuard} from './services/permission-auth-guard.service';
 import {NotFoundComponent} from './components/not-found/not-found.component';
 import {ObjectTypesComponent} from './components/object-types/object-types.component';
 import {CreateObjectTypeComponent} from './components/object-types/create-object-type/create-object-type.component';
-import {CreateExternalLoanComponent} from './components/create-external-loan/create-external-loan.component';
+import {CreateExternalLoanComponent} from './components/external-loans/create-external-loan/create-external-loan.component';
 import {ShowObjectTypeComponent} from './components/object-types/show-object-type/show-object-type.component';
 import {ObjectComponent} from './components/object-types/object/object.component';
 import {StorageLocationsComponent} from './components/storage-locations/storage-locations.component';
 import {ShowStorageLocationComponent} from './components/storage-locations/show-storage-location/show-storage-location.component';
+import {ExternalLoansComponent} from './components/external-loans/external-loans.component';
 
 
 const routes: Routes = [
@@ -30,7 +31,7 @@ const routes: Routes = [
 
   {path: 'objects/:id', component: ObjectComponent, canActivate: [PermissionAuthGuard]},
 
-  {path: 'external-loans', component: ObjectTypesComponent, canActivate: [PermissionAuthGuard]},
+  {path: 'external-loans', component: ExternalLoansComponent, canActivate: [PermissionAuthGuard]},
   {path: 'external-loans/create', component: CreateExternalLoanComponent, canActivate: [PermissionAuthGuard]},
   {
     path: '**',

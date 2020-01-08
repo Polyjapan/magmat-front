@@ -44,7 +44,6 @@ export class ObjectComponent implements OnInit {
     const date = log.objectLog.timestamp;
 
     if (typeof date === 'string') {
-      console.log(Date.parse(date));
       return new Date(Date.parse(date)).toLocaleString();
     } else {
       return date.toLocaleString();

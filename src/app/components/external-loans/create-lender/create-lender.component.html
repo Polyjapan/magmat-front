@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{isUpdate ? 'Modifier' : 'Créer'}} un prêteur</h2>
+
+<form mat-dialog-content (ngSubmit)="submit($event)" #ngform="ngForm">
+
+  <!--
+
+  name: string;
+  description: string;
+  phoneNumber: string;
+  email: string;
+  location: string;
+
+  -->
+
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Nom du prêteur" [(ngModel)]="lender.name" name="name" required maxlength="150">
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%;">
+    <textarea matInput placeholder="Description" [(ngModel)]="lender.description" name="description">
+    </textarea>
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Emplacement (adresse/salle)" [(ngModel)]="lender.location" name="location" required>
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Téléphone" [(ngModel)]="lender.phoneNumber" name="name" required>
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="EMail" [(ngModel)]="lender.email" name="email" type="email" required>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" style="width: 100%;" [disabled]="sending || !ngform.form.valid">
+    Créer
+    <mat-progress-spinner *ngIf="sending" mode="indeterminate" diameter="20" class="spinner"></mat-progress-spinner>
+  </button>
+
+</form>

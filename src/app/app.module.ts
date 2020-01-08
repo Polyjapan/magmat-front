@@ -16,7 +16,14 @@ import {
   MatSidenavModule,
   MatToolbarModule,
   MatListModule,
-  MatInputModule, MatAutocompleteModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, MatDialogModule, MatCheckboxModule
+  MatInputModule,
+  MatAutocompleteModule,
+  MatSelectModule,
+  MatTableModule,
+  MatProgressSpinnerModule,
+  MatDialogModule,
+  MatCheckboxModule,
+  MatDatepickerModule, MatNativeDateModule
 }
   from '@angular/material';
 import {AppRoutingModule} from './app-routing.module';
@@ -27,7 +34,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ObjectTypesComponent } from './components/object-types/object-types.component';
 import { CreateObjectTypeComponent } from './components/object-types/create-object-type/create-object-type.component';
-import { CreateExternalLoanComponent } from './components/create-external-loan/create-external-loan.component';
+import { CreateExternalLoanComponent } from './components/external-loans/create-external-loan/create-external-loan.component';
 import {FormsModule} from '@angular/forms';
 import { ShowObjectTypeComponent } from './components/object-types/show-object-type/show-object-type.component';
 import { SelectLoanComponent } from './components/selectors/select-loan/select-loan.component';
@@ -37,6 +44,10 @@ import { SelectUserComponent } from './components/selectors/select-user/select-u
 import { StorageLocationsComponent } from './components/storage-locations/storage-locations.component';
 import { CreateStorageLocationComponent } from './components/storage-locations/create-storage-location/create-storage-location.component';
 import { ShowStorageLocationComponent } from './components/storage-locations/show-storage-location/show-storage-location.component';
+import { ExternalLoansComponent } from './components/external-loans/external-loans.component';
+import { SelectLenderComponent } from './components/selectors/select-lender/select-lender.component';
+import { SelectDatetimeComponent } from './components/selectors/select-datetime/select-datetime.component';
+import { CreateLenderComponent } from './components/external-loans/create-lender/create-lender.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -59,10 +70,15 @@ export function tokenGetter() {
     SelectUserComponent,
     StorageLocationsComponent,
     CreateStorageLocationComponent,
-    ShowStorageLocationComponent
+    ShowStorageLocationComponent,
+    ExternalLoansComponent,
+    SelectLenderComponent,
+    SelectDatetimeComponent,
+    CreateLenderComponent
   ],
   entryComponents: [
-    CreateStorageLocationComponent
+    CreateStorageLocationComponent,
+    CreateLenderComponent
   ],
   imports: [
     BrowserModule,
@@ -74,6 +90,7 @@ export function tokenGetter() {
     MatIconModule,
     MatToolbarModule,
     MatButtonModule,
+    MatNativeDateModule,
 
     JwtModule.forRoot({
       config: {
@@ -92,6 +109,7 @@ export function tokenGetter() {
     MatProgressSpinnerModule,
     MatDialogModule,
     MatCheckboxModule,
+    MatDatepickerModule,
 
   ],
   providers: [
