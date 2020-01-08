@@ -1,12 +1,12 @@
 export const environment = {
   production: true,
 
-  apiurl: 'https://inventory.japan-impact.ch/api/',
-  baseUrl: 'https://inventory.japan-impact.ch',
-  apidomain: 'inventory.japan-impact.ch',
+  apiurl: 'https://magmat.japan-impact.ch/api/',
+  baseUrl: 'https://magmat.japan-impact.ch',
+  apidomain: 'magmat.japan-impact.ch',
 
   auth: {
     apiurl: 'https://auth.japan-impact.ch/',
-    clientId: 'O9xVmbgNpmwA_TA1rCllb_RJPja2C8PcBdRMKYP7tkw'
+    clientId: 'C3dTeDb6bxxcEu93ajIMUiaoukaBjYvC5RKJT3CJ8ws'
   },
 };

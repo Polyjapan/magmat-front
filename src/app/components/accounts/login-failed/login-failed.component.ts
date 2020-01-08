@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./login-failed.component.css']
 })
 export class LoginFailedComponent implements OnInit {
-  private details: string;
+  details: string;
   constructor(private router: ActivatedRoute) { }
 
   ngOnInit() {

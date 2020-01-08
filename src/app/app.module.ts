@@ -38,7 +38,7 @@ import { StorageLocationsComponent } from './components/storage-locations/storag
 import { CreateStorageLocationComponent } from './components/storage-locations/create-storage-location/create-storage-location.component';
 import { ShowStorageLocationComponent } from './components/storage-locations/show-storage-location/show-storage-location.component';
 
-function tokenGetter() {
+export function tokenGetter() {
   return localStorage.getItem('id_token');
 }
 
