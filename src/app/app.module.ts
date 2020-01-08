@@ -53,6 +53,9 @@ import { QuickItemCreateComponent } from './components/quickboxes/quick-item-cre
 import { QuickmoveComponent } from './components/quickboxes/quickmove/quickmove.component';
 import { ReturnsComponent } from './components/returns/returns.component';
 import { TidyingComponent } from './components/tidying/tidying.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
+import { SelectObjectComponent } from './components/selectors/select-object/select-object.component';
+import { QuickChangestateComponent } from './components/quickboxes/quick-changestate/quick-changestate.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -84,7 +87,10 @@ export function tokenGetter() {
     QuickItemCreateComponent,
     QuickmoveComponent,
     ReturnsComponent,
-    TidyingComponent
+    TidyingComponent,
+    HomepageComponent,
+    SelectObjectComponent,
+    QuickChangestateComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,

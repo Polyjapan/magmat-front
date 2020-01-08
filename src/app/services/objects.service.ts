@@ -78,4 +78,8 @@ export class ObjectsService {
   getObjects(): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/');
   }
+
+  getObjectByTag(tag: string) {
+    return this.http.get<CompleteObject>(environment.apiurl + '/objects/by-tag/' + tag);
+  }
 }

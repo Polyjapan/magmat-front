@@ -19,10 +19,9 @@ export class ObjectComponent implements OnInit {
   externalLoanToString = externalLoanToString;
   storageLocationToString = storageLocationToString;
   statusToString = statusToString;
-  logs: CompleteObjectLog[];
-  ObjectStatus = ObjectStatus;
 
-  lendTo: UserProfile;
+  logs: CompleteObjectLog[];
+
 
   constructor(private service: ObjectsService, private route: ActivatedRoute) { }
 
@@ -38,8 +37,6 @@ export class ObjectComponent implements OnInit {
     this.service.getObjectLogs(this.id).subscribe(obj => this.logs = obj);
   }
 
-  sending = false;
-
   dateFormat(log: CompleteObjectLog) {
     const date = log.objectLog.timestamp;
 
@@ -50,60 +47,4 @@ export class ObjectComponent implements OnInit {
     }
   }
 
-  private changeState(targetState: ObjectStatus) {
-    if (!this.lendTo)
-      return;
-
-    if (this.sending) {
-      return;
-    }
-    this.sending = true;
-    const userId = this.lendTo.id;
-
-    Swal.fire({
-      titleText: 'Confirmer le changement d\'état',
-      html: 'Voulez vous confirmer le passage de l\'objet à l\'état <b>' + statusToString(targetState) + '</b> pour l\'utilisateur <b>' + this.lendTo.details.firstName + ' ' + this.lendTo.details.lastName + '</b> ?',
-      icon: 'question',
-      showConfirmButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Confirmer',
-      cancelButtonText: 'Annuler'
-    }).then(data => {
-      if (data.value) {
-        this.service
-          .changeState(this.id, targetState, userId)
-          .subscribe(succ => {
-            Swal.fire({
-              titleText: 'Changement réussi',
-              html: 'L\'objet est désormais <b>' + statusToString(targetState) + '</b> par <b>' + this.lendTo.details.firstName + ' ' +
-                this.lendTo.details.lastName + '</b>',
-              icon: 'success'
-            });
-            this.sending = false;
-            this.refresh();
-          }, err => {
-            this.sending = false;
-            Swal.fire('Oups', 'Une erreur s\'est produite pendant le changement d\'état. Réessayez plus tard', 'error')
-          });
-      } else {
-        this.sending = false;
-      }
-    }, err => this.sending = false);
-  }
-
-  declareLoaned() {
-    this.changeState(ObjectStatus.OUT);
-  }
-
-  declareInStock() {
-    this.changeState(ObjectStatus.IN_STOCK);
-  }
-
-  declareResting() {
-    this.changeState(ObjectStatus.RESTING);
-  }
-
-  declareLost() {
-    this.changeState(ObjectStatus.LOST);
-  }
 }

@@ -1,0 +1,53 @@
+<ng-container [ngSwitch]="object.object.status">
+  <p *ngSwitchCase="ObjectStatus.IN_STOCK">
+    Indiquez un utilisateur pour ouvrir un prêt.
+  </p>
+  <p *ngSwitchCase="ObjectStatus.LOST">
+    Indiquez l'utilisateur ayant ramené l'objet pour clore la perte.
+  </p>
+  <p *ngSwitchCase="ObjectStatus.OUT">
+    Indiquez l'utilisateur pour clore le prêt, déclarer une perte, ou indiquer un dépot d'objet.
+  </p>
+  <p *ngSwitchCase="ObjectStatus.RESTING">
+    Indiquez l'utilisateur pour clore le prêt ou déclarer la récupération d'un objet déposé.
+  </p>
+</ng-container>
+
+<form>
+  <app-select-user (selectedUser)="lendTo = $event"></app-select-user>
+
+  <ng-container [ngSwitch]="object.object.status">
+    <ng-container *ngSwitchCase="ObjectStatus.IN_STOCK">
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLoaned()" mat-stroked-button
+              color="accent" style="width: 100%;">Ouvrir un prêt
+      </button>
+    </ng-container>
+    <ng-container *ngSwitchCase="ObjectStatus.LOST">
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLoaned()" mat-stroked-button
+              color="accent" style="width: 50%;">Déclarer retrouvé et prêter
+      </button>
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareInStock()" mat-stroked-button
+              style="width: 50%;">Déclarer retrouvé et stocker
+      </button>
+    </ng-container>
+    <ng-container *ngSwitchCase="ObjectStatus.OUT">
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareInStock()" mat-stroked-button
+              color="accent" style="width: 33%;">Fermer le prêt
+      </button>
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareResting()" mat-stroked-button
+              style="width: 34%;">Déposer quelque part
+      </button>
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLost()" mat-stroked-button
+              color="warn" style="width: 33%;">Déclarer perdu
+      </button>
+    </ng-container>
+    <ng-container *ngSwitchCase="ObjectStatus.RESTING">
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareInStock()" mat-stroked-button
+              color="accent" style="width: 50%;">Fermer le prêt
+      </button>
+      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLoaned()" mat-stroked-button
+              style="width: 50%;">Récupérer
+      </button>
+    </ng-container>
+  </ng-container>
+</form>

@@ -1,0 +1,33 @@
+<h1>Magmat'o'Matic</h1>
+<h2><i>Salut !</i></h2>
+
+<div fxLayout.lt-md="column" fxLayout="row" fxLayoutGap="10px">
+
+  <div fxFlex>
+    <mat-card>
+      <mat-card-title>Prêt rapide</mat-card-title>
+
+      <app-select-object [(selected)]="quickLoanTag" (selectedObject)="quickLoanObject = $event"></app-select-object>
+
+      <app-quick-changestate *ngIf="quickLoanObject" [object]="quickLoanObject" (update)="quickLoanTag = undefined"></app-quick-changestate>
+    </mat-card>
+  </div>
+  <div fxFlex>
+    <mat-card>
+      <mat-card-title>Déplacement rapide</mat-card-title>
+
+
+      <app-select-storage [(selected)]="quickMoveStorage"></app-select-storage>
+
+      <app-quickmove *ngIf="quickMoveStorage" [locationId]="quickMoveStorage" (success)="quickMoveStorage = undefined"></app-quickmove>
+    </mat-card>
+  </div>
+  <div fxFlex>
+    <mat-card>
+      <mat-card-title>Accès rapide</mat-card-title>
+
+      <app-select-object (selectedObject)="redirectTo($event)"></app-select-object>
+    </mat-card>
+  </div>
+
+</div>
