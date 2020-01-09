@@ -1,15 +1,30 @@
 <mat-toolbar role="heading" color="primary">
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="drawer.toggle()"
+    *ngIf="isLoggedIn && (isHandset$ | async)">
+    <mat-icon *ngIf="isLoggedIn" aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+
   <a mat-button [routerLink]="['/']">Inventaire Japan Impact</a>
   <span class="spacer"></span>
 
-  <button mat-button (click)="logout()"><mat-icon>exit_to_app</mat-icon> Déconnexion</button>
+  <button mat-button (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon>
+    Déconnexion
+  </button>
 </mat-toolbar>
 
 <mat-sidenav-container style="min-height: calc(100% - /* hardcoded toolbar size */ 64px);">
 
-  <mat-sidenav
-      *ngIf="isLoggedIn"
-      #nav [mode]="mobileQuery.matches ? 'over' : 'side'" [opened]="!mobileQuery.matches" style="min-width: 15%;" [disableClose]="!mobileQuery.matches">
+
+  <mat-sidenav #drawer class="sidenav"
+               style="min-width: 15%;"
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="isLoggedIn && ((isHandset$ | async) === false)">
 
     <app-sidebar [url]="subUrl"></app-sidebar>
   </mat-sidenav>
