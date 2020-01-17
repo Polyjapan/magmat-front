@@ -36,6 +36,8 @@ export class CreateObjectTypeComponent implements OnInit {
       if (map.has('typeId')) {
         this.type = undefined;
         this.objects.getSimpleObjectType(Number.parseInt(map.get('typeId'), 10)).subscribe(tpe => this.type = tpe);
+      } else {
+        this.type.requiresSignature = false;
       }
     });
   }

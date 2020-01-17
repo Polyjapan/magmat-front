@@ -4,6 +4,7 @@
 
   <p>{{objectType.objectType.description}}</p>
 
+  <p *ngIf="objectType.objectType.requiresSignature"><mat-icon>gesture</mat-icon> Signature nécessaire pour l'emprunt et le rendu.</p>
   <p *ngIf="objectType.inconvStorageLocationObject"><b>Est rangé pendant JI: </b>{{storageLocationToString(objectType.inconvStorageLocationObject)}}</p>
   <p *ngIf="objectType.partOfLoanObject"><b>Fait partie du prêt: </b>{{objectType.partOfLoanObject.lender.name}}, à rendre le {{objectType.partOfLoanObject.externalLoan.returnTime}} à <i>{{objectType.partOfLoanObject.externalLoan.returnPlace}}</i></p>
   <p *ngIf="objectType.storageLocationObject"><b>Est rangé hors JI: </b>{{storageLocationToString(objectType.storageLocationObject)}}</p>

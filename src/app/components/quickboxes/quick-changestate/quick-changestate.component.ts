@@ -3,6 +3,8 @@ import Swal from 'sweetalert2';
 import {CompleteObject, ObjectStatus, statusToString} from '../../../data/object';
 import {UserProfile} from '../../../data/user';
 import {ObjectsService} from '../../../services/objects.service';
+import {MatDialog} from '@angular/material';
+import {SignatureModalComponent} from '../../selectors/signature-modal/signature-modal.component';
 
 @Component({
   selector: 'app-quick-changestate',
@@ -18,11 +20,9 @@ export class QuickChangestateComponent implements OnInit {
   lendTo: UserProfile;
   sending = false;
 
-  constructor(private service: ObjectsService) {
+  constructor(private service: ObjectsService, private dialog: MatDialog) {
   }
 
-  ngOnInit() {
-  }
 
   declareLoaned() {
     this.changeState(ObjectStatus.OUT);
@@ -49,6 +49,31 @@ export class QuickChangestateComponent implements OnInit {
       return;
     }
     this.sending = true;
+
+    // May require signature
+    if (this.object.objectType.requiresSignature) {
+      if (targetState === ObjectStatus.IN_STOCK || targetState === ObjectStatus.OUT) {
+        // Retour en stock ou sortie de stock.
+        const text = (targetState === ObjectStatus.IN_STOCK ? "Retour" : "Emprunt") + ' de ' + this.object.objectType.name + ' ' + this.object.object.suffix;
+        this.dialog.open(SignatureModalComponent, {data: text})
+          .afterClosed()
+          .subscribe(res => {
+            if (res && typeof res === 'string') {
+              this.doChangeState(targetState, res);
+            } else {
+              Swal.fire('Eh non!', 'Impossible de faire ça, il te faut signer mon dude.', 'error');
+              this.sending = false;
+            }
+          });
+      } else {
+        this.doChangeState(targetState);
+      }
+    } else {
+      this.doChangeState(targetState);
+    }
+  }
+
+  private doChangeState(targetState: ObjectStatus, signature?: string) {
     const userId = this.lendTo.id;
 
     Swal.fire({
@@ -63,7 +88,7 @@ export class QuickChangestateComponent implements OnInit {
     }).then(data => {
       if (data.value) {
         this.service
-          .changeState(this.object.object.objectId, targetState, userId)
+          .changeState(this.object.object.objectId, targetState, userId, signature)
           .subscribe(succ => {
             Swal.fire({
               titleText: 'Changement réussi',
@@ -81,5 +106,8 @@ export class QuickChangestateComponent implements OnInit {
         this.sending = false;
       }
     }, err => this.sending = false);
+  }
+
+  ngOnInit(): void {
   }
 }

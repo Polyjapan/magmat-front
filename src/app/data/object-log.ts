@@ -9,6 +9,7 @@ export class ObjectLog {
   user: number;
   sourceState: ObjectStatus;
   targetState: ObjectStatus;
+  signature?: string;
 }
 
 export class CompleteObjectLog {

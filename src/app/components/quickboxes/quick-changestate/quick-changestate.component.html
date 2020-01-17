@@ -13,41 +13,45 @@
   </p>
 </ng-container>
 
+<p *ngIf="object.objectType.requiresSignature"><b><mat-icon>warning</mat-icon> ATTENTION : </b>Une signature est requise pour prêter ou récupérer l'objet. Ne laissez pas partir la personne avant d'avoir la signature.</p>
+
 <form>
   <app-select-user (selectedUser)="lendTo = $event"></app-select-user>
 
-  <ng-container [ngSwitch]="object.object.status">
-    <ng-container *ngSwitchCase="ObjectStatus.IN_STOCK">
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLoaned()" mat-stroked-button
-              color="accent" style="width: 100%;">Ouvrir un prêt
-      </button>
-    </ng-container>
-    <ng-container *ngSwitchCase="ObjectStatus.LOST">
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLoaned()" mat-stroked-button
-              color="accent" style="width: 50%;">Déclarer retrouvé et prêter
-      </button>
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareInStock()" mat-stroked-button
-              style="width: 50%;">Déclarer retrouvé et stocker
-      </button>
-    </ng-container>
-    <ng-container *ngSwitchCase="ObjectStatus.OUT">
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareInStock()" mat-stroked-button
-              color="accent" style="width: 33%;">Fermer le prêt
-      </button>
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareResting()" mat-stroked-button
-              style="width: 34%;">Déposer quelque part
-      </button>
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLost()" mat-stroked-button
-              color="warn" style="width: 33%;">Déclarer perdu
-      </button>
-    </ng-container>
-    <ng-container *ngSwitchCase="ObjectStatus.RESTING">
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareInStock()" mat-stroked-button
-              color="accent" style="width: 50%;">Fermer le prêt
-      </button>
-      <button [disabled]="sending" *ngIf="lendTo" type="submit" (click)="declareLoaned()" mat-stroked-button
-              style="width: 50%;">Récupérer
-      </button>
+  <ng-container *ngIf="lendTo">
+    <ng-container [ngSwitch]="object.object.status">
+      <ng-container *ngSwitchCase="ObjectStatus.IN_STOCK">
+        <button [disabled]="sending" type="submit" (click)="declareLoaned()" mat-stroked-button
+                color="accent" style="width: 100%;">Ouvrir un prêt
+        </button>
+      </ng-container>
+      <ng-container *ngSwitchCase="ObjectStatus.LOST">
+        <button [disabled]="sending" type="submit" (click)="declareLoaned()" mat-stroked-button
+                color="accent" style="width: 50%;">Déclarer retrouvé et prêter
+        </button>
+        <button [disabled]="sending" type="submit" (click)="declareInStock()" mat-stroked-button
+                style="width: 50%;">Déclarer retrouvé et stocker
+        </button>
+      </ng-container>
+      <ng-container *ngSwitchCase="ObjectStatus.OUT">
+        <button [disabled]="sending" type="submit" (click)="declareInStock()" mat-stroked-button
+                color="accent" style="width: 33%;">Fermer le prêt
+        </button>
+        <button [disabled]="sending" type="submit" (click)="declareResting()" mat-stroked-button
+                style="width: 34%;">Déposer quelque part
+        </button>
+        <button [disabled]="sending" type="submit" (click)="declareLost()" mat-stroked-button
+                color="warn" style="width: 33%;">Déclarer perdu
+        </button>
+      </ng-container>
+      <ng-container *ngSwitchCase="ObjectStatus.RESTING">
+        <button [disabled]="sending" type="submit" (click)="declareInStock()" mat-stroked-button
+                color="accent" style="width: 50%;">Fermer le prêt
+        </button>
+        <button [disabled]="sending" type="submit" (click)="declareLoaned()" mat-stroked-button
+                style="width: 50%;">Récupérer
+        </button>
+      </ng-container>
     </ng-container>
   </ng-container>
 </form>

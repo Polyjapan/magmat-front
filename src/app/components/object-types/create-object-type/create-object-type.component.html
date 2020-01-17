@@ -23,6 +23,8 @@
       <textarea matInput placeholder="Un truc qui roule et qui sert à déplacer des palettes" [(ngModel)]="type.description" name="description"></textarea>
     </mat-form-field>
 
+    <mat-checkbox [(ngModel)]="type.requiresSignature" name="requiresSignature">Demander une signature pour la prise et le rendu de l'objet</mat-checkbox>
+
     <h2>Rangement de l'objet</h2>
     <p>Ces informations sont facultatives. Vous pouvez les modifier ultérieurement si vous ne les connaissez pas entièrement.</p>
 

@@ -8,6 +8,7 @@ export class ObjectType {
   storageLocation?: number;
   inconvStorageLocation?: number;
   partOfLoan?: number;
+  requiresSignature: boolean;
 }
 
 export class CompleteObjectType {

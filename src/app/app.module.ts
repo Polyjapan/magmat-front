@@ -56,6 +56,9 @@ import { TidyingComponent } from './components/tidying/tidying.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { SelectObjectComponent } from './components/selectors/select-object/select-object.component';
 import { QuickChangestateComponent } from './components/quickboxes/quick-changestate/quick-changestate.component';
+import {SignaturePadModule} from 'angular2-signaturepad';
+import { SigningAreaComponent } from './components/selectors/signing-area/signing-area.component';
+import { SignatureModalComponent } from './components/selectors/signature-modal/signature-modal.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -90,11 +93,14 @@ export function tokenGetter() {
     TidyingComponent,
     HomepageComponent,
     SelectObjectComponent,
-    QuickChangestateComponent
+    QuickChangestateComponent,
+    SigningAreaComponent,
+    SignatureModalComponent,
   ],
   entryComponents: [
     CreateStorageLocationComponent,
-    CreateLenderComponent
+    CreateLenderComponent,
+    SignatureModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -126,6 +132,7 @@ export function tokenGetter() {
     MatDialogModule,
     MatCheckboxModule,
     MatDatepickerModule,
+    SignaturePadModule,
 
   ],
   providers: [

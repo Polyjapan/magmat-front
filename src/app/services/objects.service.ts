@@ -70,9 +70,9 @@ export class ObjectsService {
     return this.http.post<ObjectCreateResult>(environment.apiurl + '/objects/', objects);
   }
 
-  changeState(objectId: number, targetState: ObjectStatus, user: number): Observable<void> {
+  changeState(objectId: number, targetState: ObjectStatus, user: number, signature?: string): Observable<void> {
     return this.http.put<void>(environment.apiurl + '/objects/state/' + objectId,
-      {targetState, userId: user});
+      {targetState, userId: user, signature});
   }
 
   getObjects(): Observable<CompleteObject[]> {
