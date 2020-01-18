@@ -9,7 +9,7 @@
   <ng-container *ngFor="let line of tree.stored | keyvalue">
     <h2>Salle : {{line.key}}</h2>
 
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+    <div fxLayout="column" fxLayoutGap="20px">
 
       <div *ngFor="let space of line.value | keyvalue" fxFlex>
         <mat-card>

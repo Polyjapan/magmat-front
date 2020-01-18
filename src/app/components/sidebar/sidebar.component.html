@@ -7,13 +7,13 @@
     Objets</a>
   <a mat-list-item [class.active]="subUrl === 'external-loans'" [routerLink]="['external-loans']">
     <mat-icon>receipt</mat-icon>
-    Prêts</a>
+    Prêts externes</a>
+  <a mat-list-item [class.active]="subUrl === 'returns'" [routerLink]="['returns']">
+    <mat-icon>calendar_today</mat-icon>
+    Rendus externes</a>
   <a mat-list-item [class.active]="subUrl === 'storages'" [routerLink]="['storages']">
     <mat-icon>storage</mat-icon>
     Stockages</a>
-  <a mat-list-item [class.active]="subUrl === 'returns'" [routerLink]="['returns']">
-    <mat-icon>calendar_today</mat-icon>
-    Rendus</a>
   <a mat-list-item [class.active]="subUrl === 'tidying'" [routerLink]="['tidying']">
     <mat-icon>archive</mat-icon>
     Rangement</a>

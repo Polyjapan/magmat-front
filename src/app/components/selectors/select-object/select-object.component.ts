@@ -31,8 +31,7 @@ export class SelectObjectComponent implements OnInit, OnChanges {
       .pipe(
         filter(text => !isNullOrUndefined(text)),
         filter(text => text.length >= 1),
-        debounceTime(200),
-        distinctUntilChanged()
+        debounceTime(200)
       ).subscribe(val => {
       this.service.getObjectByTag(val).subscribe(data => {
         this.selectedObject.emit(data);

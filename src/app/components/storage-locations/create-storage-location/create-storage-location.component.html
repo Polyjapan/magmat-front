@@ -7,11 +7,11 @@
   </mat-form-field>
 
   <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Stockage (armoire...)" [(ngModel)]="storageLocation.space" name="space" required maxlength="100">
+    <input matInput placeholder="Stockage (armoire...)" [(ngModel)]="storageLocation.space" name="space" maxlength="100">
   </mat-form-field>
 
   <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Lieu précis (étagère, boite, ...)" [(ngModel)]="storageLocation.location" name="location" required maxlength="100">
+    <input matInput placeholder="Lieu précis (étagère, boite, ...)" [(ngModel)]="storageLocation.location" name="location" maxlength="100">
   </mat-form-field>
 
   <mat-checkbox name="inConv" [(ngModel)]="storageLocation.inConv">

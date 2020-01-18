@@ -35,13 +35,16 @@
       </ng-container>
       <ng-container *ngSwitchCase="ObjectStatus.OUT">
         <button [disabled]="sending" type="submit" (click)="declareInStock()" mat-stroked-button
-                color="accent" style="width: 33%;">Fermer le prêt
+                color="accent" style="width: 50%;">Fermer le prêt
+        </button>
+        <button [disabled]="sending" type="submit" (click)="declareLoaned()" mat-stroked-button
+                color="primary" style="width: 50%;">Transférer le prêt
         </button>
         <button [disabled]="sending" type="submit" (click)="declareResting()" mat-stroked-button
-                style="width: 34%;">Déposer quelque part
+                style="width: 50%;">Déposer quelque part
         </button>
         <button [disabled]="sending" type="submit" (click)="declareLost()" mat-stroked-button
-                color="warn" style="width: 33%;">Déclarer perdu
+                color="warn" style="width: 50%;">Déclarer perdu
         </button>
       </ng-container>
       <ng-container *ngSwitchCase="ObjectStatus.RESTING">
