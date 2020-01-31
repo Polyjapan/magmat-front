@@ -13,7 +13,8 @@ import {NgModel} from '@angular/forms';
 })
 export class SelectUserComponent implements OnInit {
   @Input() label: string = 'Choisir un utilisateur';
-  @Output() selectedId = new EventEmitter<number>();
+  @Input() selectedId: number;
+  @Output() selectedIdChange = new EventEmitter<number>();
   @Output() selectedUser = new EventEmitter<UserProfile>();
 
   selected: string;
@@ -27,6 +28,15 @@ export class SelectUserComponent implements OnInit {
   constructor(private service: ProfileService) {
   }
 
+  private onValueChange(val: string) {
+    this.service.getUserProfile(val).subscribe(data => {
+      this.selectedIdChange.emit(data.id);
+      this.selectedUser.emit(data);
+      this.currentProfile = data;
+      this.inputElement.control.setErrors(null);
+    }, err => this.inputElement.control.setErrors({noProfile : true}));
+  }
+
   ngOnInit() {
     this.inputObservable
       .pipe(
@@ -34,18 +44,16 @@ export class SelectUserComponent implements OnInit {
         filter(text => text.match('[0-9]+') !== null),
         debounceTime(200),
         distinctUntilChanged()
-      ).subscribe(val => {
-        this.service.getUserProfile(val).subscribe(data => {
-          this.selectedId.emit(data.id);
-          this.selectedUser.emit(data);
-          this.currentProfile = data;
-          this.inputElement.control.setErrors(null);
-        }, err => this.inputElement.control.setErrors({noProfile : true}));
-    });
+      ).subscribe(val => this.onValueChange(val));
+
+    if (this.selectedId) {
+      this.selected = '' + this.selectedId;
+      this.onValueChange(this.selected);
+    }
   }
 
   update($event: string) {
-    this.selectedId.emit(undefined);
+    this.selectedIdChange.emit(undefined);
     this.selectedUser.emit(undefined);
     this.currentProfile = undefined;
     this.inputSubscriber.next($event);

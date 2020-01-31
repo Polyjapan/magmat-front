@@ -1,0 +1,47 @@
+<mat-spinner *ngIf="!object"></mat-spinner>
+
+<ng-container *ngIf="object">
+
+  <h1>Modifier un objet</h1>
+
+  <form #form="ngForm">
+    <h2>Informations sur l'objet</h2>
+    <mat-form-field>
+      <input matInput placeholder="Suffixe de l'objet" required [(ngModel)]="object.object.suffix" name="name">
+      <span matPrefix style="margin-right: 5px;">{{object.objectType.name}}</span>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Asset Tag (code barre)" required [(ngModel)]="object.object.assetTag" name="assetTag">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Description (héritée par défaut du type d'objet)</mat-label>
+      <textarea matInput placeholder="{{object.objectType.description}}" [(ngModel)]="object.object.description" name="description"></textarea>
+    </mat-form-field>
+
+    <app-select-user label="Objet réservé pour..." [(selectedId)]="object.object.reservedFor"></app-select-user>
+
+    <h2>Rangement de l'objet</h2>
+    <p>Ces informations sont facultatives. Par défaut, l'objet hérite des informations de son <strong>type parent</strong>. Il est recommandé de ne pas modifier ces informations depuis ce formulaire, mais depuis le formulaire de déplacement rapide. A vos risques et périls...</p>
+
+    <app-select-storage [(selected)]="object.object.inconvStorageLocation" [inconv]="true" label="Lieu de rangement durant JI"></app-select-storage>
+
+    <div fxLayout="row">
+      <app-select-storage fxFlex="1 1 40%" [(selected)]="object.object.storageLocation" [inconv]="false" label="Lieu de rangement hors JI"></app-select-storage>
+
+      <p fxFlex="1 1 20%" style="text-align: center;"><b>OU</b></p>
+
+      <app-select-loan fxFlex="1 1 40%" [(selected)]="object.object.partOfLoan"></app-select-loan>
+    </div>
+
+    <br>
+
+
+    <div fxLayout="row" fxLayoutGap="5%">
+      <button (click)="update()" mat-raised-button [disabled]="form.invalid || sending">Mettre à jour</button>
+    </div>
+
+  </form>
+
+</ng-container>

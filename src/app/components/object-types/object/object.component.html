@@ -6,19 +6,27 @@
     <mat-card>
       <mat-card-title>Détails de l'objet :: {{object.objectType.name}} {{object.object.suffix}}</mat-card-title>
 
-      <ul>
-        <li *ngIf="object.object.assetTag"><b>Asset Tag</b> : <code>{{object.object.assetTag}}</code></li>
-        <li><b>Description
-          :</b> {{object.object.description ? object.object.description : object.objectType.description }} <i
-          *ngIf="!object.object.description">(hérité)</i></li>
-        <li><b>Stockage hors convention :</b> {{storageLocationToString(object.storageLocationObject, 'N/A')}} <i
-          *ngIf="!object.object.storageLocation">(hérité)</i></li>
-        <li><b>Stockage en convention :</b> {{storageLocationToString(object.inconvStorageLocationObject, 'N/A')}} <i
-          *ngIf="!object.object.inconvStorageLocation">(hérité)</i></li>
-        <li><b>Prêt parent :</b> {{externalLoanToString(object.partOfLoanObject, 'N/A')}} <i
-          *ngIf="!object.object.partOfLoan">(hérité)</i></li>
-        <li><b>Etat acutel :</b> {{statusToString(object.object.status)}}</li>
-      </ul>
+      <mat-card-content>
+        <button [routerLink]="['..', 'update', object.object.objectId]" mat-stroked-button>Modifier l'objet</button>
+
+        <ul>
+          <li *ngIf="object.object.assetTag"><b>Asset Tag</b> : <code>{{object.object.assetTag}}</code></li>
+          <li><b>Description
+            :</b> {{object.object.description ? object.object.description : object.objectType.description }} <i
+            *ngIf="!object.object.description">(hérité)</i></li>
+          <li><b>Stockage hors convention :</b> {{storageLocationToString(object.storageLocationObject, 'N/A')}} <i
+            *ngIf="!object.object.storageLocation">(hérité)</i></li>
+          <li><b>Stockage en convention :</b> {{storageLocationToString(object.inconvStorageLocationObject, 'N/A')}} <i
+            *ngIf="!object.object.inconvStorageLocation">(hérité)</i></li>
+          <li><b>Prêt parent :</b> {{externalLoanToString(object.partOfLoanObject, 'N/A')}} <i
+            *ngIf="!object.object.partOfLoan">(hérité)</i></li>
+          <li><b>Réservé pour :</b> {{object.object.reservedFor ? object.reservedFor.details.firstName + ' ' + object.reservedFor.details.lastName + ' (' + object.object.reservedFor + ')' : 'Personne'}}</li>
+          <li><b>Etat acutel :</b> {{statusToString(object.object.status)}}</li>
+        </ul>
+
+      </mat-card-content>
+
+
     </mat-card>
   </div>
 

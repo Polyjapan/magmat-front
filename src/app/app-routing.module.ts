@@ -16,6 +16,7 @@ import {ViewExternalLoanComponent} from './components/external-loans/view-extern
 import {ReturnsComponent} from './components/returns/returns.component';
 import {TidyingComponent} from './components/tidying/tidying.component';
 import {HomepageComponent} from './components/homepage/homepage.component';
+import {UpdateObjectComponent} from './components/object-types/update-object/update-object.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,7 @@ const routes: Routes = [
   {path: 'object-types/edit/:typeId', component: CreateObjectTypeComponent, canActivate: [PermissionAuthGuard]},
 
   {path: 'objects/:id', component: ObjectComponent, canActivate: [PermissionAuthGuard]},
+  {path: 'objects/update/:objectId', component: UpdateObjectComponent, canActivate: [PermissionAuthGuard]},
 
   {path: 'tidying', component: TidyingComponent, canActivate: [PermissionAuthGuard]},
   {path: 'returns', component: ReturnsComponent, canActivate: [PermissionAuthGuard]},

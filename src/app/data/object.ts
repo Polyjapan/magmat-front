@@ -1,6 +1,7 @@
 import {StorageLocation} from './storage-location';
 import {CompleteExternalLoan} from './external-loan';
 import {ObjectType} from './object-type';
+import {UserProfile} from './user';
 
 export enum ObjectStatus {
   IN_STOCK = 'InStock', OUT = 'Out', LOST = 'Lost', RESTING = 'Resting'
@@ -38,6 +39,7 @@ export class CompleteObject {
   storageLocationObject?: StorageLocation;
   inconvStorageLocationObject?: StorageLocation;
   partOfLoanObject?: CompleteExternalLoan;
+  reservedFor?: UserProfile;
 }
 
 export class ObjectCreateResult {

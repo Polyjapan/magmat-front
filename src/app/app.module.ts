@@ -59,6 +59,7 @@ import { QuickChangestateComponent } from './components/quickboxes/quick-changes
 import {SignaturePadModule} from 'angular2-signaturepad';
 import { SigningAreaComponent } from './components/selectors/signing-area/signing-area.component';
 import { SignatureModalComponent } from './components/selectors/signature-modal/signature-modal.component';
+import { UpdateObjectComponent } from './components/object-types/update-object/update-object.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -96,6 +97,7 @@ export function tokenGetter() {
     QuickChangestateComponent,
     SigningAreaComponent,
     SignatureModalComponent,
+    UpdateObjectComponent,
   ],
   entryComponents: [
     CreateStorageLocationComponent,

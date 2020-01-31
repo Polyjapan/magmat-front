@@ -1,13 +1,8 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {StorageLocation} from '../../../data/storage-location';
-import {CompleteExternalLoan} from '../../../data/external-loan';
-import {Observable} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
 import {ObjectsService} from '../../../services/objects.service';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import {LoansService} from '../../../services/loans.service';
-import {map} from 'rxjs/operators';
 import {ObjectType} from '../../../data/object-type';
-import {NgModel} from '@angular/forms';
 import {MatDialog} from '@angular/material';
 import Swal from 'sweetalert2';
 import {isNullOrUndefined} from 'util';
