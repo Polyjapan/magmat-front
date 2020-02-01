@@ -55,6 +55,10 @@ export class ObjectsService {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-type/complete/' + typeId);
   }
 
+  getObjectsLoanedToUser(userId: number): Observable<CompleteObject[]> {
+    return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/loanedTo/' + userId);
+  }
+
   getObjectsForLocation(location: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-location/complete/' + location);
   }

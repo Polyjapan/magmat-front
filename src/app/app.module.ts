@@ -60,6 +60,8 @@ import {SignaturePadModule} from 'angular2-signaturepad';
 import { SigningAreaComponent } from './components/selectors/signing-area/signing-area.component';
 import { SignatureModalComponent } from './components/selectors/signature-modal/signature-modal.component';
 import { UpdateObjectComponent } from './components/object-types/update-object/update-object.component';
+import { InternalLoansComponent } from './components/internal-loans/internal-loans.component';
+import { ObjectsListComponent } from './components/object-types/objects-list/objects-list.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -98,6 +100,8 @@ export function tokenGetter() {
     SigningAreaComponent,
     SignatureModalComponent,
     UpdateObjectComponent,
+    InternalLoansComponent,
+    ObjectsListComponent,
   ],
   entryComponents: [
     CreateStorageLocationComponent,

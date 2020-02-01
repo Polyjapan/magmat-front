@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 export class ShowObjectTypeComponent implements OnInit {
   objectType: CompleteObjectType;
   storageLocationToString = storageLocationToString;
-  objects = new MatTableDataSource<CompleteObject>();
+  objects: CompleteObject[] = [];
   id: number;
 
   constructor(private route: ActivatedRoute, private objectsService: ObjectsService) {
@@ -31,6 +31,6 @@ export class ShowObjectTypeComponent implements OnInit {
   }
 
   refreshObjects() {
-    this.objectsService.getObjectsForType(this.id).subscribe(objs => this.objects.data = objs);
+    this.objectsService.getObjectsForType(this.id).subscribe(objs => this.objects = objs);
   }
 }

@@ -1,0 +1,12 @@
+<h1>Liste des prêts en cours pour un utilisateur</h1>
+
+<p>Indiquez un numéro d'utilisateur ci dessous pour commencer la recherche.</p>
+
+<app-select-user style="width: 100%;" (selectedUser)="onSelect($event)"></app-select-user>
+
+<ng-container *ngIf="selectedUser">
+  <h2>Résultats pour {{selectedUser.details.firstName}} {{selectedUser.details.lastName}} :</h2>
+
+  <mat-spinner *ngIf="!loans"></mat-spinner>
+  <app-objects-list *ngIf="loans" [objects]="loans"></app-objects-list>
+</ng-container>

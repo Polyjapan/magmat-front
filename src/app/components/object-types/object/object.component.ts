@@ -43,7 +43,8 @@ export class ObjectComponent implements OnInit {
     this.loadComments();
   }
 
-  dateFormat(log: CompleteObjectLog | CompleteObjectComment) {
+  dateFormat(_log: CompleteObjectLog | CompleteObjectComment) {
+    const log = _log as any;
     const date = log.objectLog ? log.objectLog.timestamp : log.objectComment.timestamp;
 
     if (typeof date === 'string') {
