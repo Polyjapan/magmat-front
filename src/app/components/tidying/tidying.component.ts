@@ -11,11 +11,18 @@ import {CompleteObject} from '../../data/object';
 export class TidyingComponent implements OnInit {
   tree: TopTidyingTree;
 
+  invert = false;
+
   constructor(private os: ObjectsService) {
   }
 
+  reload() {
+    this.tree = undefined;
+    this.os.getTidyingData(this.invert).subscribe(tree => this.tree = tree);
+  }
+
   ngOnInit() {
-    this.os.getTidyingData().subscribe(tree => this.tree = tree);
+    this.reload();
   }
 
   displayObject(item: CompleteObject) {

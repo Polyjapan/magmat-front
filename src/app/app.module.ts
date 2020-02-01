@@ -23,7 +23,7 @@ import {
   MatProgressSpinnerModule,
   MatDialogModule,
   MatCheckboxModule,
-  MatDatepickerModule, MatNativeDateModule
+  MatDatepickerModule, MatNativeDateModule, MatButtonToggleModule, MatSlideToggleModule
 }
   from '@angular/material';
 import {AppRoutingModule} from './app-routing.module';
@@ -135,6 +135,8 @@ export function tokenGetter() {
     MatCheckboxModule,
     MatDatepickerModule,
     SignaturePadModule,
+    MatButtonToggleModule,
+    MatSlideToggleModule,
 
   ],
   providers: [

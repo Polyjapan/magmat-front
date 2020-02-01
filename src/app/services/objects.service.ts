@@ -21,8 +21,8 @@ export class ObjectsService {
     return this.http.get<CompleteObjectType[]>(environment.apiurl + '/objects/types/complete');
   }
 
-  getTidyingData(): Observable<TopTidyingTree> {
-    return this.http.get<TopTidyingTree>(environment.apiurl + '/objects/tidying');
+  getTidyingData(inverted: boolean): Observable<TopTidyingTree> {
+    return this.http.get<TopTidyingTree>(environment.apiurl + '/objects/tidying?inverted=' + inverted);
   }
 
   getObjectTypesForLoan(loan: number): Observable<ObjectType[]> {

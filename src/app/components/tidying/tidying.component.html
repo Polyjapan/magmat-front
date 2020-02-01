@@ -1,5 +1,8 @@
 <h1>Aide au rangement</h1>
 
+<mat-slide-toggle [(ngModel)]="invert" (ngModelChange)="reload()">Inverser le rangement</mat-slide-toggle>
+
+<p *ngIf="invert">Rangement inversé : les objets sont d'abord groupés en fonction de leur rangement de destination.</p>
 <!-- Granularity 3 and 6 are probably safe to ignore -->
 
 <mat-spinner *ngIf="!tree"></mat-spinner>
@@ -29,14 +32,16 @@
                   </ng-container>
                 </ng-container>
               </ng-container>
-              <ng-container *ngFor="let loan of loc.value.loaned | keyvalue">
-                <tr *ngFor="let item of loan.value.objects">
+              <ng-container *ngFor="let loan of loc.value.loaned">
+                <tr *ngFor="let item of loan.objects">
                   <td>{{displayObject(item)}}</td>
                   <td><b>&rArr;</b></td>
-                  <td>Prêt de <i>{{loan.value.loan.lender.name}}</i> (<a [routerLink]="['/', 'external-loans', loan.value.loan.externalLoan.externalLoanId]">voir</a>) </td>
+                  <td>Prêt de <i>{{loan.loan.lender.name}}</i> (<a
+                    [routerLink]="['/', 'external-loans', loan.loan.externalLoan.externalLoanId]">voir</a>)
+                  </td>
                 </tr>
               </ng-container>
-              <tr *ngFor="let item of loc.value.unstored | keyvalue">
+              <tr *ngFor="let item of loc.value.unstored">
                 <td>{{displayObject(item)}}</td>
                 <td><b>&rArr;</b></td>
                 <td><i>emplacement inconnu</i></td>
@@ -48,7 +53,88 @@
       </div>
     </div>
 
-    <br><hr><br>
+    <br>
+    <hr>
+    <br>
+  </ng-container>
+
+  <ng-container *ngFor="let line of tree.loaned">
+    <h2>Prêt de <i>{{line.loan.lender.name}}</i> (<a
+      [routerLink]="['/', 'external-loans', line.loan.externalLoan.externalLoanId]">voir</a>)</h2>
+
+    <div fxLayout="column" fxLayoutGap="20px">
+        <mat-card>
+          <table>
+             <ng-container *ngFor="let storRoom of line.objects.stored | keyvalue">
+                <ng-container *ngFor="let storSpace of storRoom.value | keyvalue">
+                  <ng-container *ngFor="let storLoc of storSpace.value | keyvalue">
+                    <tr *ngFor="let item of storLoc.value">
+                      <td>{{displayObject(item)}}</td>
+                      <td><b>&rArr;</b></td>
+                      <td>{{storRoom.key}} > {{storSpace.key}} > {{storLoc.key}}</td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngFor="let loan of line.objects.loaned">
+                <tr *ngFor="let item of loan.objects">
+                  <td>{{displayObject(item)}}</td>
+                  <td><b>&rArr;</b></td>
+                  <td>Prêt de <i>{{loan.loan.lender.name}}</i> (<a
+                    [routerLink]="['/', 'external-loans', loan.loan.externalLoan.externalLoanId]">voir</a>)
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngFor="let item of line.objects.other">
+                <td>{{displayObject(item)}}</td>
+                <td><b>&rArr;</b></td>
+                <td><i>emplacement inconnu</i></td>
+              </tr>
+          </table>
+        </mat-card>
+
+      </div>
+    <br>
+    <hr>
+    <br>
+  </ng-container>
+
+
+  <ng-container>
+    <h2>Non stockés</h2>
+
+    <mat-card>
+      <table>
+          <ng-container *ngFor="let storRoom of tree.unstored.stored | keyvalue">
+            <ng-container *ngFor="let storSpace of storRoom.value | keyvalue">
+              <ng-container *ngFor="let storLoc of storSpace.value | keyvalue">
+                <tr *ngFor="let item of storLoc.value">
+                  <td>{{displayObject(item)}}</td>
+                  <td><b>&rArr;</b></td>
+                  <td>{{storRoom.key}} > {{storSpace.key}} > {{storLoc.key}}</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngFor="let loan of tree.unstored.loaned">
+            <tr *ngFor="let item of loan.objects">
+              <td>{{displayObject(item)}}</td>
+              <td><b>&rArr;</b></td>
+              <td>Prêt de <i>{{loan.loan.lender.name}}</i> (<a
+                [routerLink]="['/', 'external-loans', loan.loan.externalLoan.externalLoanId]">voir</a>)
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngFor="let item of tree.unstored.other">
+            <td>{{displayObject(item)}}</td>
+            <td><b>&rArr;</b></td>
+            <td><i>emplacement inconnu</i></td>
+          </tr>
+      </table>
+    </mat-card>
+
+    <br>
+    <hr>
   </ng-container>
 
 </ng-container>
