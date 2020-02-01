@@ -29,6 +29,8 @@ export class SingleObject {
   inconvStorageLocation?: number;
   partOfLoan?: number;
   reservedFor?: number;
+  plannedUse?: string;
+  depositPlace?: string;
   assetTag?: string;
   status: ObjectStatus;
 }

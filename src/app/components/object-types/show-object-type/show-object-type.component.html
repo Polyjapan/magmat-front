@@ -34,13 +34,28 @@
       <td mat-cell *matCellDef="let element"> {{storageLocationToString(element.inconvStorageLocationObject)}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> </th>
-      <td mat-cell *matCellDef="let element"> <button mat-stroked-button [routerLink]="['/', 'objects', element.object.objectId]">Détails</button> <button mat-stroked-button [routerLink]="['/', 'objects', 'update', element.object.objectId]">Modifier</button></td>
+    <ng-container matColumnDef="plannedUse">
+      <th mat-header-cell *matHeaderCellDef> Utilisation Prévue </th>
+      <td mat-cell *matCellDef="let element"> {{element.object.plannedUse}} </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['assetTag', 'name', 'inConvStorage', 'status', 'actions']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['assetTag', 'name', 'inConvStorage', 'status', 'actions'];"></tr>
+    <ng-container matColumnDef="reservedFor">
+      <th mat-header-cell *matHeaderCellDef> Réservé pour </th>
+      <td mat-cell *matCellDef="let element">  {{element.reservedFor ? element.reservedFor.details.firstName + ' ' + element.reservedFor.details.lastName : ''}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="depositPlace">
+      <th mat-header-cell *matHeaderCellDef> Lieu de dépose </th>
+      <td mat-cell *matCellDef="let element"> {{element.object.depositPlace}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let element"> <button mat-icon-button color="primary" [routerLink]="['/', 'objects', element.object.objectId]"><mat-icon>folder_open</mat-icon></button> <button mat-icon-button color="primary" [routerLink]="['/', 'objects', 'update', element.object.objectId]"><mat-icon>edit</mat-icon></button></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['assetTag', 'name', 'inConvStorage', 'plannedUse', 'reservedFor', 'depositPlace', 'status', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['assetTag', 'name', 'inConvStorage', 'plannedUse', 'reservedFor', 'depositPlace', 'status', 'actions'];"></tr>
 
   </table>
 

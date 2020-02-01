@@ -20,6 +20,18 @@
       <textarea matInput placeholder="{{object.objectType.description}}" [(ngModel)]="object.object.description" name="description"></textarea>
     </mat-form-field>
 
+    <h2>Aides-mémoire</h2>
+    <p>Ces champs vous permettent de retenir facilement quelques informations importantes pour l'objet. Sentez vous libre d'y inscrire ce que vous souhaitez.</p>
+
+    <mat-form-field>
+      <input matInput placeholder="Utilisation prévue" [(ngModel)]="object.object.plannedUse" name="plannedUse">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Lieu de dépose"  [(ngModel)]="object.object.depositPlace" name="depositPlace">
+    </mat-form-field>
+
+
     <app-select-user label="Objet réservé pour..." [(selectedId)]="object.object.reservedFor"></app-select-user>
 
     <h2>Rangement de l'objet</h2>
