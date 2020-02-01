@@ -10,6 +10,7 @@ import {map} from 'rxjs/operators';
 import {CompleteObject, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
 import {CompleteObjectLog} from '../data/object-log';
 import {TopTidyingTree} from '../data/tidying';
+import {CompleteObjectComment} from '../data/object-comment';
 
 @Injectable({providedIn: 'root'})
 export class ObjectsService {
@@ -81,6 +82,14 @@ export class ObjectsService {
 
   getObjects(): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/');
+  }
+
+  getObjectComments(objectId: number): Observable<CompleteObjectComment[]> {
+    return this.http.get<CompleteObjectComment[]>(environment.apiurl + '/objects/comments/' + objectId);
+  }
+
+  postObjectComment(objectId: number, comment: string): Observable<void> {
+    return this.http.post<void>(environment.apiurl + '/objects/comments/' + objectId, comment);
   }
 
   getObjectByTag(tag: string) {

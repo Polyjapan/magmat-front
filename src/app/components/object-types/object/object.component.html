@@ -2,7 +2,7 @@
 
 <div *ngIf="object" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
 
-  <div>
+  <div fxLayout="column" fxLayoutGap="20px">
     <mat-card>
       <mat-card-title>Détails de l'objet :: {{object.objectType.name}} {{object.object.suffix}}</mat-card-title>
 
@@ -30,6 +30,32 @@
       </mat-card-content>
 
 
+    </mat-card>
+
+
+    <mat-card>
+      <mat-card-title>Ajout de commentaire</mat-card-title>
+
+      <form (ngSubmit)="sendComment()">
+        <mat-form-field style="width: 70%;">
+          <input matInput placeholder="Commentaire..." required maxlength="5000" name="comment" [(ngModel)]="comment" />
+        </mat-form-field>
+
+        <button mat-stroked-button style="width: 29%; margin-left: 1%" type="submit" [disabled]="posting">Envoyer</button>
+      </form>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-title>Commentaires de l'objet</mat-card-title>
+
+      <mat-list *ngIf="comments" class="mat-elevation-z3">
+        <mat-list-item *ngFor="let com of comments">
+          <h4 mat-line>{{com.writer.details.firstName}} {{com.writer.details.lastName}} - {{dateFormat(com)}}</h4>
+          <p mat-line>{{com.objectComment.comment}}</p>
+        </mat-list-item>
+      </mat-list>
+
+      <mat-spinner *ngIf="!comments"></mat-spinner>
     </mat-card>
   </div>
 
