@@ -21,6 +21,7 @@ export class SelectUserComponent implements OnInit {
   @ViewChild('input', {static: true}) inputElement: NgModel;
 
   currentProfile: UserProfile;
+  autoComplete: Observable<UserProfile[]>;
 
   private inputObservable = new Observable<string>(subscriber => this.inputSubscriber = subscriber);
   private inputSubscriber: Subscriber<string>;
@@ -37,14 +38,26 @@ export class SelectUserComponent implements OnInit {
     }, err => this.inputElement.control.setErrors({noProfile : true}));
   }
 
+  private triggerSearch(val: string) {
+    this.autoComplete = this.service.searchUsers(val);
+  }
+
   ngOnInit() {
     this.inputObservable
       .pipe(
         filter(text => text.length >= 1),
-        filter(text => text.match('[0-9]+') !== null),
+        filter(text => text.match('[0-9]+') !== null || text.length >= 3),
         debounceTime(200),
         distinctUntilChanged()
-      ).subscribe(val => this.onValueChange(val));
+      ).subscribe(val => {
+        console.log('<> ' + val);
+
+        if (val.match('[0-9]+') !== null) {
+          this.onValueChange(val);
+        } else {
+          this.triggerSearch(val);
+        }
+    });
 
     if (this.selectedId) {
       this.selected = '' + this.selectedId;
