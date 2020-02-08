@@ -84,47 +84,21 @@
 
         <mat-form-field *ngIf="types" style="width: 100%;">
           <mat-label>Choisissez un type d'objet...</mat-label>
-          <mat-select [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}">
-            <mat-option [value]="null">Choisir...</mat-option>
-            <mat-option *ngFor="let tpe of types" [value]="tpe">{{tpe.name}}</mat-option>
-          </mat-select>
+          <input type="text" matInput [formControl]="objectTypeSearchControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFunc">
+            <mat-option *ngFor="let tpe of filteredTypes | async" [value]="tpe">{{tpe.name}}</mat-option>
+          </mat-autocomplete>
         </mat-form-field>
 
-        <app-quick-item-create *ngIf="selectedType" [objectType]="selectedType"
-                               (createSuccess)="selectedType = undefined; refreshObjects()"></app-quick-item-create>
+        <app-quick-item-create *ngIf="selectedType" [objectType]="selectedType" style="width: 100%;"
+                               (createSuccess)="selectedType = undefined; refreshObjects()" [setLoan]="selectedType.partOfLoan ? undefined : loan.externalLoan.externalLoanId"></app-quick-item-create>
       </mat-card>
-
-      <mat-card>
-        <mat-card-title>Types d'objets du prêt</mat-card-title>
-        <p>Vous permet de lister ou créer rapidement des types d'objets qui sont directement liés à ce prêt. Si vous ne
-          connaissez pas encore la localisation, vous pourrez la modifier plus tard.</p>
-
-
-        <table *ngIf="types" mat-table [dataSource]="types" style="width: 100%;">
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Nom</th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="inConvStorage">
-            <th mat-header-cell *matHeaderCellDef> Stockage en convention</th>
-            <td mat-cell *matCellDef="let element"> {{getStorageLocation(element.inconvStorageLocation)}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button mat-stroked-button [routerLink]="['/', 'object-types', element.objectTypeId]">Voir</button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="['name', 'inConvStorage', 'actions']"></tr>
-          <tr mat-row *matRowDef="let row; columns: ['name', 'inConvStorage', 'actions'];"></tr>
-        </table>
-      </mat-card>
+      
       <mat-card>
         <mat-card-title>Ajout rapide de type d'objet</mat-card-title>
-        <p>Utilisez le formulaire suivant pour créer rapidement un type d'objet qui sera directement ajouté au prêt.</p>
+        <p>Utilisez le formulaire suivant pour créer rapidement un type d'objet.</p>
+        <mat-slide-toggle [(ngModel)]="linkTypesToLoan">Lier les types d'objet au prêt</mat-slide-toggle>
+
 
         <form fxLayout="row" fxLayoutGap="20px" (ngSubmit)="create()">
           <mat-form-field fxFlex>

@@ -12,6 +12,7 @@ import {ObjectType} from '../../../data/object-type';
 export class QuickItemCreateComponent implements OnInit {
   @Input() objectType: ObjectType;
   @Output() createSuccess = new EventEmitter<any>();
+  @Input() setLoan: number = undefined;
 
   prefix: string;
   suffixStart: number;
@@ -84,7 +85,8 @@ export class QuickItemCreateComponent implements OnInit {
         objectTypeId: this.objectType.objectTypeId,
         suffix: (this.prefix && this.prefix.length > 0 ? this.prefix + ' ' : '') + (suffix++),
         assetTag: tag,
-        status: ObjectStatus.IN_STOCK
+        status: ObjectStatus.IN_STOCK,
+        partOfLoan: this.setLoan,
       };
     });
   }

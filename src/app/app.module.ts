@@ -9,23 +9,23 @@ import {JwtModule} from '@auth0/angular-jwt';
 import {LoginFailedComponent} from './components/accounts/login-failed/login-failed.component';
 import {RequireLoginComponent} from './components/accounts/require-login/require-login.component';
 import {
-  MatButtonModule,
-  MatCardModule,
-  MatIconModule,
-  MatProgressBarModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatListModule,
-  MatInputModule,
-  MatAutocompleteModule,
-  MatSelectModule,
-  MatTableModule,
-  MatProgressSpinnerModule,
-  MatDialogModule,
-  MatCheckboxModule,
-  MatDatepickerModule, MatNativeDateModule, MatButtonToggleModule, MatSlideToggleModule
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatTableModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatDatepickerModule, MatNativeDateModule, MatButtonToggleModule, MatSlideToggleModule, MatSortModule
 }
-  from '@angular/material';
+    from '@angular/material';
 import {AppRoutingModule} from './app-routing.module';
 import {LoginService} from './services/login.service';
 import {HttpClientModule} from '@angular/common/http';
@@ -35,7 +35,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ObjectTypesComponent } from './components/object-types/object-types.component';
 import { CreateObjectTypeComponent } from './components/object-types/create-object-type/create-object-type.component';
 import { CreateExternalLoanComponent } from './components/external-loans/create-external-loan/create-external-loan.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ShowObjectTypeComponent } from './components/object-types/show-object-type/show-object-type.component';
 import { SelectLoanComponent } from './components/selectors/select-loan/select-loan.component';
 import { SelectStorageComponent } from './components/selectors/select-storage/select-storage.component';
@@ -141,6 +141,8 @@ export function tokenGetter() {
     SignaturePadModule,
     MatButtonToggleModule,
     MatSlideToggleModule,
+    MatSortModule,
+    ReactiveFormsModule,
 
   ],
   providers: [

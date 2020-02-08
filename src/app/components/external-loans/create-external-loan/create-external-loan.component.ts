@@ -27,7 +27,6 @@ export class CreateExternalLoanComponent implements OnInit {
   }
 
   get isValid() {
-    console.log(this.loan);
     return this.loan && this.loan.externalLenderId && this.loan.returnTime && this.loan.pickupTime && this.eventId;
   }
 

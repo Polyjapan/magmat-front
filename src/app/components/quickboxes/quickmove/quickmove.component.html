@@ -1,14 +1,3 @@
-<p>Utilisez le formulaire suivant pour rapidement déplacer des objets dans cet emplacement de stockage.
-  Scannez les asset tag des objets à déplacer dans le champ de texte suivant (un par ligne), et envoyez pour
-  déplacer tous ces objets d'un coup.</p>
-<p>
-  Si vous souhaitez changer l'emplacement du type d'objet et pas seulement de l'objet scanné (exemple : changer
-  l'emplacement du type Laptop en scannant le laptop 10), cochez "Changer l'emplacement du type d'objet".
-  <br>Cela ne déplacera cependant pas les objets dont l'emplacement a été défini manuellement (par exemple, si
-  le laptop 10 a précédemment été indiqué à un emplacement différent du type Laptop, alors il ne sera pas
-  déplacé). Si vous voulez que ces objets soient déplacés aussi, alors cochez la case "Déplacer tous les objets
-  du même type".
-</p>
 
 <form (ngSubmit)="moveObjects()">
   <mat-form-field style="width: 100%;">
@@ -33,3 +22,15 @@
                           class="spinner"></mat-progress-spinner>
   </button>
 </form>
+
+<p>Utilisez le formulaire ci dessus pour rapidement déplacer des objets dans cet emplacement de stockage.
+  Scannez les asset tag des objets à déplacer dans le champ de texte (un par ligne), et envoyez pour
+  déplacer tous ces objets d'un coup.</p>
+<p>
+  Si vous souhaitez changer l'emplacement du type d'objet et pas seulement de l'objet scanné (exemple : changer
+  l'emplacement du type Laptop en scannant le laptop 10), cochez "Changer l'emplacement du type d'objet".
+  <br>Cela ne déplacera cependant pas les objets dont l'emplacement a été défini manuellement (par exemple, si
+  le laptop 10 a précédemment été indiqué à un emplacement différent du type Laptop, alors il ne sera pas
+  déplacé). Si vous voulez que ces objets soient déplacés aussi, alors cochez la case "Déplacer tous les objets
+  du même type".
+</p>

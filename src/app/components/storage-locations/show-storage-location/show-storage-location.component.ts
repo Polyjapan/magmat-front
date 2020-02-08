@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import {StorageLocation} from '../../../data/storage-location';
 import {CompleteObject, statusToString} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
 import {Observable} from 'rxjs';
 import Swal from 'sweetalert2';
+import {CreateStorageLocationComponent} from '../create-storage-location/create-storage-location.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-show-storage-location',
@@ -19,7 +21,8 @@ export class ShowStorageLocationComponent implements OnInit {
   statusToString = statusToString;
 
 
-  constructor(private ar: ActivatedRoute, private sl: StorageLocationsService, private obj: ObjectsService) { }
+  constructor(private ar: ActivatedRoute, private router: Router, private sl: StorageLocationsService, private obj: ObjectsService, private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.ar.paramMap.subscribe(map => {
@@ -41,5 +44,28 @@ export class ShowStorageLocationComponent implements OnInit {
     } else {
       return elem.object.storageLocation === undefined;
     }
+  }
+
+  update() {
+    this.dialog.open(CreateStorageLocationComponent, {data: this.location});
+  }
+
+  delete() {
+    Swal.fire({
+      titleText: 'Êtes vous sûr ?', text: 'Voulez vous vraiment supprimer cet emplacement de stockage ?',
+      showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Oui', cancelButtonText: 'Non'
+    }).then(result => {
+      if (result && result.value === true) {
+        this.location = undefined;
+
+        this.sl.deleteStorage(this.id).subscribe(res => {
+          this.sl.forceRefreshLocations();
+          this.router.navigate(['..'], {relativeTo: this.ar});
+        }, fail => {
+          Swal.fire('Oups', 'On dirait que ça n\'a pas marché.', 'error');
+          this.refresh();
+        });
+      }
+    });
   }
 }

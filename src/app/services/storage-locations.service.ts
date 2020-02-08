@@ -8,7 +8,7 @@ import {LoansService} from './loans.service';
 import {of} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {isNullOrUndefined} from 'util';
-import {filter, map} from 'rxjs/operators';
+import {filter, map, switchMap} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class StorageLocationsService {
@@ -38,8 +38,16 @@ export class StorageLocationsService {
     return this.locations.pipe(map(locations => locations.filter(loc => loc.storageLocationId === num)[0]));
   }
 
-  createStorage(loc: StorageLocation): Observable<void> {
-    return this.http.post<void>(environment.apiurl + '/locations', loc);
+  createUpdateStorage(loc: StorageLocation): Observable<void> {
+    if (loc.storageLocationId) {
+      return this.http.put<void>(environment.apiurl + '/locations/' + loc.storageLocationId, loc);
+    } else {
+      return this.http.post<void>(environment.apiurl + '/locations', loc);
+    }
+  }
+
+  deleteStorage(loc: number): Observable<void> {
+    return this.http.delete<void>(environment.apiurl + '/locations/' + loc);
   }
 
   moveItems(loc: number, items: string[], moveType: boolean, moveAll: boolean): Observable<void> {

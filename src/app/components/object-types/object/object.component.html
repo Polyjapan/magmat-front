@@ -2,7 +2,7 @@
 
 <div *ngIf="object" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
 
-  <div fxLayout="column" fxLayoutGap="20px">
+  <div fxFlex fxLayout="column" fxLayoutGap="20px">
     <mat-card>
       <mat-card-title>Détails de l'objet :: {{object.objectType.name}} {{object.object.suffix}}</mat-card-title>
 
