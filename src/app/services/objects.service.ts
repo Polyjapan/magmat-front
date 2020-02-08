@@ -71,6 +71,10 @@ export class ObjectsService {
     return this.http.get<CompleteObjectLog[]>(environment.apiurl + '/objects/logs/' + typeId);
   }
 
+  getNextSuffix(typeId: number, prefix: string): Observable<number> {
+    return this.http.get<number>(environment.apiurl + '/objects/nextSuffix/' + typeId + '?prefix=' + prefix);
+  }
+
   getObjectById(objectId: number): Observable<CompleteObject> {
     return this.http.get<CompleteObject>(environment.apiurl + '/objects/complete/' + objectId);
   }

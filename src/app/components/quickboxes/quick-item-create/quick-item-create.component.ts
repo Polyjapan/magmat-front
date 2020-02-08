@@ -1,15 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import Swal from 'sweetalert2';
 import {ObjectStatus, SingleObject} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
 import {ObjectType} from '../../../data/object-type';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-quick-item-create',
   templateUrl: './quick-item-create.component.html',
   styleUrls: ['./quick-item-create.component.css']
 })
-export class QuickItemCreateComponent implements OnInit {
+export class QuickItemCreateComponent implements OnChanges {
   @Input() objectType: ObjectType;
   @Output() createSuccess = new EventEmitter<any>();
   @Input() setLoan: number = undefined;
@@ -19,9 +20,17 @@ export class QuickItemCreateComponent implements OnInit {
   tags: string;
   sending = false;
 
+  updatePrefix(prefix: string) {
+    this.prefix = prefix;
+    this.objectsService.getNextSuffix(this.objectType.objectTypeId, this.prefix).subscribe(n => this.suffixStart = n);
+  }
+
   constructor(private objectsService: ObjectsService) { }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.objectType && (isNullOrUndefined(this.prefix) || this.prefix === '')) {
+      this.updatePrefix('');
+    }
   }
 
 
