@@ -4,8 +4,8 @@ import {CompleteObject, ObjectStatus, statusToString} from '../../../data/object
 import {UserProfile} from '../../../data/user';
 import {ObjectsService} from '../../../services/objects.service';
 import {MatDialog} from '@angular/material';
-import {SignatureModalComponent} from '../../selectors/signature-modal/signature-modal.component';
 import {requestSignature} from '../../../services/signature';
+import {storageLocationToString} from '../../../data/storage-location';
 
 @Component({
   selector: 'app-quick-changestate',
@@ -41,6 +41,9 @@ export class QuickChangestateComponent implements OnInit {
     this.changeState(ObjectStatus.LOST);
   }
 
+  ngOnInit(): void {
+  }
+
   private changeState(targetState: ObjectStatus) {
     if (!this.lendTo) {
       return;
@@ -54,7 +57,9 @@ export class QuickChangestateComponent implements OnInit {
     // May require signature
     if (this.object.objectType.requiresSignature) {
       if (this.object.object.status === ObjectStatus.IN_STOCK && targetState === ObjectStatus.OUT) {
-        requestSignature(this.dialog, this.object.objectType.name + ' ' + this.object.object.suffix, sgn => this.doChangeState(targetState, sgn), () => this.sending = false);
+        requestSignature(this.dialog, this.object.objectType.name + ' ' + this.object.object.suffix,
+            sgn => this.doChangeState(targetState, sgn),
+          () => this.sending = false);
       } else {
         this.doChangeState(targetState);
       }
@@ -80,10 +85,13 @@ export class QuickChangestateComponent implements OnInit {
         this.service
           .changeState(this.object.object.objectId, targetState, userId, signature)
           .subscribe(succ => {
+            const placeHere = targetState === ObjectStatus.IN_STOCK ? '<br>Merci de ranger l\'objet ici : <b>'
+              + storageLocationToString(this.object.inconvStorageLocationObject) + '</b>' : '';
+
             Swal.fire({
               titleText: 'Changement réussi',
               html: 'L\'objet est désormais <b>' + statusToString(targetState) + '</b> par <b>' + this.lendTo.details.firstName + ' ' +
-                this.lendTo.details.lastName + '</b>',
+                this.lendTo.details.lastName + '</b>' + placeHere,
               icon: 'success'
             });
             this.sending = false;
@@ -96,8 +104,5 @@ export class QuickChangestateComponent implements OnInit {
         this.sending = false;
       }
     }, err => this.sending = false);
-  }
-
-  ngOnInit(): void {
   }
 }

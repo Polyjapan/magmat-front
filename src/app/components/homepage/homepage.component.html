@@ -29,7 +29,7 @@
         <ng-container *ngIf="quickLoanFoundObjects && quickLoanFoundObjects.length > 0 && !currentError">
           <p>Objets trouvés :</p>
           <ul>
-            <li *ngFor="let obj of quickLoanFoundObjects">{{obj.objectType.name}} {{obj.object.suffix}}</li>
+            <li *ngFor="let obj of quickLoanFoundObjects">{{obj.objectType.name}} {{obj.object.suffix}} (rangement : {{storageLocationToString(obj.inconvStorageLocationObject)}}</li>
           </ul>
 
           <p *ngIf="!targetState">Erreur : Les objets n'ont pas tous le même état.</p>

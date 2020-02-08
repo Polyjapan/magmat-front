@@ -7,11 +7,22 @@ export class StorageLocation {
   location: string;
 }
 
-export function storageLocationToString(loc: StorageLocation, defaultValue: string = '') {
-  if (!loc) {
+export function storageLocationToString(location: StorageLocation, defaultValue: string = ''): string {
+  if (location) {
+    const parts = [];
+
+    if (location.room) {
+      parts.push(location.room);
+    }
+    if (location.space) {
+      parts.push(location.space);
+    }
+    if (location.location) {
+      parts.push(location.location);
+    }
+
+    return parts.join(' > ') + ' [' + (location.inConv ? 'EnConv' : 'HorsConv') + ']';
+  } else {
     return defaultValue;
   }
-
-  const level2 = loc.space + ' > ' + loc.location;
-  return loc.room ? loc.room + ' > ' + level2 : level2;
 }

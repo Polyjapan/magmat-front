@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {StorageLocation} from '../../../data/storage-location';
+import {StorageLocation, storageLocationToString} from '../../../data/storage-location';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -33,22 +33,6 @@ export class SelectStorageComponent implements OnInit {
   }
 
   displayLocation(location?: StorageLocation): string | undefined {
-    if (location) {
-      const parts = [];
-
-      if (location.room) {
-        parts.push(location.room);
-      }
-      if (location.space) {
-        parts.push(location.space);
-      }
-      if (location.location) {
-        parts.push(location.location);
-      }
-
-      return parts.join(' > ') + ' [' + (location.inConv ? 'EnConv' : 'HorsConv') + ']';
-    } else {
-      return '???';
-    }
+    return storageLocationToString(location, '???');
   }
 }
