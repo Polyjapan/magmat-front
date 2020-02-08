@@ -52,9 +52,9 @@ export class QuickChangestateComponent implements OnInit {
 
     // May require signature
     if (this.object.objectType.requiresSignature) {
-      if (targetState === ObjectStatus.IN_STOCK || targetState === ObjectStatus.OUT) {
+      if (this.object.object.status === ObjectStatus.IN_STOCK && targetState === ObjectStatus.OUT) {
         // Retour en stock ou sortie de stock.
-        const text = (targetState === ObjectStatus.IN_STOCK ? "Retour" : "Emprunt") + ' de ' + this.object.objectType.name + ' ' + this.object.object.suffix;
+        const text = 'Emprunt de ' + this.object.objectType.name + ' ' + this.object.object.suffix;
         this.dialog.open(SignatureModalComponent, {data: text})
           .afterClosed()
           .subscribe(res => {

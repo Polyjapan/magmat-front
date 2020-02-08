@@ -33,6 +33,22 @@ export class SelectStorageComponent implements OnInit {
   }
 
   displayLocation(location?: StorageLocation): string | undefined {
-    return location ? location.room + ' - ' + location.space + ' - ' + location.location : undefined;
+    if (location) {
+      const parts = [];
+
+      if (location.room) {
+        parts.push(location.room);
+      }
+      if (location.space) {
+        parts.push(location.space);
+      }
+      if (location.location) {
+        parts.push(location.location);
+      }
+
+      return parts.join(' > ') + ' [' + (location.inConv ? 'EnConv' : 'HorsConv') + ']';
+    } else {
+      return '???';
+    }
   }
 }

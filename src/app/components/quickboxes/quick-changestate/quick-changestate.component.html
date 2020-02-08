@@ -13,7 +13,7 @@
   </p>
 </ng-container>
 
-<p *ngIf="object.objectType.requiresSignature"><b><mat-icon>warning</mat-icon> ATTENTION : </b>Une signature est requise pour prêter ou récupérer l'objet. Ne laissez pas partir la personne avant d'avoir la signature.</p>
+<p *ngIf="object.objectType.requiresSignature"><b><mat-icon>warning</mat-icon> ATTENTION : </b>Une signature est requise pour prêter l'objet. Ne laissez pas partir la personne avant d'avoir la signature.</p>
 
 <form>
   <app-select-user (selectedUser)="lendTo = $event"></app-select-user>

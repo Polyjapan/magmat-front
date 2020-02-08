@@ -29,7 +29,7 @@ export class SelectUserComponent implements OnInit {
   constructor(private service: ProfileService) {
   }
 
-  private onValueChange(val: string) {
+  onValueChange(val: string) {
     this.service.getUserProfile(val).subscribe(data => {
       this.selectedIdChange.emit(data.id);
       this.selectedUser.emit(data);

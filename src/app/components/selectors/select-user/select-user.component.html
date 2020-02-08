@@ -3,7 +3,7 @@
   <input matInput placeholder="ID utilisateur (141) ou s + numéro staff (s19)" [ngModel]="selected" #input="ngModel" (ngModelChange)="update($event)" name="staff" [matAutocomplete]="auto">
 
   <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let option of autoComplete | async" [value]="option.id" (onSelectionChange)="onValueChange(option.id)">
+    <mat-option *ngFor="let option of autoComplete | async" [value]="option.id" (onSelectionChange)="onValueChange('' + option.id)">
       {{ option.details.firstName }} {{ option.details.lastName }} ({{ option.email }})
     </mat-option>
   </mat-autocomplete>
