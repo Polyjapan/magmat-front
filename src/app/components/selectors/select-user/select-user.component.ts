@@ -71,4 +71,9 @@ export class SelectUserComponent implements OnInit {
     this.currentProfile = undefined;
     this.inputSubscriber.next($event);
   }
+
+  public reset() {
+    this.selected = '';
+    this.update('');
+  }
 }

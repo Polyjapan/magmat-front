@@ -19,29 +19,29 @@
       <p>Permet de prêter ou récupérer d'un coup plusieurs objets d'un utilisateur. Les objets doivent tous avoir le
         même état source (prêté ou à rendre).</p>
 
-      <app-select-user [(selectedId)]="quickLoanMultiUser"></app-select-user>
+      <app-select-user #quickMultiLoanUserSelect [(selectedId)]="quickLoanMultiUser"></app-select-user>
 
       <ng-container *ngIf="quickLoanMultiUser">
         <mat-form-field style="width: 100%;">
           <textarea matInput placeholder="Asset Tags" name="assetTags" [formControl]="quickLoanMultiTags"></textarea>
         </mat-form-field>
 
-        <ng-container *ngIf="(hasObjects | async) && !(currentError | async)">
+        <ng-container *ngIf="quickLoanFoundObjects && quickLoanFoundObjects.length > 0 && !currentError">
           <p>Objets trouvés :</p>
           <ul>
-            <li *ngFor="let obj of quickLoanFoundObjects | async">{{obj.objectType.name}} {{obj.object.suffix}}</li>
+            <li *ngFor="let obj of quickLoanFoundObjects">{{obj.objectType.name}} {{obj.object.suffix}}</li>
           </ul>
 
-          <p *ngIf="!(targetState | async)">Erreur : Les objets n'ont pas tous le même état.</p>
+          <p *ngIf="!targetState">Erreur : Les objets n'ont pas tous le même état.</p>
 
-          <p *ngIf="requiresSignature | async"><b><mat-icon>warning</mat-icon> ATTENTION : </b>Une signature est requise pour prêter l'objet. Ne laissez pas partir la personne avant d'avoir la signature.</p>
+          <p *ngIf="requiresSignature"><b><mat-icon>warning</mat-icon> ATTENTION : </b>Une signature est requise pour prêter l'objet. Ne laissez pas partir la personne avant d'avoir la signature.</p>
 
-          <button *ngIf="(targetState | async)" [disabled]="quickLoanMultiSending" type="submit" (click)="quickLoan()" mat-stroked-button
-                  color="accent" style="width: 100%;">{{(targetState | async) === ObjectStatus.OUT ? 'Ouvrir' : 'Fermer'}} le prêt
+          <button *ngIf="targetState" [disabled]="quickLoanMultiSending" type="submit" (click)="quickLoan()" mat-stroked-button
+                  color="accent" style="width: 100%;">{{targetState === ObjectStatus.OUT ? 'Ouvrir' : 'Fermer'}} le prêt
           </button>
         </ng-container>
 
-        <p *ngIf="currentError | async">Erreur : {{currentError | async}}</p>
+        <p *ngIf="currentError">Erreur : {{currentError}}</p>
       </ng-container>
 
     </mat-card>
