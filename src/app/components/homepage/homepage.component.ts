@@ -82,7 +82,7 @@ export class HomepageComponent implements OnInit {
         this.targetState = this.quickLoanFoundObjects.pipe(
             map(lst => {
               const targetStatuses = new Set(lst
-                  .map(e => e ? (e.object.status !== ObjectStatus.IN_STOCK) ? ObjectStatus.IN_STOCK : ObjectStatus.OUT : undefined));
+                  .map(e => e ? (e.object.status !== ObjectStatus.IN_STOCK) ? ObjectStatus.OUT : ObjectStatus.IN_STOCK : undefined));
 
               if (targetStatuses.size > 1) {
                 return undefined;
