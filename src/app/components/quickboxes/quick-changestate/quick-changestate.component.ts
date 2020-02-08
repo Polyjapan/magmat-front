@@ -5,6 +5,7 @@ import {UserProfile} from '../../../data/user';
 import {ObjectsService} from '../../../services/objects.service';
 import {MatDialog} from '@angular/material';
 import {SignatureModalComponent} from '../../selectors/signature-modal/signature-modal.component';
+import {requestSignature} from '../../../services/signature';
 
 @Component({
   selector: 'app-quick-changestate',
@@ -53,18 +54,7 @@ export class QuickChangestateComponent implements OnInit {
     // May require signature
     if (this.object.objectType.requiresSignature) {
       if (this.object.object.status === ObjectStatus.IN_STOCK && targetState === ObjectStatus.OUT) {
-        // Retour en stock ou sortie de stock.
-        const text = 'Emprunt de ' + this.object.objectType.name + ' ' + this.object.object.suffix;
-        this.dialog.open(SignatureModalComponent, {data: text})
-          .afterClosed()
-          .subscribe(res => {
-            if (res && typeof res === 'string') {
-              this.doChangeState(targetState, res);
-            } else {
-              Swal.fire('Eh non!', 'Impossible de faire ça, il te faut signer mon dude.', 'error');
-              this.sending = false;
-            }
-          });
+        requestSignature(this.dialog, this.object.objectType.name + ' ' + this.object.object.suffix, sgn => this.doChangeState(targetState, sgn), () => this.sending = false);
       } else {
         this.doChangeState(targetState);
       }

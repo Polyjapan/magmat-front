@@ -5,21 +5,45 @@
 
   <div fxFlex>
     <mat-card>
-      <mat-card-title>Prêt rapide</mat-card-title>
+      <mat-card-title>Changement d'état rapide</mat-card-title>
 
       <app-select-object [(selected)]="quickLoanTag" (selectedObject)="quickLoanObject = $event"></app-select-object>
 
-      <app-quick-changestate *ngIf="quickLoanObject" [object]="quickLoanObject" (update)="quickLoanTag = undefined"></app-quick-changestate>
+      <app-quick-changestate *ngIf="quickLoanObject" [object]="quickLoanObject"
+                             (update)="quickLoanTag = undefined"></app-quick-changestate>
     </mat-card>
   </div>
   <div fxFlex>
     <mat-card>
-      <mat-card-title>Déplacement rapide</mat-card-title>
+      <mat-card-title>Prêt/Retour multiple rapide</mat-card-title>
+      <p>Permet de prêter ou récupérer d'un coup plusieurs objets d'un utilisateur. Les objets doivent tous avoir le
+        même état source (prêté ou à rendre).</p>
 
+      <app-select-user [(selectedId)]="quickLoanMultiUser"></app-select-user>
 
-      <app-select-storage [(selected)]="quickMoveStorage"></app-select-storage>
+      <ng-container *ngIf="quickLoanMultiUser">
+        <mat-form-field style="width: 100%;">
+          <textarea matInput placeholder="Asset Tags" name="assetTags" [formControl]="quickLoanMultiTags"></textarea>
+        </mat-form-field>
 
-      <app-quickmove *ngIf="quickMoveStorage" [locationId]="quickMoveStorage" (success)="quickMoveStorage = undefined"></app-quickmove>
+        <ng-container *ngIf="(hasObjects | async) && !(currentError | async)">
+          <p>Objets trouvés :</p>
+          <ul>
+            <li *ngFor="let obj of quickLoanFoundObjects | async">{{obj.objectType.name}} {{obj.object.suffix}}</li>
+          </ul>
+
+          <p *ngIf="!(targetState | async)">Erreur : Les objets n'ont pas tous le même état.</p>
+
+          <p *ngIf="requiresSignature | async"><b><mat-icon>warning</mat-icon> ATTENTION : </b>Une signature est requise pour prêter l'objet. Ne laissez pas partir la personne avant d'avoir la signature.</p>
+
+          <button *ngIf="(targetState | async)" [disabled]="quickLoanMultiSending" type="submit" (click)="quickLoan()" mat-stroked-button
+                  color="accent" style="width: 100%;">{{(targetState | async) === ObjectStatus.OUT ? 'Ouvrir' : 'Fermer'}} le prêt
+          </button>
+        </ng-container>
+
+        <p *ngIf="currentError | async">Erreur : {{currentError | async}}</p>
+      </ng-container>
+
     </mat-card>
   </div>
   <div fxFlex>
@@ -27,6 +51,16 @@
       <mat-card-title>Accès rapide</mat-card-title>
 
       <app-select-object (selectedObject)="redirectTo($event)"></app-select-object>
+    </mat-card>
+
+    <mat-card style="margin-top: 10px;">
+      <mat-card-title>Déplacement rapide</mat-card-title>
+
+
+      <app-select-storage [(selected)]="quickMoveStorage"></app-select-storage>
+
+      <app-quickmove *ngIf="quickMoveStorage" [locationId]="quickMoveStorage"
+                     (success)="quickMoveStorage = undefined"></app-quickmove>
     </mat-card>
   </div>
 

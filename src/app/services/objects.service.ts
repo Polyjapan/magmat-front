@@ -100,7 +100,7 @@ export class ObjectsService {
     return this.http.post<void>(environment.apiurl + '/objects/comments/' + objectId, comment);
   }
 
-  getObjectByTag(tag: string) {
+  getObjectByTag(tag: string): Observable<CompleteObject> {
     return this.http.get<CompleteObject>(environment.apiurl + '/objects/by-tag/' + tag);
   }
 }
