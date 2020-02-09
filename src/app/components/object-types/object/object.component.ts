@@ -4,7 +4,7 @@ import {ObjectsService} from '../../../services/objects.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {storageLocationToString} from '../../../data/storage-location';
 import {externalLoanToString} from 'src/app/data/external-loan';
-import {CompleteObjectLog} from '../../../data/object-log';
+import {ObjectLogWithUser} from '../../../data/object-log';
 import Swal from 'sweetalert2';
 import {CompleteObjectComment} from '../../../data/object-comment';
 import {AuthService} from '../../../services/auth.service';
@@ -19,7 +19,7 @@ export class ObjectComponent implements OnInit {
   externalLoanToString = externalLoanToString;
   storageLocationToString = storageLocationToString;
   statusToString = statusToString;
-  logs: CompleteObjectLog[];
+  logs: ObjectLogWithUser[];
   comments: CompleteObjectComment[];
   comment: string;
   posting = false;
@@ -41,7 +41,7 @@ export class ObjectComponent implements OnInit {
     this.loadComments();
   }
 
-  dateFormat(_log: CompleteObjectLog | CompleteObjectComment) {
+  dateFormat(_log: ObjectLogWithUser | CompleteObjectComment) {
     const log = _log as any;
     const date = log.objectLog ? log.objectLog.timestamp : log.objectComment.timestamp;
 

@@ -1,5 +1,6 @@
-import {ObjectStatus} from './object';
+import {ObjectStatus, SingleObject} from './object';
 import {UserProfile} from './user';
+import {ObjectType} from './object-type';
 
 export class ObjectLog {
   objectId: number;
@@ -12,8 +13,14 @@ export class ObjectLog {
   signature?: string;
 }
 
-export class CompleteObjectLog {
+export class ObjectLogWithUser {
   objectLog: ObjectLog;
   user: UserProfile;
   changedBy: UserProfile;
+}
+
+export class ObjectLogWithObject {
+  objectLog: ObjectLog;
+  object: SingleObject;
+  objectType: ObjectType;
 }

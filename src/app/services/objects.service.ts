@@ -8,7 +8,7 @@ import {of, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {CompleteObject, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
-import {CompleteObjectLog} from '../data/object-log';
+import {ObjectLogWithObject, ObjectLogWithUser} from '../data/object-log';
 import {TopTidyingTree} from '../data/tidying';
 import {CompleteObjectComment} from '../data/object-comment';
 
@@ -59,6 +59,10 @@ export class ObjectsService {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/loanedTo/' + userId);
   }
 
+  getLoansHistoryForUser(userId: number): Observable<ObjectLogWithObject[]> {
+    return this.http.get<ObjectLogWithObject[]>(environment.apiurl + '/objects/history/' + userId);
+  }
+
   getObjectsForLocation(location: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-location/complete/' + location);
   }
@@ -67,8 +71,8 @@ export class ObjectsService {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-loan/complete/' + loan);
   }
 
-  getObjectLogs(typeId: number): Observable<CompleteObjectLog[]> {
-    return this.http.get<CompleteObjectLog[]>(environment.apiurl + '/objects/logs/' + typeId);
+  getObjectLogs(typeId: number): Observable<ObjectLogWithUser[]> {
+    return this.http.get<ObjectLogWithUser[]>(environment.apiurl + '/objects/logs/' + typeId);
   }
 
   getNextSuffix(typeId: number, prefix: string): Observable<number> {

@@ -17,7 +17,7 @@ import {ReturnsComponent} from './components/returns/returns.component';
 import {TidyingComponent} from './components/tidying/tidying.component';
 import {HomepageComponent} from './components/homepage/homepage.component';
 import {UpdateObjectComponent} from './components/object-types/update-object/update-object.component';
-import {InternalLoansComponent} from './components/internal-loans/internal-loans.component';
+import {UserLogsComponent} from './components/user-logs/user-logs.component';
 
 
 const routes: Routes = [
@@ -42,7 +42,7 @@ const routes: Routes = [
   {path: 'tidying', component: TidyingComponent, canActivate: [PermissionAuthGuard]},
   {path: 'returns', component: ReturnsComponent, canActivate: [PermissionAuthGuard]},
 
-  {path: 'internal-loans', component: InternalLoansComponent, canActivate: [PermissionAuthGuard]},
+  {path: 'user-logs', component: UserLogsComponent, canActivate: [PermissionAuthGuard]},
 
   {path: 'external-loans', component: ExternalLoansComponent, canActivate: [PermissionAuthGuard]},
   {path: 'external-loans/create', component: CreateExternalLoanComponent, canActivate: [PermissionAuthGuard]},
