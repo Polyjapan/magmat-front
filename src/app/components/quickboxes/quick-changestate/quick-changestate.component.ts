@@ -56,9 +56,9 @@ export class QuickChangestateComponent implements OnInit {
 
     // May require signature
     if (this.object.objectType.requiresSignature) {
-      if (this.object.object.status === ObjectStatus.IN_STOCK && targetState === ObjectStatus.OUT) {
+      if ((this.object.object.status === ObjectStatus.IN_STOCK || this.object.object.status === ObjectStatus.OUT) && targetState === ObjectStatus.OUT) {
         requestSignature(this.dialog, this.object.objectType.name + ' ' + this.object.object.suffix,
-            sgn => this.doChangeState(targetState, sgn),
+          sgn => this.doChangeState(targetState, sgn),
           () => this.sending = false);
       } else {
         this.doChangeState(targetState);
