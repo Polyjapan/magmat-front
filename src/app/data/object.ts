@@ -4,7 +4,7 @@ import {ObjectType} from './object-type';
 import {UserProfile} from './user';
 
 export enum ObjectStatus {
-  IN_STOCK = 'InStock', OUT = 'Out', LOST = 'Lost', RESTING = 'Resting'
+  IN_STOCK = 'InStock', OUT = 'Out', LOST = 'Lost', RESTING = 'Resting', DELETED = 'Deleted'
 }
 
 export function statusToString(status: ObjectStatus) {
@@ -17,6 +17,8 @@ export function statusToString(status: ObjectStatus) {
       return 'Prêté';
     case ObjectStatus.RESTING:
       return 'Déposé';
+    case ObjectStatus.DELETED:
+      return 'Remisé';
   }
 }
 

@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {CompleteObject, ObjectStatus, statusToString} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {storageLocationToString} from '../../../data/storage-location';
 import {externalLoanToString} from 'src/app/data/external-loan';
-import {CompleteObjectLog, ObjectLog} from '../../../data/object-log';
-import {UserProfile} from '../../../data/user';
+import {CompleteObjectLog} from '../../../data/object-log';
 import Swal from 'sweetalert2';
 import {CompleteObjectComment} from '../../../data/object-comment';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-object',
@@ -16,19 +16,17 @@ import {CompleteObjectComment} from '../../../data/object-comment';
 })
 export class ObjectComponent implements OnInit {
   object: CompleteObject;
-  private id: number;
   externalLoanToString = externalLoanToString;
   storageLocationToString = storageLocationToString;
   statusToString = statusToString;
-
   logs: CompleteObjectLog[];
   comments: CompleteObjectComment[];
-
   comment: string;
   posting = false;
+  private id: number;
 
-
-  constructor(private service: ObjectsService, private route: ActivatedRoute) { }
+  constructor(private service: ObjectsService, private route: ActivatedRoute, private auth: AuthService, private router: Router) {
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
@@ -72,4 +70,26 @@ export class ObjectComponent implements OnInit {
     }, err => this.posting = false);
   }
 
+  delete() {
+    Swal.fire({
+      titleText: 'Es-tu certain de vouloir faire cela ?',
+      html: 'Cette opération placera l\'objet dans un état final "Remisé" dont il ne pourra plus jamais sortir.<br>Il disparaitra également ' +
+        'des listes d\'objets, mais pourra toujours être retrouvé avec son asset tag.<br>Son asset tag ne sera pas libéré.',
+      confirmButtonText: 'Oui',
+      cancelButtonText: 'Non',
+      showCancelButton: true, showConfirmButton: true
+    }).then(res => {
+      if (res.value === true) {
+        this.service
+          .changeState(this.object.object.objectId, ObjectStatus.DELETED, this.auth.getToken().userId)
+          .subscribe(succ => {
+            Swal.fire(undefined, undefined, 'success');
+            this.router.navigate(['/', 'object-types', this.object.object.objectTypeId]);
+          }, err => {
+            Swal.fire('Erreur inconnue', undefined, 'error');
+            console.log(err);
+          });
+      }
+    });
+  }
 }

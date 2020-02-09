@@ -7,8 +7,9 @@
       <mat-card-title>Détails de l'objet :: {{object.objectType.name}} {{object.object.suffix}}</mat-card-title>
 
       <mat-card-content>
-        <button [routerLink]="['..', 'update', object.object.objectId]" mat-stroked-button>Modifier l'objet</button>
-        <button [routerLink]="['/', 'object-types', object.object.objectTypeId]" mat-stroked-button>Retour au type de l'objet</button>
+        <button [routerLink]="['..', 'update', object.object.objectId]" mat-stroked-button><mat-icon>edit</mat-icon> Modifier l'objet</button>
+        <button (click)="delete()" mat-stroked-button><mat-icon>delete</mat-icon> Supprimer l'objet</button>
+        <button [routerLink]="['/', 'object-types', object.object.objectTypeId]" mat-stroked-button><mat-icon>keyboard_backspace</mat-icon> Retour au type de l'objet</button>
 
         <ul>
           <li *ngIf="object.object.assetTag"><b>Asset Tag</b> : <code>{{object.object.assetTag}}</code></li>
