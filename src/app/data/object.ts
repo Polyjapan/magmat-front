@@ -46,6 +46,11 @@ export class CompleteObject {
   reservedFor?: UserProfile;
 }
 
+export class CompleteObjectWithUser {
+  object: CompleteObject;
+  user: UserProfile;
+}
+
 export class ObjectCreateResult {
   inserted: SingleObject[];
   notInserted: SingleObject[];

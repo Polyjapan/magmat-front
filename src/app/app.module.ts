@@ -62,6 +62,7 @@ import { SignatureModalComponent } from './components/selectors/signature-modal/
 import { UpdateObjectComponent } from './components/object-types/update-object/update-object.component';
 import { UserLogsComponent } from './components/user-logs/user-logs.component';
 import { ObjectsListComponent } from './components/object-types/objects-list/objects-list.component';
+import { AllObjectsOutComponent } from './components/all-objects-out/all-objects-out.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -102,6 +103,7 @@ export function tokenGetter() {
     UpdateObjectComponent,
     UserLogsComponent,
     ObjectsListComponent,
+    AllObjectsOutComponent,
   ],
   entryComponents: [
     CreateStorageLocationComponent,

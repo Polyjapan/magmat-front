@@ -7,7 +7,7 @@ import {StorageLocationsService} from './storage-locations.service';
 import {of, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
-import {CompleteObject, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
+import {CompleteObject, CompleteObjectWithUser, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
 import {ObjectLogWithObject, ObjectLogWithUser} from '../data/object-log';
 import {TopTidyingTree} from '../data/tidying';
 import {CompleteObjectComment} from '../data/object-comment';
@@ -57,6 +57,10 @@ export class ObjectsService {
 
   getObjectsLoanedToUser(userId: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/loanedTo/' + userId);
+  }
+
+  getObjectsLoaned(): Observable<CompleteObjectWithUser[]> {
+    return this.http.get<CompleteObjectWithUser[]>(environment.apiurl + '/objects/loaned/');
   }
 
   getLoansHistoryForUser(userId: number): Observable<ObjectLogWithObject[]> {

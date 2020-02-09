@@ -8,6 +8,9 @@
   <a mat-list-item [class.active]="subUrl === 'user-logs'" [routerLink]="['user-logs']">
     <mat-icon>swap_horiz</mat-icon>
     Historique par utilisateur</a>
+  <a mat-list-item [class.active]="subUrl === 'objects-out'" [routerLink]="['objects-out']">
+    <mat-icon>list</mat-icon>
+    Liste des objets prêtés</a>
   <a mat-list-item [class.active]="subUrl === 'external-loans'" [routerLink]="['external-loans']">
     <mat-icon>receipt</mat-icon>
     Prêts externes</a>
