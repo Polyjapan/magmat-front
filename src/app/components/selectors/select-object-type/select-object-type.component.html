@@ -1,0 +1,8 @@
+<mat-form-field *ngIf="types" style="width: 100%;">
+  <mat-label>Choisissez un type d'objet...</mat-label>
+  <input type="text" matInput [formControl]="objectTypeSearchControl" [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFunc">
+    <mat-option *ngFor="let tpe of filteredTypes | async" [value]="tpe">{{tpe.name}}</mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+<mat-spinner *ngIf="!types"></mat-spinner>

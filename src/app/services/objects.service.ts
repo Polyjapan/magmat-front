@@ -105,7 +105,7 @@ export class ObjectsService {
   }
 
   postObjectComment(objectId: number, comment: string): Observable<void> {
-    return this.http.post<void>(environment.apiurl + '/objects/comments/' + objectId, comment);
+    return this.http.post<void>(environment.apiurl + '/objects/comments/' + objectId, comment, {headers: {'Content-Type': 'text/plain; charset=UTF-8'}});
   }
 
   getObjectByTag(tag: string): Observable<CompleteObject> {

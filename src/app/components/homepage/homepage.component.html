@@ -1,5 +1,5 @@
 <h1>Magmat'o'Matic</h1>
-<h2><i>Salut !</i></h2>
+<h2><i>Salut pétole !</i></h2>
 
 <div fxLayout.lt-md="column" fxLayout="row" fxLayoutGap="10px">
 
@@ -8,6 +8,8 @@
       <mat-card-title>Changement d'état rapide</mat-card-title>
 
       <app-select-object [(selected)]="quickLoanTag" (selectedObject)="quickLoanObject = $event"></app-select-object>
+
+      <p *ngIf="quickLoanObject && quickLoanObject.object.description"><b>Description : </b>{{quickLoanObject.object.description}}</p>
 
       <app-quick-changestate *ngIf="quickLoanObject" [object]="quickLoanObject"
                              (update)="quickLoanTag = undefined"></app-quick-changestate>

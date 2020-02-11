@@ -33,6 +33,10 @@ export class UpdateObjectComponent implements OnInit {
       return;
     }
 
+    if (this.object.object.objectTypeId !== this.object.objectType.objectTypeId) {
+      this.object.object.objectTypeId = this.object.objectType.objectTypeId;
+    }
+
     this.sending = true;
     this.objects.updateObject(this.object).subscribe(id => {
       Swal.fire({title: 'Objet mis à jour', icon: 'success', timer: 3000, timerProgressBar: true}).then(() => {

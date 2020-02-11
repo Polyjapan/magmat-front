@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {CompleteExternalLoan, LoanState, loanStateToText} from '../../../data/external-loan';
 import {ActivatedRoute} from '@angular/router';
 import {LoansService} from '../../../services/loans.service';
@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {filter, map, startWith} from 'rxjs/operators';
+import {SelectObjectTypeComponent} from '../../selectors/select-object-type/select-object-type.component';
 
 @Component({
   selector: 'app-view-external-loan',
@@ -25,15 +26,13 @@ export class ViewExternalLoanComponent implements OnInit {
   loanStateToText = loanStateToText;
   statusToString = statusToString;
   items: CompleteObject[]; // For objects listing
-  types: ObjectType[];
   locations = new Map<number, StorageLocation>();
-  selectedType: ObjectType;
   createdType: ObjectType;
   creating: boolean;
   changingState = false;
   linkTypesToLoan = false;
-  objectTypeSearchControl = new FormControl();
-  filteredTypes: Observable<ObjectType[]>;
+  selectedType: ObjectType;
+  @ViewChild(SelectObjectTypeComponent, {static: false}) selectObjectTypeComponent: SelectObjectTypeComponent;
 
   constructor(private ar: ActivatedRoute, private ls: LoansService, private os: ObjectsService, private sls: StorageLocationsService) {
   }
@@ -73,34 +72,11 @@ export class ViewExternalLoanComponent implements OnInit {
 
     this.resetCreatedType();
 
-    this.filteredTypes = this.objectTypeSearchControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this.types.filter(t => t.name.toLowerCase().indexOf(name.toLowerCase()) === 0) : this.types)
-      );
 
-    this.objectTypeSearchControl.valueChanges.subscribe(v => {
-      console.log(v);
-      console.log(typeof v);
-      if (typeof v === 'object' && v.name && v.objectTypeId) {
-        this.selectedType = v as ObjectType;
-      } else {
-        this.selectedType = undefined;
-      }
-    });
   }
 
   refreshObjects() {
     this.os.getObjectsForLoan(this.id).subscribe(items => this.items = items);
-  }
-
-  displayFunc(tpe: ObjectType): string {
-    return isNullOrUndefined(tpe) ? '' : tpe.name + ' (#' + tpe.objectTypeId + ')';
-  }
-
-  refreshTypes() {
-    this.os.getObjectTypes().subscribe(tpes => this.types = tpes.map(o => o.objectType));
   }
 
   refreshLoan() {
@@ -188,5 +164,11 @@ export class ViewExternalLoanComponent implements OnInit {
       this.creating = false;
       Swal.fire('Erreur', 'Une erreur s\'est produite pendant l\'envoi. Merci de réessayer.', 'error');
     });
+  }
+
+  private refreshTypes() {
+    if (this.selectObjectTypeComponent) {
+      this.selectObjectTypeComponent.refreshTypes();
+    }
   }
 }

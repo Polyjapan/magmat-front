@@ -42,7 +42,7 @@ export class ObjectTypesComponent implements OnInit {
     this.types.subscribe(data => this.typesSource.data = data);
     this.typesSource.sort = this.sort;
     this.typesSource.sortingDataAccessor = this.dataAccessor;
-    this.typesSource.filterPredicate = (data: CompleteObject, search: string) =>
+    this.typesSource.filterPredicate = (data: CompleteObjectType, search: string) =>
       ['inConvStorage', 'offConvStorage', 'sourceLoan', 'name']
         .map(s => this.dataAccessor(data, s))
         .join(' ').toLowerCase().includes(search.toLowerCase());

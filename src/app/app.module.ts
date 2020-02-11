@@ -63,6 +63,7 @@ import { UpdateObjectComponent } from './components/object-types/update-object/u
 import { UserLogsComponent } from './components/user-logs/user-logs.component';
 import { ObjectsListComponent } from './components/object-types/objects-list/objects-list.component';
 import { AllObjectsOutComponent } from './components/all-objects-out/all-objects-out.component';
+import { SelectObjectTypeComponent } from './components/selectors/select-object-type/select-object-type.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -104,6 +105,7 @@ export function tokenGetter() {
     UserLogsComponent,
     ObjectsListComponent,
     AllObjectsOutComponent,
+    SelectObjectTypeComponent,
   ],
   entryComponents: [
     CreateStorageLocationComponent,

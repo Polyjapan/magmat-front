@@ -1,3 +1,10 @@
+<form>
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Filtrer..." [(ngModel)]="dataSource.filter" name="filter">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</form>
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z4" style="width: 100%;" matSort>
   <ng-container matColumnDef="assetTag">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Asset Tag </th>

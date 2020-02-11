@@ -63,6 +63,11 @@ export class ObjectsListComponent implements OnChanges {
     this.dataSource.data = this.objects;
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = this.dataAccessor;
+
+    this.dataSource.filterPredicate = (data: (CompleteObject | CompleteObjectWithUser), search: string) =>
+      ['name']
+        .map(s => this.dataAccessor(data, s))
+        .join(' ').toLowerCase().includes(search.toLowerCase());
   }
 
 }
