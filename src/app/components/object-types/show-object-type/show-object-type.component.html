@@ -1,6 +1,9 @@
 <mat-spinner *ngIf="!objectType"></mat-spinner>
 <ng-container *ngIf="objectType">
-  <h1>Type d'objets #{{objectType.objectType.objectTypeId}} :: {{objectType.objectType.name}} <button mat-flat-button [routerLink]="['..', 'edit', objectType.objectType.objectTypeId]">Modifier</button></h1>
+  <h1>Type d'objets #{{objectType.objectType.objectTypeId}} :: {{objectType.objectType.name}}</h1>
+
+  <button mat-stroked-button [routerLink]="['..', 'edit', objectType.objectType.objectTypeId]"><mat-icon>edit</mat-icon> Modifier</button>
+  <button mat-stroked-button (click)="delete()" [disabled]="deleting"><mat-icon>delete</mat-icon> Supprimer</button>
 
   <p>{{objectType.objectType.description}}</p>
 

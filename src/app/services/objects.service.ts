@@ -38,12 +38,16 @@ export class ObjectsService {
     }
   }
 
+  getObjectType(id: number): Observable<CompleteObjectType> {
+    return this.http.get<CompleteObjectType>(environment.apiurl + '/objects/types/complete/' + id);
+  }
+
   updateObject(object: CompleteObject): Observable<void> {
     return this.http.put<void>(environment.apiurl + '/objects/' + object.object.objectId, object.object);
   }
 
-  getObjectType(id: number): Observable<CompleteObjectType> {
-    return this.http.get<CompleteObjectType>(environment.apiurl + '/objects/types/complete/' + id);
+  deleteObjectType(id: number): Observable<void> {
+    return this.http.delete<void>(environment.apiurl + '/objects/types/' + id);
   }
 
   getSimpleObjectType(id: number): Observable<ObjectType> {
