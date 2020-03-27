@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
-import {AuthService} from './services/auth.service';
+import {LoginManager} from './services/login-manager.service';
 import {BreakpointObserver, Breakpoints, MediaMatcher} from '@angular/cdk/layout';
 import {RouterOutlet} from '@angular/router';
 import {map, shareReplay} from 'rxjs/operators';
@@ -21,7 +21,7 @@ export class AppComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) {
+  constructor(private breakpointObserver: BreakpointObserver, private auth: LoginManager) {
   }
 
   activateRoute(event, elem: RouterOutlet) {

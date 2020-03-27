@@ -56,7 +56,7 @@ export class SelectStorageComponent implements OnInit, OnChanges {
       );
 
     this.searchControl.valueChanges.subscribe(v => {
-      if (typeof v === 'object' && v.name && v.objectTypeId) {
+      if (typeof v === 'object' && v.storageLocationId) {
         this.selectedChange.emit((v as StorageLocation).storageLocationId);
       } else {
         this.selectedChange.emit(undefined);

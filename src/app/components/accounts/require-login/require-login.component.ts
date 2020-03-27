@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {environment} from '../../../../environments/environment';
+import {AuthApiService} from '@japanimpact/angular-auth-framework';
 
 @Component({
   selector: 'app-require-login',
@@ -9,10 +10,10 @@ import {environment} from '../../../../environments/environment';
 export class RequireLoginComponent implements OnInit {
   url = environment.auth.apiurl + '/login?app=' + environment.auth.clientId;
 
-  constructor() { }
+  constructor(private auth: AuthApiService) { }
 
   ngOnInit() {
-    window.location.replace(this.url);
+    window.location.replace(this.auth.loginUrl);
   }
 
 }

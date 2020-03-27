@@ -7,7 +7,7 @@ import {externalLoanToString} from 'src/app/data/external-loan';
 import {ObjectLogWithUser} from '../../../data/object-log';
 import Swal from 'sweetalert2';
 import {CompleteObjectComment} from '../../../data/object-comment';
-import {AuthService} from '../../../services/auth.service';
+import {LoginManager} from '../../../services/login-manager.service';
 
 @Component({
   selector: 'app-object',
@@ -25,7 +25,7 @@ export class ObjectComponent implements OnInit {
   posting = false;
   private id: number;
 
-  constructor(private service: ObjectsService, private route: ActivatedRoute, private auth: AuthService, private router: Router) {
+  constructor(private service: ObjectsService, private route: ActivatedRoute, private auth: LoginManager, private router: Router) {
   }
 
   ngOnInit() {
