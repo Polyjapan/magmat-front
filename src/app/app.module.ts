@@ -137,7 +137,6 @@ export function tokenGetter() {
     */
 
     TokensmanagerModule.forRoot({
-      authApiKey: environment.auth.clientId,
       authApiDomain: environment.auth.apiurl,
       whitelistedDomains: [environment.apidomain]
     }),
