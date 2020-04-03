@@ -7,7 +7,9 @@ import {environment} from '../../../../environments/environment';
   styleUrls: ['./require-login.component.css']
 })
 export class RequireLoginComponent implements OnInit {
-  url = environment.auth.apiurl + '/login?app=' + environment.auth.clientId;
+  private service = window.location.origin;
+
+  url = environment.auth.apiurl + '/cas/login?service=' + this.service;
 
   constructor() { }
 
