@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "inventory"
+  "defaultProject": "inventory",
+  "cli": {
+    "analytics": "7a46660a-6b50-4d66-bc2d-6b80b610442d"
+  }
 }
