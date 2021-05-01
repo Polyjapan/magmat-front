@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {StorageLocation} from '../../../data/storage-location';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import Swal from 'sweetalert2';
 import {isNullOrUndefined} from 'util';

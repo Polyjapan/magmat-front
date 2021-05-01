@@ -3,7 +3,7 @@ import {ObjectsService} from '../../../services/objects.service';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import {LoansService} from '../../../services/loans.service';
 import {ObjectType} from '../../../data/object-type';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import {isNullOrUndefined} from 'util';
 import {ActivatedRoute, Router} from '@angular/router';

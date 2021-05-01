@@ -7,7 +7,7 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import {ObjectsService} from '../../services/objects.service';
 import {forkJoin, Observable, of} from 'rxjs';
 import {requestSignature} from '../../services/signature';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import {SelectUserComponent} from '../selectors/select-user/select-user.component';
 import {storageLocationToString} from '../../data/storage-location';

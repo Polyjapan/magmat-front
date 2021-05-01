@@ -5,7 +5,7 @@ import {CompleteObjectType} from '../../../data/object-type';
 import {storageLocationToString} from '../../../data/storage-location';
 import {CompleteObject, ObjectStatus, SingleObject} from '../../../data/object';
 import {externalLoanToString} from 'src/app/data/external-loan';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 
 @Component({

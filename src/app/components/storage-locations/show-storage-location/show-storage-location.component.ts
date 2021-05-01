@@ -7,7 +7,7 @@ import {ObjectsService} from '../../../services/objects.service';
 import {Observable} from 'rxjs';
 import Swal from 'sweetalert2';
 import {CreateStorageLocationComponent} from '../create-storage-location/create-storage-location.component';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-show-storage-location',

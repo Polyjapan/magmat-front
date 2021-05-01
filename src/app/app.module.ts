@@ -8,24 +8,25 @@ import {environment} from '../environments/environment';
 import {JwtModule} from '@auth0/angular-jwt';
 import {LoginFailedComponent} from './components/accounts/login-failed/login-failed.component';
 import {RequireLoginComponent} from './components/accounts/require-login/require-login.component';
-import {
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressBarModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatListModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatSelectModule,
-    MatTableModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatCheckboxModule,
-    MatDatepickerModule, MatNativeDateModule, MatButtonToggleModule, MatSlideToggleModule, MatSortModule
-}
-    from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import {AppRoutingModule} from './app-routing.module';
 import {LoginService} from './services/login.service';
 import {HttpClientModule} from '@angular/common/http';

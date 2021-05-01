@@ -1,4 +1,4 @@
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {CompleteObject} from '../data/object';
 import {SignatureModalComponent} from '../components/selectors/signature-modal/signature-modal.component';
 import Swal from "sweetalert2";

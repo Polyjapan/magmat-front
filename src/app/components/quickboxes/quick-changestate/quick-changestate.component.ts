@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import {CompleteObject, ObjectStatus, statusToString} from '../../../data/object';
 import {UserProfile} from '../../../data/user';
 import {ObjectsService} from '../../../services/objects.service';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {requestSignature} from '../../../services/signature';
 import {storageLocationToString} from '../../../data/storage-location';
 

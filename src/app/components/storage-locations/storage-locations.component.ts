@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {StorageLocationsService} from '../../services/storage-locations.service';
 import {Observable} from 'rxjs';
 import {StorageLocation} from '../../data/storage-location';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {CreateStorageLocationComponent} from './create-storage-location/create-storage-location.component';
 
 @Component({

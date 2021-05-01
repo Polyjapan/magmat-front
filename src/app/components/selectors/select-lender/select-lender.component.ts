@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {ExternalLender} from '../../../data/external-lender';
 import {LendersService} from '../../../services/lenders.service';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {CreateLenderComponent} from '../../external-loans/create-lender/create-lender.component';
 import {isNumber} from 'util';
 

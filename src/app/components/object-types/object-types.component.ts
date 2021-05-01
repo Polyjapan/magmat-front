@@ -1,7 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {CompleteObjectType} from '../../data/object-type';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {ObjectsService} from '../../services/objects.service';
 import {storageLocationToString} from 'src/app/data/storage-location';
 import {externalLoanToString} from 'src/app/data/external-loan';
