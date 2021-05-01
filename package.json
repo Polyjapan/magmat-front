@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prod": "ng build --prod",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -23,7 +24,7 @@
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
     "@auth0/angular-jwt": "^3.0.1",
-    "angular2-signaturepad": "^2.10.0",
+    "angular2-signaturepad": "^3.0.4",
     "mat-progress-buttons": "^8.0.7",
     "rxjs": "~6.4.0",
     "sweetalert2": "^9.5.4",

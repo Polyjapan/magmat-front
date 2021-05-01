@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {SignaturePad} from 'angular2-signaturepad/signature-pad';
+import {SignaturePad} from 'angular2-signaturepad';
 
 @Component({
   selector: 'app-signing-area',
