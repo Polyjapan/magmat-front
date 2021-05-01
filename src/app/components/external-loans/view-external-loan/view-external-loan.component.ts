@@ -32,7 +32,7 @@ export class ViewExternalLoanComponent implements OnInit {
   changingState = false;
   linkTypesToLoan = false;
   selectedType: ObjectType;
-  @ViewChild(SelectObjectTypeComponent, {static: false}) selectObjectTypeComponent: SelectObjectTypeComponent;
+  @ViewChild(SelectObjectTypeComponent) selectObjectTypeComponent: SelectObjectTypeComponent;
 
   constructor(private ar: ActivatedRoute, private ls: LoansService, private os: ObjectsService, private sls: StorageLocationsService) {
   }
