@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {CompleteObject, CompleteObjectWithUser, statusToString} from '../../../data/object';
 import {storageLocationToString} from 'src/app/data/storage-location';
 import { MatSort } from '@angular/material/sort';
@@ -9,13 +9,17 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './objects-list.component.html',
   styleUrls: ['./objects-list.component.css']
 })
-export class ObjectsListComponent implements OnChanges {
+export class ObjectsListComponent implements OnChanges, OnInit {
   @Input() objects: (CompleteObject | CompleteObjectWithUser)[];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  dataSource: MatTableDataSource<CompleteObject | CompleteObjectWithUser> = new MatTableDataSource(this.objects);
+  dataSource: MatTableDataSource<CompleteObject | CompleteObjectWithUser>;
 
   constructor() {
+  }
+
+  ngOnInit() {
+    this.dataSource = new MatTableDataSource(this.objects);
   }
 
   getObjectId(o: (CompleteObject | CompleteObjectWithUser)) {
