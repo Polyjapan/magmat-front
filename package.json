@@ -25,6 +25,7 @@
     "@angular/router": "~11.2.12",
     "@auth0/angular-jwt": "^3.0.1",
     "angular2-signaturepad": "^3.0.4",
+    "mat-progress-buttons": "^9.2.1",
     "rxjs": "~6.6.7",
     "sweetalert2": "^9.5.4",
     "tslib": "^2.0.0",
