@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { QuickmoveComponent } from './quickmove.component';
 
@@ -6,7 +6,7 @@ describe('QuickmoveComponent', () => {
   let component: QuickmoveComponent;
   let fixture: ComponentFixture<QuickmoveComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ QuickmoveComponent ]
     })

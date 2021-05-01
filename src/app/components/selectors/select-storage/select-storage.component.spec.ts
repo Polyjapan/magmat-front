@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SelectStorageComponent } from './select-storage.component';
 
@@ -6,7 +6,7 @@ describe('SelectStorageComponent', () => {
   let component: SelectStorageComponent;
   let fixture: ComponentFixture<SelectStorageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SelectStorageComponent ]
     })
