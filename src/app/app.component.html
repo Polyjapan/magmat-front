@@ -9,6 +9,10 @@
   </button>
 
   <a mat-button [routerLink]="['/']">Inventaire Japan Impact</a>
+
+  <app-event-selector *ngIf="isLoggedIn"></app-event-selector>
+
+
   <span class="spacer"></span>
 
   <button mat-button (click)="logout()">

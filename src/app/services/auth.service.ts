@@ -47,6 +47,10 @@ export class AuthService {
     localStorage.setItem('_post_login_action', action);
   }
 
+  public changeToken(token: string) {
+    localStorage.setItem('id_token', token);
+  }
+
   private loadNextAction(): string {
     const act = localStorage.getItem('_post_login_action');
     localStorage.removeItem('_post_login_action');

@@ -10,6 +10,7 @@ import {LoginFailedComponent} from './components/accounts/login-failed/login-fai
 import {RequireLoginComponent} from './components/accounts/require-login/require-login.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -65,6 +66,7 @@ import { UserLogsComponent } from './components/user-logs/user-logs.component';
 import { ObjectsListComponent } from './components/object-types/objects-list/objects-list.component';
 import { AllObjectsOutComponent } from './components/all-objects-out/all-objects-out.component';
 import { SelectObjectTypeComponent } from './components/selectors/select-object-type/select-object-type.component';
+import {EventSelectorComponent} from './components/selectors/event-selector/event-selector.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -107,6 +109,7 @@ export function tokenGetter() {
     ObjectsListComponent,
     AllObjectsOutComponent,
     SelectObjectTypeComponent,
+    EventSelectorComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,
@@ -124,6 +127,7 @@ export function tokenGetter() {
     MatToolbarModule,
     MatButtonModule,
     MatNativeDateModule,
+    MatMenuModule,
 
     JwtModule.forRoot({
       config: {
