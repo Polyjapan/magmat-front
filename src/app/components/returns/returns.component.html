@@ -36,7 +36,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="['tag', 'name', 'status', 'see']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['tag', 'name', 'status','see'];"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['tag', 'name', 'status','see'];" [routerLink]="['/', 'objects', row.object.objectId]"></tr>
 
       </table>
     </ng-container>

@@ -38,18 +38,18 @@
       <mat-card-title>Ajout de commentaire</mat-card-title>
 
       <form (ngSubmit)="sendComment()">
-        <mat-form-field style="width: 70%;">
+        <mat-form-field style="width: 100%;">
           <input matInput placeholder="Commentaire..." required maxlength="5000" name="comment" [(ngModel)]="comment" />
         </mat-form-field>
 
-        <button mat-stroked-button style="width: 29%; margin-left: 1%" type="submit" [disabled]="posting">Envoyer</button>
+        <button mat-stroked-button style="float: right;" type="submit" [disabled]="posting">Envoyer</button>
       </form>
     </mat-card>
 
-    <mat-card>
+    <mat-card *ngIf="comments && comments.length > 0">
       <mat-card-title>Commentaires de l'objet</mat-card-title>
 
-      <mat-list *ngIf="comments" class="mat-elevation-z3">
+      <mat-list class="mat-elevation-z3">
         <mat-list-item *ngFor="let com of comments">
           <h4 mat-line>{{com.writer.details.firstName}} {{com.writer.details.lastName}} - {{dateFormat(com)}}</h4>
           <p mat-line>{{com.objectComment.comment}}</p>

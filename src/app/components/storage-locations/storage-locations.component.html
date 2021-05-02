@@ -1,7 +1,10 @@
 <h1>Emplacements de stockage</h1>
 
-<button mat-raised-button (click)="create()" color="accent">Créer un emplacement</button>
-<button mat-raised-button (click)="refresh()">Recharger</button>
+<div style="position: fixed; bottom: 1em; right: 1em; opacity: 1; z-index: 1;">
+  <button mat-fab (click)="create()" type="button" color="primary"><mat-icon>add</mat-icon></button>
+  <button mat-fab (click)="refresh()" type="button" color="primary" style="margin-left: .5em"><mat-icon>refresh</mat-icon></button>
+</div>
+
 
 <br>
 
@@ -23,11 +26,7 @@
     <th mat-header-cell *matHeaderCellDef> Type</th>
     <td mat-cell *matCellDef="let elem"> {{elem.inConv ? 'Convention' : 'Hors convention'}} </td>
   </ng-container>
-  <ng-container matColumnDef="see">
-    <th mat-header-cell *matHeaderCellDef> </th>
-    <td mat-cell *matCellDef="let elem"> <button [routerLink]="elem.storageLocationId" mat-button>Voir</button> </td>
-  </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['room', 'space', 'location', 'inConv', 'see']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['room', 'space', 'location', 'inConv', 'see'];"></tr>
+  <tr mat-header-row *matHeaderRowDef="['room', 'space', 'location', 'inConv']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['room', 'space', 'location', 'inConv'];" [routerLink]="row.storageLocationId"></tr>
 </table>

@@ -47,12 +47,11 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let element">
-      <button mat-stroked-button [routerLink]="element.guestId">Voir</button>
     </td>
   </ng-container>
 
   <tr mat-header-row
-      *matHeaderRowDef="['name', 'organization', 'description', 'phoneNumber', 'email', 'location', 'actions']"></tr>
+      *matHeaderRowDef="['name', 'organization', 'description', 'phoneNumber', 'email', 'location']"></tr>
   <tr mat-row
-      *matRowDef="let row; columns: ['name', 'organization', 'description', 'phoneNumber', 'email', 'location', 'actions'];"></tr>
+      *matRowDef="let row; columns: ['name', 'organization', 'description', 'phoneNumber', 'email', 'location'];" [routerLink]="row.guestId"></tr>
 </table>
