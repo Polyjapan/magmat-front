@@ -7,6 +7,7 @@ import {FormControl} from '@angular/forms';
 import {Guest} from '../../../data/guest';
 import {GuestsService} from '../../../services/guests.service';
 import has = Reflect.has;
+import {of} from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-select-user',
@@ -16,6 +17,7 @@ import has = Reflect.has;
 export class SelectUserComponent implements OnInit {
   @Input() label: string = 'Choisir un utilisateur';
   @Input() userId: number;
+  @Input() allowGuests: boolean = true;
   @Output() userIdChange = new EventEmitter<number>();
   @Output() selectedUser = new EventEmitter<(UserProfile | Guest)>();
 
@@ -38,7 +40,7 @@ export class SelectUserComponent implements OnInit {
         this.currentProfile = data;
         this.selected.setErrors(null);
       }, err => this.selected.setErrors({noProfile: true}));
-    } else if (has(val, 'guestId')) {
+    } else if (has(val, 'guestId') && this.allowGuests) {
       const guest = val as Guest;
       this.userIdChange.emit(undefined);
       this.selectedUser.emit(guest);
@@ -89,25 +91,28 @@ export class SelectUserComponent implements OnInit {
         switchMap(data => {
           const name = (data[0] as string).toLowerCase();
           const users = (data[1] as (UserProfile | Guest)[]);
-          return this.guests.getGuests().pipe(
-            map(guests => {
-              if (name.match('^s[0-9]+$')) {
-                return [];
-              } else if (name.match('^[0-9]+$')) {
-                const id = Number.parseInt(name, 10);
-                return guests.filter(elem => elem.guestId === id);
-              } else {
-                return guests.filter(elem => this.displayFunc(elem).toLowerCase().indexOf(name) !== -1);
-              }
-            }),
-            map(guests => guests as (UserProfile | Guest)[]),
-            map(guests => {
-              const arr = [];
-              users.forEach(e => arr.push(e));
-              guests.forEach(e => arr.push(e));
-              return arr;
-            })
-          );
+
+          if (name.match('^s[0-9]+$') || !this.allowGuests) {
+            return of(users);
+          } else {
+            return this.guests.getGuests().pipe(
+              map(guests => {
+                if (name.match('^[0-9]+$')) {
+                  const id = Number.parseInt(name, 10);
+                  return guests.filter(elem => elem.guestId === id);
+                } else {
+                  return guests.filter(elem => this.displayFunc(elem).toLowerCase().indexOf(name) !== -1);
+                }
+              }),
+              map(guests => guests as (UserProfile | Guest)[]),
+              map(guests => {
+                const arr = [];
+                users.forEach(e => arr.push(e));
+                guests.forEach(e => arr.push(e));
+                return arr;
+              })
+            );
+          }
         })
       );
 
