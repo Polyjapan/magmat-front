@@ -36,7 +36,7 @@
                 <tr *ngFor="let item of loan.objects">
                   <td>{{displayObject(item)}}</td>
                   <td><b>&rArr;</b></td>
-                  <td>Prêt de <i>{{loan.loan.lender.name}}</i> (<a
+                  <td>Prêt <i>{{loan.loan.externalLoan.loanTitle}}</i> (<a
                     [routerLink]="['/', 'external-loans', loan.loan.externalLoan.externalLoanId]">voir</a>)
                   </td>
                 </tr>
@@ -59,7 +59,7 @@
   </ng-container>
 
   <ng-container *ngFor="let line of tree.loaned">
-    <h2>Prêt de <i>{{line.loan.lender.name}}</i> (<a
+    <h2>Prêt de <i>{{line.loan.externalLoan.loanTitle}}</i> (<a
       [routerLink]="['/', 'external-loans', line.loan.externalLoan.externalLoanId]">voir</a>)</h2>
 
     <div fxLayout="column" fxLayoutGap="20px">
@@ -80,7 +80,7 @@
                 <tr *ngFor="let item of loan.objects">
                   <td>{{displayObject(item)}}</td>
                   <td><b>&rArr;</b></td>
-                  <td>Prêt de <i>{{loan.loan.lender.name}}</i> (<a
+                  <td>Prêt <i>{{loan.loan.externalLoan.loanTitle}}</i> (<a
                     [routerLink]="['/', 'external-loans', loan.loan.externalLoan.externalLoanId]">voir</a>)
                   </td>
                 </tr>
@@ -120,7 +120,7 @@
             <tr *ngFor="let item of loan.objects">
               <td>{{displayObject(item)}}</td>
               <td><b>&rArr;</b></td>
-              <td>Prêt de <i>{{loan.loan.lender.name}}</i> (<a
+              <td>Prêt <i>{{loan.loan.externalLoan.loanTitle}}</i> (<a
                 [routerLink]="['/', 'external-loans', loan.loan.externalLoan.externalLoanId]">voir</a>)
               </td>
             </tr>

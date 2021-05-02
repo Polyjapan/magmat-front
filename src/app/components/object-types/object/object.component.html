@@ -20,8 +20,8 @@
             *ngIf="!object.object.storageLocation">(hérité)</i></li>
           <li><b>Stockage en convention :</b> {{storageLocationToString(object.inconvStorageLocationObject, 'N/A')}} <i
             *ngIf="!object.object.inconvStorageLocation">(hérité)</i></li>
-          <li><b>Prêt parent :</b> {{externalLoanToString(object.partOfLoanObject, 'N/A')}} <i
-            *ngIf="!object.object.partOfLoan">(hérité)</i></li>
+          <li><b>Prêt parent : </b><a *ngIf="object.partOfLoanObject" [routerLink]="['/', 'external-loans', object.partOfLoanObject.externalLoan.externalLoanId]">{{object.partOfLoanObject.externalLoan.loanTitle}}</a> <span *ngIf="!object.partOfLoanObject">N/A</span>
+            <i *ngIf="!object.object.partOfLoan"> (hérité)</i></li>
           <li><b>Réservé pour :</b> {{object.object.reservedFor ? object.reservedFor.details.firstName + ' ' + object.reservedFor.details.lastName + ' (' + object.object.reservedFor + ')' : 'Personne'}}</li>
           <li *ngIf="object.object.plannedUse"><b>Utilisation prévue :</b> {{object.object.plannedUse}}</li>
           <li *ngIf="object.object.depositPlace"><b>Lieu de dépose :</b> {{object.object.depositPlace}}</li>

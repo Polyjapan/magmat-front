@@ -7,18 +7,18 @@ import {CompleteExternalLoan, ExternalLoan, LoanState} from '../data/external-lo
 import {of} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
-import {ExternalLender} from '../data/external-lender';
+import {Guest} from '../data/guest';
 
 @Injectable({providedIn: 'root'})
 export class LendersService {
-  private lenders = new BehaviorSubject<ExternalLender[]>([]);
+  private lenders = new BehaviorSubject<Guest[]>([]);
   private lastPull = 0;
 
   private pullIfNeeded() {
     const now = Date.now();
 
     if (now - this.lastPull > (60 * 1000)) {
-      this.http.get<ExternalLender[]>(environment.apiurl + '/external-lenders/').subscribe(res => this.lenders.next(res));
+      this.http.get<Guest[]>(environment.apiurl + '/guests/').subscribe(res => this.lenders.next(res));
       this.lastPull = now;
     }
   }
@@ -31,18 +31,18 @@ export class LendersService {
   constructor(private http: HttpClient) {
   }
 
-  getLenders(): Observable<ExternalLender[]> {
+  getLenders(): Observable<Guest[]> {
     this.pullIfNeeded();
     return this.lenders;
   }
 
-  getLender(id: number): Observable<ExternalLender> {
+  getLender(id: number): Observable<Guest> {
     this.pullIfNeeded();
 
-    return this.lenders.pipe(map(lenders => lenders.filter(lender => lender.externalLenderId === id)[0]));
+    return this.lenders.pipe(map(lenders => lenders.filter(lender => lender.guestId === id)[0]));
   }
 
-  createLender(lender: ExternalLender): Observable<number> {
-    return this.http.post<number>(environment.apiurl + '/external-lenders/', lender);
+  createLender(lender: Guest): Observable<number> {
+    return this.http.post<number>(environment.apiurl + '/guests/', lender);
   }
 }

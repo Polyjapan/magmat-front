@@ -1,4 +1,5 @@
-import {ExternalLender} from './external-lender';
+import {Guest} from './guest';
+import {UserProfile} from './user';
 
 export enum LoanState {
   AWAITING_PICKUP = 'AwaitingPickup',
@@ -23,15 +24,17 @@ export function loanStateToText(loanState: LoanState) {
 
 export function externalLoanToString(loan: CompleteExternalLoan, defaultValue: string = '') {
   if (loan) {
-    return loan.lender.name + ' (' + loan.lender.location + ')';
+    return loan.externalLoan.loanTitle + ' (' + loan.guest.location + ')';
   }
   return defaultValue;
 }
 
 export class ExternalLoan {
   externalLoanId?: number;
-  externalLenderId?: number;
+  guestId?: number;
+  userId?: number;
   eventId: number;
+  loanTitle: string;
   pickupTime: Date;
   returnTime: Date;
   pickupPlace?: string;
@@ -42,5 +45,6 @@ export class ExternalLoan {
 
 export class CompleteExternalLoan {
   externalLoan: ExternalLoan;
-  lender: ExternalLender;
+  guest?: Guest;
+  user?: UserProfile;
 }

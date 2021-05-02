@@ -2,7 +2,7 @@
   <mat-label>{{label ? label : 'Lien du prêt'}}</mat-label>
 
   <mat-select [ngModel]="selected" (ngModelChange)="changeValue($event)" name="lender" required>
-    <mat-option *ngFor="let option of lenders" [value]="option.externalLenderId">
+    <mat-option *ngFor="let option of lenders" [value]="option.guestId">
       {{ displayLender(option) }}
     </mat-option>
   </mat-select>

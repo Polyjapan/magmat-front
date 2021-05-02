@@ -30,7 +30,8 @@ export class SelectLoanComponent implements OnInit {
   }
 
   displayLoan(loan?: CompleteExternalLoan): string | undefined {
-    return loan ? (loan.lender ? 'Prêt de ' + loan.lender.name +
+    const name = loan.guest ? loan.guest.name : loan.user.email;
+    return loan ? (loan.guest ? 'Prêt ' + loan.externalLoan.loanTitle + ' (' + name + ')' +
       ' récupéré le ' + loan.externalLoan.pickupTime : undefined) : undefined;
   }
 

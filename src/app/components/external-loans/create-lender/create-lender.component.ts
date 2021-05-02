@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ExternalLender} from '../../../data/external-lender';
+import {Guest} from '../../../data/guest';
 import {isNullOrUndefined} from "util";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {LendersService} from '../../../services/lenders.service';
@@ -11,14 +11,14 @@ import Swal from 'sweetalert2';
   styleUrls: ['./create-lender.component.css']
 })
 export class CreateLenderComponent implements OnInit {
-  lender: ExternalLender;
+  lender: Guest;
   sending = false;
 
-  constructor(private dialogRef: MatDialogRef<CreateLenderComponent>, private ls: LendersService, @Inject(MAT_DIALOG_DATA) private data?: ExternalLender) {
+  constructor(private dialogRef: MatDialogRef<CreateLenderComponent>, private ls: LendersService, @Inject(MAT_DIALOG_DATA) private data?: Guest) {
     if (data) {
       this.lender = data;
     } else {
-      this.lender = new ExternalLender();
+      this.lender = new Guest();
     }
   }
 
@@ -26,7 +26,7 @@ export class CreateLenderComponent implements OnInit {
   }
 
   get isUpdate(): boolean {
-    return !isNullOrUndefined(this.lender.externalLenderId);
+    return !isNullOrUndefined(this.lender.guestId);
   }
 
   submit($event: any) {

@@ -1,5 +1,5 @@
 export class Event {
-  eventId: number;
-  eventName: string;
+  id: number;
+  name: string;
   inConv: boolean;
 }

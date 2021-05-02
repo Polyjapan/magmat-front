@@ -3,7 +3,7 @@ import {CompleteExternalLoan} from '../../../data/external-loan';
 import {LoansService} from '../../../services/loans.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {ExternalLender} from '../../../data/external-lender';
+import {Guest} from '../../../data/guest';
 import {LendersService} from '../../../services/lenders.service';
 import { MatDialog } from '@angular/material/dialog';
 import {CreateLenderComponent} from '../../external-loans/create-lender/create-lender.component';
@@ -21,9 +21,9 @@ export class SelectLenderComponent implements OnInit {
   @Input() selected: number;
 
   @Output() selectedChange = new EventEmitter<number>();
-  @Output() selectedLenderChange = new EventEmitter<ExternalLender>();
+  @Output() selectedLenderChange = new EventEmitter<Guest>();
 
-  lenders: ExternalLender[] = [];
+  lenders: Guest[] = [];
   constructor(private service: LendersService, private dialog: MatDialog) { }
 
   ngOnInit() {
@@ -32,13 +32,13 @@ export class SelectLenderComponent implements OnInit {
     });
   }
 
-  displayLender(lender?: ExternalLender): string | undefined {
+  displayLender(lender?: Guest): string | undefined {
     return lender ? lender.name + ' (' + lender.location + ')' : undefined;
   }
 
   changeValue($event) {
     this.selectedChange.emit($event);
-    this.selectedLenderChange.emit(this.lenders.filter(l => l.externalLenderId === $event)[0]);
+    this.selectedLenderChange.emit(this.lenders.filter(l => l.guestId === $event)[0]);
   }
 
   create() {

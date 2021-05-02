@@ -1,7 +1,7 @@
 <mat-spinner *ngIf="!loan"></mat-spinner>
 
 <ng-container *ngIf="loan">
-  <h1>Prêt de {{loan.lender.name}}</h1>
+  <h1>Prêt de {{loan.guest ? loan.guest.name : (loan.user.details.firstName + ' ' + loan.user.details.lastName)}}</h1>
 
   <div fxLayout.lt-md="column" fxLayout="row" fxLayoutGap="30px">
     <div fxFlex.lt-md fxFlexOrder="2" fxFlexOrder.lt-md="0" [fxFlex]="isReturned ? '100%' : '30%'">
@@ -37,12 +37,20 @@
 
       <mat-card>
         <mat-card-title>Informations sur le prêteur</mat-card-title>
-        <ul>
-          <li><b>Nom :</b> {{loan.lender.name}}</li>
-          <li *ngIf="loan.lender.description"><b>Description :</b> {{loan.lender.description}}</li>
-          <li><b>Téléphone :</b> {{loan.lender.phoneNumber}}</li>
-          <li><b>Email :</b> {{loan.lender.email}}</li>
-          <li><b>Localisation :</b> {{loan.lender.location}}</li>
+        <ul *ngIf="loan.guest">
+          <li><b>Type :</b> Utilisateur invité</li>
+          <li><b>Nom :</b> {{loan.guest.name}}</li>
+          <li *ngIf="loan.guest.organization"><b>Organisation :</b> {{loan.guest.organization}}</li>
+          <li *ngIf="loan.guest.description"><b>Description :</b> {{loan.guest.description}}</li>
+          <li *ngIf="loan.guest.phoneNumber"><b>Téléphone :</b> {{loan.guest.phoneNumber}}</li>
+          <li *ngIf="loan.guest.email"><b>Email :</b> {{loan.guest.email}}</li>
+          <li *ngIf="loan.guest.location"><b>Localisation :</b> {{loan.guest.location}}</li>
+        </ul>
+        <ul *ngIf="loan.user">
+          <li><b>Type :</b> Utilisateur standard (#{{loan.user.id}})</li>
+          <li><b>Nom :</b> {{loan.user.details.firstName}} {{loan.user.details.lastName}}</li>
+          <li *ngIf="loan.user.details.phoneNumber"><b>Téléphone :</b> {{loan.user.details.phoneNumber}}</li>
+          <li><b>Email :</b> {{loan.user.email}}</li>
         </ul>
       </mat-card>
     </div>

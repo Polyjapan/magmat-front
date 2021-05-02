@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ExternalLoan, LoanState, LoanStates, loanStateToText} from '../../../data/external-loan';
 import {isNullOrUndefined} from 'util';
-import {ExternalLender} from '../../../data/external-lender';
+import {Guest} from '../../../data/guest';
 import {LoansService} from '../../../services/loans.service';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
@@ -14,7 +14,7 @@ import {EventsService} from '../../../services/events.service';
 })
 export class CreateExternalLoanComponent implements OnInit {
   loan: ExternalLoan;
-  lender: ExternalLender;
+  lender: Guest;
   eventId: number;
 
   sending = false;
@@ -27,14 +27,14 @@ export class CreateExternalLoanComponent implements OnInit {
   }
 
   get isValid() {
-    return this.loan && this.loan.externalLenderId && this.loan.returnTime && this.loan.pickupTime && this.eventId;
+    return this.loan && this.loan.guestId && this.loan.returnTime && this.loan.pickupTime && this.eventId && this.loan.loanTitle;
   }
 
   ngOnInit() {
     this.resetLoan();
     this.es.getCurrentEvent().subscribe(ev => {
-      if (!isNullOrUndefined(ev)) {
-        this.eventId = ev.eventId
+      if (ev) {
+        this.eventId = ev.id;
       }
     });
   }

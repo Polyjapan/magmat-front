@@ -6,12 +6,14 @@
 
 <ng-container *ngIf="loans">
   <mat-card *ngFor="let loan of loans">
-    <mat-card-title>{{loan.lender.name}} à rendre le {{loan.externalLoan.returnTime.toLocaleString()}}</mat-card-title>
+    <mat-card-title>{{loan.externalLoan.loanTitle}} à rendre le {{loan.externalLoan.returnTime.toLocaleString()}}</mat-card-title>
 
     <button mat-stroked-button [routerLink]="['/', 'external-loans', loan.externalLoan.externalLoanId]">Voir le détail du prêt</button>
 
     <ng-container *ngIf="loansItems.has(loan.externalLoan.externalLoanId)">
-      <p *ngIf="loansItems.get(loan.externalLoan.externalLoanId).length === 0">Tous les objets sont de retour à la maison. Le prêt est... prêt pour être rendu :D</p>
+      <p *ngIf="loansItems.get(loan.externalLoan.externalLoanId).length === 0">Tous les objets sont de retour à la maison. Le prêt peut être rendu !
+        <span *ngIf="loan.externalLoan.returnPlace">D'après nos informations, vous devez rendre le prêt ici : <b>{{loan.externalLoan.returnPlace}}</b></span>
+      </p>
 
       <table *ngIf="loansItems.get(loan.externalLoan.externalLoanId).length > 0" mat-table style="width: 100%;" [dataSource]="loansItems.get(loan.externalLoan.externalLoanId)">
         <ng-container matColumnDef="tag">
