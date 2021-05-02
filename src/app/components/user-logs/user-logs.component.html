@@ -2,7 +2,7 @@
 
 <p>Indiquez un numéro d'utilisateur ci dessous pour commencer la recherche.</p>
 
-<app-select-user style="width: 100%;" (selectedUser)="onSelect($event)"></app-select-user>
+<app-select-user style="width: 100%;" (selectedUser)="onSelect($event)" [allowGuests]="false"></app-select-user>
 
 <ng-container *ngIf="selectedUser">
   <h2>Résultats pour {{selectedUser.details.firstName}} {{selectedUser.details.lastName}} :</h2>

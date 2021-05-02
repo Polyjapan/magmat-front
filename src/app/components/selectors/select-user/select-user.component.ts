@@ -125,39 +125,13 @@ export class SelectUserComponent implements OnInit {
         this.selected.enable();
       });
     }
-
-    /*this.inputObservable
-      .pipe(
-        filter(text => text.length >= 1),
-        filter(text => text.match('[0-9]+') !== null || text.length >= 3),
-        debounceTime(200),
-        distinctUntilChanged()
-      ).subscribe(val => {
-        console.log('<> ' + val);
-
-        if (val.match('[0-9]+') !== null) {
-          this.onValueChange(val);
-        } else {
-          this.triggerSearch(val);
-        }
-    });
-
-    if (this.selectedId) {
-      this.selected = '' + this.selectedId;
-      this.onValueChange(this.selected);
-    }*/
-  }
-
-  update($event: string) {
-    //this.selectedIdChange.emit(undefined);
-    this.selectedUser.emit(undefined);
-    this.currentProfile = undefined;
-    // this.inputSubscriber.next($event);
   }
 
   public reset() {
     this.selected.reset();
-    this.update('');
+    this.currentProfile = undefined;
+    this.selectedUser.emit(undefined);
+    this.userIdChange.emit(undefined);
   }
 
   private triggerSearch(val: string) {

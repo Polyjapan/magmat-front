@@ -22,7 +22,7 @@
   <p *ngIf="object.reservedFor"><mat-icon>information</mat-icon> Cet objet est noté comme réservé à <b>{{object.reservedFor.details.firstName}} {{object.reservedFor.details.lastName}}</b>.</p>
 
   <form>
-    <app-select-user (selectedUser)="lendTo = $event"></app-select-user>
+    <app-select-user #selectUserComponent (selectedUser)="lendTo = $event" [allowGuests]="false"></app-select-user>
 
     <ng-container *ngIf="lendTo">
       <ng-container [ngSwitch]="object.object.status">

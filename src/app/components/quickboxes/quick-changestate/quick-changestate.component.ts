@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import Swal from 'sweetalert2';
 import {CompleteObject, ObjectStatus, statusToString} from '../../../data/object';
 import {UserProfile} from '../../../data/user';
@@ -6,6 +6,7 @@ import {ObjectsService} from '../../../services/objects.service';
 import { MatDialog } from '@angular/material/dialog';
 import {requestSignature} from '../../../services/signature';
 import {storageLocationToString} from '../../../data/storage-location';
+import {SelectUserComponent} from '../../selectors/select-user/select-user.component';
 
 @Component({
   selector: 'app-quick-changestate',
@@ -15,6 +16,8 @@ import {storageLocationToString} from '../../../data/storage-location';
 export class QuickChangestateComponent implements OnInit {
   @Input() object: CompleteObject;
   @Output() update = new EventEmitter();
+
+  @ViewChild('selectUserComponent', {static: true}) userSelector: SelectUserComponent;
 
   statusToString = statusToString;
   ObjectStatus = ObjectStatus;
@@ -94,6 +97,7 @@ export class QuickChangestateComponent implements OnInit {
                 this.lendTo.details.lastName + '</b>' + placeHere,
               icon: 'success'
             });
+            this.userSelector.reset();
             this.sending = false;
             this.update.emit();
           }, err => {

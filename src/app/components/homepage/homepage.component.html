@@ -21,7 +21,7 @@
       <p>Permet de prêter ou récupérer d'un coup plusieurs objets d'un utilisateur. Les objets doivent tous avoir le
         même état source (prêté ou à rendre).</p>
 
-      <app-select-user #quickMultiLoanUserSelect [(userId)]="quickLoanMultiUser"></app-select-user>
+      <app-select-user #quickMultiLoanUserSelect [(userId)]="quickLoanMultiUser" [allowGuests]="false"></app-select-user>
 
       <ng-container *ngIf="quickLoanMultiUser">
         <mat-form-field style="width: 100%;">
