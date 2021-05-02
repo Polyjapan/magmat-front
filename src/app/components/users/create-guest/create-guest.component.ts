@@ -2,19 +2,19 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Guest} from '../../../data/guest';
 import {isNullOrUndefined} from "util";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {LendersService} from '../../../services/lenders.service';
+import {GuestsService} from '../../../services/guests.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-create-lender',
-  templateUrl: './create-lender.component.html',
-  styleUrls: ['./create-lender.component.css']
+  selector: 'app-create-guest',
+  templateUrl: './create-guest.component.html',
+  styleUrls: ['./create-guest.component.css']
 })
-export class CreateLenderComponent implements OnInit {
+export class CreateGuestComponent implements OnInit {
   lender: Guest;
   sending = false;
 
-  constructor(private dialogRef: MatDialogRef<CreateLenderComponent>, private ls: LendersService, @Inject(MAT_DIALOG_DATA) private data?: Guest) {
+  constructor(private dialogRef: MatDialogRef<CreateGuestComponent>, private ls: GuestsService, @Inject(MAT_DIALOG_DATA) private data?: Guest) {
     if (data) {
       this.lender = data;
     } else {
@@ -40,7 +40,7 @@ export class CreateLenderComponent implements OnInit {
     }
     this.sending = true;
 
-    this.ls.createLender(this.lender).subscribe(res => {
+    this.ls.createGuest(this.lender).subscribe(res => {
       this.dialogRef.close(res);
     }, err => {
       this.sending = false;

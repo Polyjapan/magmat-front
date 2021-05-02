@@ -14,6 +14,9 @@
   <a mat-list-item [class.active]="subUrl === 'external-loans'" [routerLink]="['external-loans']">
     <mat-icon>receipt</mat-icon>
     Prêts externes</a>
+  <a mat-list-item [class.active]="subUrl === 'guests'" [routerLink]="['guests']">
+    <mat-icon>no_accounts</mat-icon>
+    Utilisateurs invités</a>
   <a mat-list-item [class.active]="subUrl === 'returns'" [routerLink]="['returns']">
     <mat-icon>calendar_today</mat-icon>
     Rendus externes</a>

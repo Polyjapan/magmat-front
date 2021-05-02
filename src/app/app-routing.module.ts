@@ -19,6 +19,8 @@ import {HomepageComponent} from './components/homepage/homepage.component';
 import {UpdateObjectComponent} from './components/object-types/update-object/update-object.component';
 import {UserLogsComponent} from './components/user-logs/user-logs.component';
 import {AllObjectsOutComponent} from './components/all-objects-out/all-objects-out.component';
+import {GuestsComponent} from './components/users/guests.component';
+import {ViewUserComponent} from './components/users/view-user/view-user.component';
 
 
 const routes: Routes = [
@@ -49,6 +51,10 @@ const routes: Routes = [
   {path: 'external-loans', component: ExternalLoansComponent, canActivate: [PermissionAuthGuard]},
   {path: 'external-loans/create', component: CreateExternalLoanComponent, canActivate: [PermissionAuthGuard]},
   {path: 'external-loans/:id', component: ViewExternalLoanComponent, canActivate: [PermissionAuthGuard]},
+
+  {path: 'guests', component: GuestsComponent, canActivate: [PermissionAuthGuard]},
+  {path: 'guests/:id', component: ViewUserComponent, data: {isGuest: true}, canActivate: [PermissionAuthGuard]},
+  {path: 'users/:id', component: ViewUserComponent, canActivate: [PermissionAuthGuard]},
 
   {
     path: '**',

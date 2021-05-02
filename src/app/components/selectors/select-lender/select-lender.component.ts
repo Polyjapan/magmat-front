@@ -4,9 +4,9 @@ import {LoansService} from '../../../services/loans.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Guest} from '../../../data/guest';
-import {LendersService} from '../../../services/lenders.service';
+import {GuestsService} from '../../../services/guests.service';
 import { MatDialog } from '@angular/material/dialog';
-import {CreateLenderComponent} from '../../external-loans/create-lender/create-lender.component';
+import {CreateGuestComponent} from '../../users/create-guest/create-guest.component';
 import {isNumber} from 'util';
 
 @Component({
@@ -24,10 +24,10 @@ export class SelectLenderComponent implements OnInit {
   @Output() selectedLenderChange = new EventEmitter<Guest>();
 
   lenders: Guest[] = [];
-  constructor(private service: LendersService, private dialog: MatDialog) { }
+  constructor(private service: GuestsService, private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.service.getLenders().subscribe(lenders => {
+    this.service.getGuests().subscribe(lenders => {
       this.lenders = lenders;
     });
   }
@@ -42,10 +42,10 @@ export class SelectLenderComponent implements OnInit {
   }
 
   create() {
-    this.dialog.open(CreateLenderComponent).afterClosed().subscribe(res => {
+    this.dialog.open(CreateGuestComponent).afterClosed().subscribe(res => {
       if (isNumber(res)) {
         let messages = 0;
-        const subscriber = this.service.getLenders().subscribe(ans => {
+        const subscriber = this.service.getGuests().subscribe(ans => {
           messages ++;
           if (messages === 2) {
             subscriber.unsubscribe();
@@ -53,7 +53,7 @@ export class SelectLenderComponent implements OnInit {
             this.changeValue(res);
           }
         });
-        this.service.forceRefreshLenders();
+        this.service.refreshGuests();
       }
     });
   }

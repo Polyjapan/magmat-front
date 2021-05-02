@@ -8,16 +8,16 @@
     <mat-icon *ngIf="isLoggedIn" aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
 
-  <a mat-button [routerLink]="['/']">Inventaire Japan Impact</a>
+  <a *ngIf="!(isHandset$ | async)" mat-button [routerLink]="['/']">Inventaire Japan Impact</a>
 
   <app-event-selector *ngIf="isLoggedIn"></app-event-selector>
 
 
   <span class="spacer"></span>
 
-  <button mat-button (click)="logout()">
+  <button *ngIf="isLoggedIn" mat-button (click)="logout()">
+    <span *ngIf="!(isHandset$ | async)">Déconnexion</span>
     <mat-icon>exit_to_app</mat-icon>
-    Déconnexion
   </button>
 </mat-toolbar>
 

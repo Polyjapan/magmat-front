@@ -1,41 +1,36 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {CompleteObjectType, ObjectType} from '../data/object-type';
+import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {StorageLocation} from '../data/storage-location';
 import {ExternalLoan, LoanState} from '../data/external-loan';
 import {LoansService} from './loans.service';
 import {of} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {isNullOrUndefined} from 'util';
-import {filter, map, switchMap} from 'rxjs/operators';
+import {map, publishReplay, shareReplay, switchMap, tap} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class StorageLocationsService {
-  constructor(private http: HttpClient) {
-  }
-
-  private locations = new BehaviorSubject<StorageLocation[]>([]);
+  private refresh$ = new BehaviorSubject(0);
+  private locations$: Observable<StorageLocation[]>;
   private lastPull = 0;
 
-  private pullIfNeeded() {
-    const now = Date.now();
-
-    if (now - this.lastPull > (60 * 1000)) {
-      this.http.get<StorageLocation[]>(environment.apiurl + '/locations').subscribe(res => this.locations.next(res));
-      this.lastPull = now;
-    }
+  constructor(private http: HttpClient) {
+    this.locations$ = this.refresh$.pipe(
+      switchMap((_) => this.http.get<StorageLocation[]>(environment.apiurl + '/locations')),
+      shareReplay(1)
+    );
   }
 
+
   forceRefreshLocations() {
-    this.lastPull = 0;
-    this.pullIfNeeded();
+    this.lastPull = Date.now();
+    this.refresh$.next(0);
   }
 
   getStorageLocation(num: number): Observable<StorageLocation> {
     this.pullIfNeeded();
 
-    return this.locations.pipe(map(locations => locations.filter(loc => loc.storageLocationId === num)[0]));
+    return this.locations$.pipe(map(locations => locations.filter(loc => loc.storageLocationId === num)[0]));
   }
 
   createUpdateStorage(loc: StorageLocation): Observable<void> {
@@ -59,10 +54,18 @@ export class StorageLocationsService {
   getStorageLocations(inConv?: boolean): Observable<StorageLocation[]> {
     this.pullIfNeeded();
 
-    if (isNullOrUndefined(inConv)) {
-      return this.locations;
+    if (inConv === undefined || inConv == null) {
+      return this.locations$;
     } else {
-      return this.locations.pipe(map(locations => locations.filter(loc => loc.inConv === inConv)));
+      return this.locations$.pipe(map(locations => locations.filter(loc => loc.inConv === inConv)));
+    }
+  }
+
+  private pullIfNeeded() {
+    const now = Date.now();
+
+    if (now - this.lastPull > (60 * 1000)) {
+      this.forceRefreshLocations();
     }
   }
 }

@@ -49,7 +49,7 @@ import { ShowStorageLocationComponent } from './components/storage-locations/sho
 import { ExternalLoansComponent } from './components/external-loans/external-loans.component';
 import { SelectLenderComponent } from './components/selectors/select-lender/select-lender.component';
 import { SelectDatetimeComponent } from './components/selectors/select-datetime/select-datetime.component';
-import { CreateLenderComponent } from './components/external-loans/create-lender/create-lender.component';
+import { CreateGuestComponent } from './components/users/create-guest/create-guest.component';
 import { ViewExternalLoanComponent } from './components/external-loans/view-external-loan/view-external-loan.component';
 import { QuickItemCreateComponent } from './components/quickboxes/quick-item-create/quick-item-create.component';
 import { QuickmoveComponent } from './components/quickboxes/quickmove/quickmove.component';
@@ -67,6 +67,8 @@ import { ObjectsListComponent } from './components/object-types/objects-list/obj
 import { AllObjectsOutComponent } from './components/all-objects-out/all-objects-out.component';
 import { SelectObjectTypeComponent } from './components/selectors/select-object-type/select-object-type.component';
 import {EventSelectorComponent} from './components/selectors/event-selector/event-selector.component';
+import {GuestsComponent} from './components/users/guests.component';
+import {ViewUserComponent} from './components/users/view-user/view-user.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -93,7 +95,7 @@ export function tokenGetter() {
     ExternalLoansComponent,
     SelectLenderComponent,
     SelectDatetimeComponent,
-    CreateLenderComponent,
+    CreateGuestComponent,
     ViewExternalLoanComponent,
     QuickItemCreateComponent,
     QuickmoveComponent,
@@ -109,11 +111,13 @@ export function tokenGetter() {
     ObjectsListComponent,
     AllObjectsOutComponent,
     SelectObjectTypeComponent,
-    EventSelectorComponent
+    EventSelectorComponent,
+    GuestsComponent,
+    ViewUserComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,
-    CreateLenderComponent,
+    CreateGuestComponent,
     SignatureModalComponent,
   ],
   imports: [
