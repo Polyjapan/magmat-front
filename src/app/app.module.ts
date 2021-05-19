@@ -136,7 +136,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter,
-        whitelistedDomains: [environment.apidomain]
+        allowedDomains: [environment.apidomain]
       }
     }),
     FlexModule,
