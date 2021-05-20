@@ -36,7 +36,7 @@ export class ShowObjectTypeComponent implements OnInit {
     const objectType = this.objectType.objectType;
 
     const arr: [string, string, (string | number)[]?][] = [
-      ['DESCRIPTION', objectType.description],
+      objectType.description ? ['DESCRIPTION', objectType.description] : undefined,
       this.objectType.inconvStorageLocationObject ? ['STOCKAGE (CONVENTION)', storageLocationToString(this.objectType.inconvStorageLocationObject), ['/', 'storages', objectType.inconvStorageLocation]] : undefined,
       this.objectType.storageLocationObject ? ['STOCKAGE (ANNÉE)', storageLocationToString(this.objectType.storageLocationObject), ['/', 'storages', objectType.storageLocation]] : undefined,
       this.objectType.partOfLoanObject ? ['EMPRUNT PARENT', this.objectType.partOfLoanObject?.externalLoan?.loanTitle, ['/', 'external-loans', objectType.partOfLoan]] : undefined,

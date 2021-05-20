@@ -1,27 +1,30 @@
-<h2 mat-dialog-title>Créer un nouveau stockage</h2>
+<h2 mat-dialog-title>{{isUpdate ? 'Modifier un' : 'Créer un nouveau' }} stockage</h2>
 
-<form mat-dialog-content (ngSubmit)="submit($event)" #ngform="ngForm">
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>
 
-  <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Pièce" [(ngModel)]="storageLocation.room" name="room" required maxlength="100">
-  </mat-form-field>
-
-  <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Stockage (armoire...)" [(ngModel)]="storageLocation.space" name="space" maxlength="100">
-  </mat-form-field>
+<form mat-dialog-content (ngSubmit)="submit($event)" #ngform="ngForm" *ngIf="storageLocation && eventId !== undefined ; else loading">
 
   <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Lieu précis (étagère, boite, ...)" [(ngModel)]="storageLocation.location" name="location" maxlength="100">
+    <input matInput placeholder="Nom" [(ngModel)]="storageLocation.storageName" name="name" required maxlength="100">
   </mat-form-field>
 
-  <mat-checkbox name="inConv" [(ngModel)]="storageLocation.inConv">
+  <app-select-storage *ngIf="isUpdate" label="Stockage parent" [(selected)]="storageLocation.parentStorageId" [excludeChildrenOf]="storageLocation.storageId" (selectLocation)="parent = $event"></app-select-storage>
+  <app-select-storage *ngIf="!isUpdate" label="Stockage parent" [(selected)]="storageLocation.parentStorageId" (selectLocation)="parent = $event"></app-select-storage>
+
+  <mat-checkbox name="inConv" [ngModel]="parent ? parent.event !== undefined : inConv" (ngModelChange)="inConv = $event"
+                [disabled]="storageLocation.parentStorageId"
+                [matTooltip]="storageLocation.parentStorageId ? 'Vous ne pouvez changer cette valeur que pour les stockages de premier niveau' : ''"
+  >
     Lieu de stockage durant la convention
   </mat-checkbox>
 
   <br><br>
 
-  <button mat-raised-button color="primary" type="submit" style="width: 100%;" [disabled]="sending || !ngform.form.valid">
-    Créer
+  <button mat-raised-button color="primary" type="submit" style="width: 100%;"
+          [disabled]="sending || !ngform.form.valid">
+    {{isUpdate ? 'Modifier' : 'Créer'}}
     <mat-progress-spinner *ngIf="sending" mode="indeterminate" diameter="20" class="spinner"></mat-progress-spinner>
   </button>
 

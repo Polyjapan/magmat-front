@@ -1,10 +1,15 @@
-<mat-spinner *ngIf="!(locationWithParents | async)"></mat-spinner>
+<mat-spinner *ngIf="!(locationWithParents | async) && !(errors | async)"></mat-spinner>
 
+<ng-container *ngIf="errors | async ; let err">
+  <h1>Une erreur s'est produite</h1>
+  <p>{{err }}</p>
+</ng-container>
 
 <ng-container *ngIf="locationWithParents | async ; let parents">
   <div style="float: right;">
-    <button mat-raised-button (click)="update()" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier l'emplacement</button>
-    <button mat-raised-button (click)="delete()" color="accent"><mat-icon>delete</mat-icon> Supprimer l'emplacement</button>
+    <button mat-raised-button (click)="update(parents)" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier</button>
+    <button mat-raised-button (click)="create(parents)" color="accent" style="margin-right: 10px"><mat-icon>add</mat-icon> Créer un nouveau</button>
+    <button mat-raised-button (click)="delete()" color="warn"><mat-icon>delete</mat-icon> Supprimer</button>
   </div>
   <h1>Emplacement {{displayStorageSpace(parents)}}</h1>
 

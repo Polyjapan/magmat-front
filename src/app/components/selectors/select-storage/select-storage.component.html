@@ -1,20 +1,13 @@
 <mat-form-field style="width: 100%;">
-<mat-label>{{label ? label : 'Lieu de rangement'}}</mat-label>
-  <ng-container *ngIf="type === 'select'">
-    <mat-select [ngModel]="selected" (ngModelChange)="selectedChange.emit($event)" name="storageLocation">
-      <mat-option [value]="null">
-        {{ emptyLabel }}
-      </mat-option>
-      <mat-option *ngFor="let option of locations" [value]="option[0]">
-        {{ displayLocation(option) }}
-      </mat-option>
-    </mat-select>
-  </ng-container>
-  <ng-container *ngIf="type === 'input'">
-    <input type="text" matInput [formControl]="searchControl" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayLocation">
-      <mat-option *ngFor="let location of filteredLocations | async" [value]="location">{{displayLocation(location)}}</mat-option>
-    </mat-autocomplete>
-  </ng-container>
+  <mat-label>{{label ? label : 'Lieu de rangement'}}</mat-label>
+  <input type="text" matInput [formControl]="searchControl" (ngModelChange)="onValueChange($event)" name="selected" [matAutocomplete]="auto">
 
+  <mat-autocomplete #auto="matAutocomplete"
+                    [displayWith]="displayLocation"
+                    (optionSelected)="onValueChange($event.option.value)">
+    <mat-option *ngFor="let location of filteredLocations | async"
+                [value]="location">{{displayLocation(location)}}</mat-option>
+  </mat-autocomplete>
+
+  <mat-error>Aucun stockage trouvé</mat-error>
 </mat-form-field>

@@ -1,10 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
-import {objectHasParentLocation, StorageLocation, storageLocationToString, StorageTree} from '../../../data/storage-location';
+import {
+  lastChild,
+  objectHasParentLocation,
+  Storage,
+  StorageLocation,
+  storageLocationToString,
+  StorageTree
+} from '../../../data/storage-location';
 import {CompleteObject} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
-import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, partition, ReplaySubject, Subject} from 'rxjs';
 import Swal from 'sweetalert2';
 import {CreateStorageLocationComponent} from '../create-storage-location/create-storage-location.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -23,6 +30,7 @@ export class ShowStorageLocationComponent implements OnInit {
   eventId?: number = undefined;
 
 
+  errors: Observable<string>;
   treeWithChildren: Observable<StorageTree>;
   locationWithParents: Observable<StorageTree>;
   items: Observable<CompleteObject[]>;
@@ -48,17 +56,21 @@ export class ShowStorageLocationComponent implements OnInit {
   }
 
   displayStorageSpace(loc: StorageTree): string {
-    console.log(loc)
     return storageLocationToString(loc);
   }
 
   refresh() {
-    this.treeWithChildren = this.sl.getStorageTree(this.id).pipe(tap(loc => {
-      this.inConv = loc.event !== undefined;
-      this.eventId = loc.event;
-    })); // .subscribe(loc => this.location = loc);
+    const [succ, err] = partition(this.sl.getStorageTree(this.id), el => (el ?? null) !== null)
+
+    this.treeWithChildren = succ.pipe(tap(loc => {
+      this.inConv = loc?.event !== undefined;
+      this.eventId = loc?.event;
+    }));// .subscribe(loc => this.location = loc);
+
+    this.errors = err.pipe(map(err => "Impossible de trouver cet emplacement."))
+
     this.items = this.treeWithChildren.pipe(switchMap(v =>
-      this.obj.getObjects().pipe(map(allObj => allObj.filter(o => objectHasParentLocation(this.inConv ? o.inconvStorageLocationObject : o.storageLocationObject, v.storageId))))
+      this.obj.getObjects().pipe(map(allObj => allObj.filter(o => objectHasParentLocation(this.inConv ? o.inconvStorageLocationObject : o.storageLocationObject, v?.storageId))))
     ));
     this.locationWithParents = this.sl.getStorageWithParents(this.id);
 
@@ -86,8 +98,22 @@ export class ShowStorageLocationComponent implements OnInit {
     this.dataSource.filter = '' + $event.checked;
   }
 
-  update() {
-    this.dialog.open(CreateStorageLocationComponent, {data: this.treeWithChildren});
+  update(locationWithParents: StorageTree) {
+    const tree = lastChild(locationWithParents);
+    const storage = new Storage();
+    storage.storageId = tree.storageId;
+    storage.storageName = tree.storageName;
+    storage.parentStorageId = tree.parentStorageId;
+    storage.event = tree.event;
+    this.dialog.open(CreateStorageLocationComponent, {data: storage});
+  }
+
+  create(locationWithParents: StorageTree) {
+    const tree = lastChild(locationWithParents);
+    const storage = new Storage();
+    storage.parentStorageId = tree.storageId;
+    storage.event = tree.event;
+    this.dialog.open(CreateStorageLocationComponent, {data: storage});
   }
 
   delete() {
@@ -99,7 +125,7 @@ export class ShowStorageLocationComponent implements OnInit {
         this.treeWithChildren = undefined;
 
         this.sl.deleteStorage(this.id).subscribe(res => {
-          this.sl.forceRefreshLocations();
+          this.sl.refresh();
           this.router.navigate(['..'], {relativeTo: this.ar});
         }, fail => {
           Swal.fire('Oups', 'On dirait que ça n\'a pas marché.', 'error');

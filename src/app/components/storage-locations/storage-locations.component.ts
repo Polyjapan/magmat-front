@@ -26,7 +26,7 @@ export class StorageLocationsComponent implements OnInit {
   }
 
   refresh() {
-    this.locations.forceRefreshLocations();
+    this.locations.refresh();
   }
 
 }

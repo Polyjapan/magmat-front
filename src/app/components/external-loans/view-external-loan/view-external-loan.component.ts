@@ -21,7 +21,6 @@ export class ViewExternalLoanComponent implements OnInit {
   loan: CompleteExternalLoan;
   loanStateToText = loanStateToText;
   items: CompleteObject[]; // For objects listing
-  locations = new Map<number, StorageLocation>();
   createdType: ObjectType;
   creating: boolean;
   changingState = false;
@@ -53,13 +52,6 @@ export class ViewExternalLoanComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sls.getStorageLocations(true).subscribe(l => {
-      if (l !== null) {
-        this.locations.clear();
-        l.forEach(loc => this.locations.set(loc.storageLocationId, loc));
-      }
-    });
-
     this.ar.paramMap.subscribe(map => {
       this.id = Number.parseInt(map.get('id'), 10);
       this.refresh();
