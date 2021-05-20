@@ -5,7 +5,6 @@ import {LoansService} from '../../../services/loans.service';
 import {CompleteObject, ObjectStatus} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
 import {ObjectType} from '../../../data/object-type';
-import {StorageLocation, storageLocationToString} from '../../../data/storage-location';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import Swal from 'sweetalert2';
 import {SelectObjectTypeComponent} from '../../selectors/select-object-type/select-object-type.component';

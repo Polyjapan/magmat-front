@@ -14,20 +14,6 @@ export class Storage {
   event?: number;
 }
 
-export class StorageWithParents {
-  storageId: number;
-  parent?: StorageWithParents;
-  storageName: string;
-  event?: number;
-}
-export class StorageLocation {
-  storageLocationId: number;
-  inConv: boolean;
-  room: string;
-  space: string;
-  location: string;
-}
-
 export function lastChild(objectLocationTree: StorageTree): StorageTree {
   let o = objectLocationTree;
   while (o != null) {

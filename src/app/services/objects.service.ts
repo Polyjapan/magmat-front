@@ -2,9 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, ObservedValueOf, OperatorFunction} from 'rxjs';
 import {CompleteObjectType, ObjectType} from '../data/object-type';
-import {LoansService} from './loans.service';
 import {StorageLocationsService} from './storage-locations.service';
-import {of, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {map, switchMap} from 'rxjs/operators';
 import {CompleteObject, CompleteObjectWithUser, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
@@ -12,7 +10,7 @@ import {ObjectLogWithObject, ObjectLogWithUser} from '../data/object-log';
 import {TopTidyingTree} from '../data/tidying';
 import {CompleteObjectComment} from '../data/object-comment';
 import {EventsService} from './events.service';
-import {StorageLocation, StorageTree, StorageWithParents} from '../data/storage-location';
+import {StorageTree} from '../data/storage-location';
 
 @Injectable({providedIn: 'root'})
 export class ObjectsService {

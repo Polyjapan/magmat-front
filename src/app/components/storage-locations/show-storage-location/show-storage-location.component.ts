@@ -5,7 +5,6 @@ import {
   lastChild,
   objectHasParentLocation,
   Storage,
-  StorageLocation,
   storageLocationToString,
   StorageTree
 } from '../../../data/storage-location';

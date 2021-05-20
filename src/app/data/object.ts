@@ -1,4 +1,4 @@
-import {StorageLocation, StorageTree, StorageWithParents} from './storage-location';
+import {StorageTree} from './storage-location';
 import {CompleteExternalLoan} from './external-loan';
 import {ObjectType} from './object-type';
 import {UserProfile} from './user';
