@@ -73,6 +73,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { StatusLabelComponent } from './components/utils/status-label/status-label.component';
 import { LocationTreeComponent } from './components/utils/location-tree/location-tree.component';
 import { MatNestedTreeNode, MatTreeModule} from '@angular/material/tree';
+import {MatSliderModule} from '@angular/material/slider';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -163,7 +164,8 @@ export function tokenGetter() {
     MatSortModule,
     ReactiveFormsModule,
     MatTooltipModule,
-    MatTreeModule
+    MatTreeModule,
+    MatSliderModule
 
   ],
   providers: [

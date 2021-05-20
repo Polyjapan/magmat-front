@@ -7,7 +7,7 @@ import {environment} from '../../environments/environment';
 import {map, switchMap} from 'rxjs/operators';
 import {CompleteObject, CompleteObjectWithUser, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
 import {ObjectLogWithObject, ObjectLogWithUser} from '../data/object-log';
-import {TopTidyingTree} from '../data/tidying';
+import {TidyingTree, TopTidyingTree} from '../data/tidying';
 import {CompleteObjectComment} from '../data/object-comment';
 import {EventsService} from './events.service';
 import {StorageTree} from '../data/storage-location';
@@ -54,8 +54,8 @@ export class ObjectsService {
       .pipe(this.embedStorageList);
   }
 
-  getTidyingData(inverted: boolean): Observable<TopTidyingTree> {
-    return this.http.get<TopTidyingTree>(environment.apiurl + '/objects/tidying?inverted=' + inverted);
+  getTidyingData(inverted: boolean, leftDepth: number, rightDepth: number): Observable<TidyingTree[]> {
+    return this.http.get<TidyingTree[]>(environment.apiurl + '/objects/tidying?inverted=' + inverted + '&leftDepth=' + leftDepth + '&rightDepth=' + rightDepth);
   }
 
   createOrUpdateObjectType(type: ObjectType): Observable<number> {
