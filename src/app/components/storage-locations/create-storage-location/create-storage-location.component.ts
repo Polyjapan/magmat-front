@@ -3,7 +3,6 @@ import {StorageLocation} from '../../../data/storage-location';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import Swal from 'sweetalert2';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-create-storage-location',
@@ -26,7 +25,7 @@ export class CreateStorageLocationComponent implements OnInit {
   }
 
   get isUpdate(): boolean {
-    return this.storageLocation && !isNullOrUndefined(this.storageLocation.storageLocationId);
+    return (this.storageLocation?.storageLocationId ?? null) !== null;
   }
 
   ngOnInit() {

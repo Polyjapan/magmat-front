@@ -1,4 +1,4 @@
-import {StorageLocation} from './storage-location';
+import {StorageLocation, StorageTree, StorageWithParents} from './storage-location';
 import {CompleteExternalLoan} from './external-loan';
 import {ObjectType} from './object-type';
 import {UserProfile} from './user';
@@ -40,8 +40,8 @@ export class SingleObject {
 export class CompleteObject {
   object: SingleObject;
   objectType: ObjectType;
-  storageLocationObject?: StorageLocation;
-  inconvStorageLocationObject?: StorageLocation;
+  storageLocationObject?: StorageTree;
+  inconvStorageLocationObject?: StorageTree;
   partOfLoanObject?: CompleteExternalLoan;
   reservedFor?: UserProfile;
 }

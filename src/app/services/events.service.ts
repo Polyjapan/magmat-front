@@ -3,38 +3,39 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Event} from '../data/event';
 import {AuthService} from './auth.service';
-import {map, shareReplay, tap} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {LoginResponse} from './login.service';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {of} from 'rxjs/internal/observable/of';
+import {Option} from '@angular/cli/models/interface';
 
 @Injectable({providedIn: 'root'})
 export class EventsService {
+  private refresh$ = new BehaviorSubject(0);
   private event$: Observable<Event>;
   private events$: Observable<Event[]>;
 
   constructor(private http: HttpClient, private auth: AuthService) {
-    this.event$ = this.http.get<Event>(environment.apiurl + '/events/current')
-      .pipe(shareReplay({bufferSize: 1, refCount: true}));
     this.events$ = this.http.get<Event[]>(environment.apiurl + '/events')
       .pipe(shareReplay({bufferSize: 1, refCount: true}));
+
+    this.event$ = this.refresh$.pipe(
+      tap(_ => console.log("reloading...")),
+      switchMap((_) => this.http.get<Event>(environment.apiurl + '/events/current').pipe(catchError(err => of(null)))),
+      tap(_ => console.log("got event...")),
+      shareReplay(1));
   }
 
   getCurrentEvent(): Observable<Event> {
     return this.event$;
   }
 
-  getEvents(): Observable<Event[]> {
-    return this.events$;
+  getCurrentEventId(): Observable<number | null> {
+    return this.event$.pipe(map(ev => ev?.id))
   }
 
-  getCurrentEventId(): number {
-    const evId = localStorage.getItem('current_event_id');
-
-    if (evId) {
-      return Number.parseInt(evId, 10);
-    } else {
-      return 0;
-    }
+  getEvents(): Observable<Event[]> {
+    return this.events$;
   }
 
   switchEvent(id: number): Observable<void> {
@@ -42,7 +43,10 @@ export class EventsService {
 
     return this.http.get<LoginResponse>(environment.apiurl + '/events/switch/' + id)
       .pipe(
-        tap(res => this.auth.changeToken(res.session)),
+        tap(res => {
+          this.auth.changeToken(res.session);
+          this.refresh$.next(Date.now());
+        }),
         map(res => undefined)
       );
   }

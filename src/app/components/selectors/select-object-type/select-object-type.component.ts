@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ObjectType} from '../../../data/object-type';
 import {FormControl} from '@angular/forms';
-import {isNullOrUndefined} from 'util';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {ObjectsService} from '../../../services/objects.service';
@@ -45,13 +44,13 @@ export class SelectObjectTypeComponent implements OnInit, OnChanges {
   }
 
 
-  displayFunc(tpe: ObjectType): string {
-    return isNullOrUndefined(tpe) ? '' : tpe.name + ' (#' + tpe.objectTypeId + ')';
+  displayFunc(tpe?: ObjectType | null): string {
+    return tpe === null ? '' : tpe.name + ' (#' + tpe.objectTypeId + ')';
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.selectedType && changes.selectedType.firstChange) {
-      if (!isNullOrUndefined(changes.selectedType.currentValue)) {
+      if (changes.selectedType.currentValue !== undefined && changes.selectedType.currentValue !== null) {
         this.objectTypeSearchControl.setValue(changes.selectedType.currentValue as ObjectType);
       } else {
         this.objectTypeSearchControl.reset();

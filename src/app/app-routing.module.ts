@@ -33,6 +33,8 @@ const routes: Routes = [
   {path: '', component: HomepageComponent, canActivate: [PermissionAuthGuard]},
   {path: 'storages', component: StorageLocationsComponent, canActivate: [PermissionAuthGuard]},
   {path: 'storages/:id', component: ShowStorageLocationComponent, canActivate: [PermissionAuthGuard]},
+  {path: 'storages/list/:room', component: ShowStorageLocationComponent, canActivate: [PermissionAuthGuard]},
+  {path: 'storages/list/:room/:space', component: ShowStorageLocationComponent, canActivate: [PermissionAuthGuard]},
 
   {path: 'object-types', component: ObjectTypesComponent, canActivate: [PermissionAuthGuard]},
   {path: 'object-types/create', component: CreateObjectTypeComponent, canActivate: [PermissionAuthGuard]},

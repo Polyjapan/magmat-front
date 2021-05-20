@@ -5,7 +5,7 @@
       <mat-option [value]="null">
         {{ emptyLabel }}
       </mat-option>
-      <mat-option *ngFor="let option of locations" [value]="option.storageLocationId">
+      <mat-option *ngFor="let option of locations" [value]="option[0]">
         {{ displayLocation(option) }}
       </mat-option>
     </mat-select>

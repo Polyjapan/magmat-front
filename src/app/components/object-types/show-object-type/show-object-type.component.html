@@ -1,28 +1,52 @@
 <mat-spinner *ngIf="!objectType"></mat-spinner>
-<ng-container *ngIf="objectType">
-  <h1>Type d'objets #{{objectType.objectType.objectTypeId}} :: {{objectType.objectType.name}}</h1>
 
-  <button mat-stroked-button [routerLink]="['..', 'edit', objectType.objectType.objectTypeId]"><mat-icon>edit</mat-icon> Modifier</button>
-  <button mat-stroked-button (click)="delete()" [disabled]="deleting"><mat-icon>delete</mat-icon> Supprimer</button>
+<h1>Type d'objets #{{objectType.objectType.objectTypeId}} :: {{objectType.objectType.name}}</h1>
 
-  <p>{{objectType.objectType.description}}</p>
+<div *ngIf="objectType" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
 
-  <p *ngIf="objectType.objectType.requiresSignature"><mat-icon>gesture</mat-icon> Signature nécessaire pour l'emprunt et le rendu.</p>
-  <p *ngIf="objectType.inconvStorageLocationObject"><b>Est rangé pendant JI: </b>{{storageLocationToString(objectType.inconvStorageLocationObject)}}</p>
-  <p *ngIf="objectType.partOfLoanObject"><b>Fait partie du prêt: </b><a [routerLink]="['/', 'external-loans', objectType.partOfLoanObject.externalLoan.externalLoanId]">{{objectType.partOfLoanObject.externalLoan.loanTitle}}</a>, à rendre le {{objectType.partOfLoanObject.externalLoan.returnTime}} à <i>{{objectType.partOfLoanObject.externalLoan.returnPlace}}</i></p>
-  <p *ngIf="objectType.storageLocationObject"><b>Est rangé hors JI: </b>{{storageLocationToString(objectType.storageLocationObject)}}</p>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Objets du type</mat-card-title>
+    </mat-card-header>
 
-  <hr>
-  <h2>Objets du type</h2>
+    <app-objects-list class="fullWidth" [fullWidth]="true" [objects]="objects"></app-objects-list>
 
+  </mat-card>
 
-  <app-objects-list [objects]="objects"></app-objects-list>
+  <div fxFlex fxLayout="column" fxLayoutGap="20px">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Propriétés du type d'objet</mat-card-title>
+      </mat-card-header>
+      <mat-table mat-card-content [dataSource]="objectTypeData" class="fullWidth">
+        <ng-container matColumnDef="property">
+          <mat-cell *matCellDef="let elem"><b>{{elem[0]}}</b></mat-cell>
+        </ng-container>
 
-  <hr>
+        <ng-container matColumnDef="value">
+          <mat-cell *matCellDef="let elem" >{{elem[1]}} </mat-cell>
+        </ng-container>
 
-  <h2>Ajout rapide d'objets</h2>
-  <p>Les objets ainsi ajoutés auront tous leurs paramètres par défaut. Le suffixe de l'objet est généré à partir du préfixe de suffixe, et d'un numéro qui est incrémenté pour chaque objet ajouté. Le préfixe de suffixe est facultatif.</p>
-  <p><i>Exemple: si le préfixe de suffixe est "Asus" et le numéro de départ "03", les objets auront pour nom <b>{{objectType.objectType.name}} Asus 03</b>, <b>{{objectType.objectType.name}} Asus 04</b>, ...</i></p>
-  <app-quick-item-create [objectType]="objectType.objectType" (createSuccess)="refreshObjects()"></app-quick-item-create>
+        <mat-row style="height: 40px" *matRowDef="let row; columns: ['property', 'value'];" [routerLink]="row[2]" [class.hover]="row[2]"></mat-row>
+      </mat-table>
 
-</ng-container>
+      <mat-card-actions>
+        <button [routerLink]="['..', 'edit', objectType.objectType.objectTypeId]" mat-button>MODIFIER</button>
+        <button (click)="delete()" mat-button>SUPPRIMER</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Ajout rapide d'objets</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Les objets ainsi ajoutés auront tous leurs paramètres par défaut. Le suffixe de l'objet est généré à partir du préfixe de suffixe, et d'un numéro qui est incrémenté pour chaque objet ajouté. Le préfixe de suffixe est facultatif.</p>
+        <p><i>Exemple: si le préfixe de suffixe est "Asus" et le numéro de départ "03", les objets auront pour nom <b>{{objectType.objectType.name}} Asus 03</b>, <b>{{objectType.objectType.name}} Asus 04</b>, ...</i></p>
+        <app-quick-item-create [objectType]="objectType.objectType" (createSuccess)="refreshObjects()" style="width: 100%;"></app-quick-item-create>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
+

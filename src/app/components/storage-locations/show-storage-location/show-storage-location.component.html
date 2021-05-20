@@ -1,22 +1,31 @@
-<mat-spinner *ngIf="!location"></mat-spinner>
+<mat-spinner *ngIf="!(locationWithParents | async)"></mat-spinner>
 
-<ng-container *ngIf="location">
-  <h1>Emplacement {{location.room}} > {{location.space}} > {{location.location}}</h1>
 
-  <p>Cet emplacement est un emplacement de stockage
-    <b>{{location.inConv ? 'dans la convention' : 'hors de la convention'}}</b>.</p>
+<ng-container *ngIf="locationWithParents | async ; let parents">
+  <div style="float: right;">
+    <button mat-raised-button (click)="update()" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier l'emplacement</button>
+    <button mat-raised-button (click)="delete()" color="accent"><mat-icon>delete</mat-icon> Supprimer l'emplacement</button>
+  </div>
+  <h1>Emplacement {{displayStorageSpace(parents)}}</h1>
 
-  <button mat-raised-button (click)="update()" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier l'emplacement</button>
-  <button mat-raised-button (click)="delete()" color="accent"><mat-icon>delete</mat-icon> Supprimer l'emplacement</button>
+
+  <p>Cet emplacement est un emplacement de stockage <b>{{parents.event ? 'dans la convention' : 'hors de la convention'}}</b>.</p>
 
   <br><br>
 
   <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="25px">
     <div fxFlex>
       <mat-card>
-        <mat-card-title>Liste des objets présents</mat-card-title>
+        <div style="float: right;" *ngIf="(treeWithChildren | async).children.length > 0">
+          <mat-slide-toggle name="displayAll" [(ngModel)]="displayAll" (ngModelChange)="displayChange($event)">Voir aussi les sous stockages</mat-slide-toggle>
+        </div>
+        <mat-card-header>
+          <mat-card-title>Liste des objets présents</mat-card-title>
+        </mat-card-header>
 
-        <table mat-table style="width: 100%;" [dataSource]="items | async" matSort>
+        <ng-template #loading><mat-spinner></mat-spinner></ng-template>
+
+        <table mat-table style="width: 100%;" [dataSource]="dataSource" matSort *ngIf="items | async ; else loading">
           <ng-container matColumnDef="tag">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Tag</th>
             <td mat-cell *matCellDef="let elem"> {{elem.object.assetTag}} </td>
@@ -27,29 +36,42 @@
           </ng-container>
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Etat</th>
-            <td mat-cell *matCellDef="let elem"> {{statusToString(elem.object.status)}} </td>
-          </ng-container>
-          <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type</th>
-            <td mat-cell *matCellDef="let elem"> {{isInherited(elem) ? 'Emplacement hérité' : 'Emplacement fixé sur l\'objet'}} </td>
-          </ng-container>
-          <ng-container matColumnDef="see">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let elem">
-              <button [routerLink]="['/', 'objects', elem.object.objectId]" mat-button>Voir</button>
-            </td>
+            <td mat-cell *matCellDef="let elem"> <app-status-label [status]="elem.object.status"></app-status-label>  </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="['tag', 'name', 'status', 'type', 'see']"></tr>
-          <tr mat-row *matRowDef="let row; columns: ['tag', 'name', 'status', 'type','see'];"></tr>
+          <tr mat-header-row *matHeaderRowDef="['tag', 'name', 'status']"></tr>
+          <tr mat-row *matRowDef="let elem; columns: ['tag', 'name', 'status'];" [routerLink]="['/', 'objects', elem.object.objectId]" class="hover"></tr>
 
         </table>
       </mat-card>
     </div>
 
-    <div fxFlex>
+    <div fxFlex fxLayout="column" fxLayoutGap="20px">
+      <mat-card *ngIf="parents.children.length > 0">
+        <mat-card-header>
+          <mat-card-title>Hiérarchie</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <app-location-tree [trees]="[parents]" [expandSingle]="true"></app-location-tree>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card *ngIf="(treeWithChildren | async).children.length">
+        <mat-card-header>
+          <mat-card-title>Enfants</mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content *ngIf="treeWithChildren && (treeWithChildren | async) ; let tree">
+          <app-location-tree [trees]="[treeWithChildren | async]"></app-location-tree>
+        </mat-card-content>
+
+      </mat-card>
       <mat-card>
-        <mat-card-title>Déplacement rapide</mat-card-title>
+        <mat-card-header>
+          <mat-card-title>Déplacement rapide</mat-card-title>
+        </mat-card-header>
 
         <app-quickmove [locationId]="id" (success)="refresh()"></app-quickmove>
       </mat-card>

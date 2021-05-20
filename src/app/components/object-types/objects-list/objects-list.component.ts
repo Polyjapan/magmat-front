@@ -10,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./objects-list.component.css']
 })
 export class ObjectsListComponent implements OnChanges, OnInit {
+  @Input() fullWidth: boolean = false;
   @Input() objects: (CompleteObject | CompleteObjectWithUser)[];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -35,7 +36,8 @@ export class ObjectsListComponent implements OnChanges, OnInit {
       base.push('user');
     }
 
-    base.push('actions');
+    // TODO: Louis - I don't like the look of this table with the edit button, but if edit is frequently needed then we may need to put this back
+    // base.push('actions');
     return base;
 
   }
@@ -52,6 +54,7 @@ export class ObjectsListComponent implements OnChanges, OnInit {
 
     switch (column) {
       case 'status':
+        // Only for sorting
         return statusToString(o.object.status);
       case 'inConvStorage':
         return storageLocationToString(o.inconvStorageLocationObject);

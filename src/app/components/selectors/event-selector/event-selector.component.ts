@@ -20,8 +20,8 @@ export class EventSelectorComponent implements OnInit {
   ngOnInit() {
   }
 
-  switch(id: number) {
-    this.events.switchEvent(id)
-      .subscribe(res => window.location.reload());
+  async switch(id: number) {
+    await this.events.switchEvent(id).toPromise()
+    // window.location.reload()
   }
 }

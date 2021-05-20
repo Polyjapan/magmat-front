@@ -3,7 +3,6 @@ import Swal from 'sweetalert2';
 import {ObjectStatus, SingleObject} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
 import {ObjectType} from '../../../data/object-type';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-quick-item-create',
@@ -28,7 +27,7 @@ export class QuickItemCreateComponent implements OnChanges {
   constructor(private objectsService: ObjectsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.objectType && (isNullOrUndefined(this.prefix) || this.prefix === '')) {
+    if (changes.objectType && ((this.prefix ?? '')  === '')) {
       this.updatePrefix('');
     }
   }

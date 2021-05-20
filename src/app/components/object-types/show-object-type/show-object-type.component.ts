@@ -31,6 +31,21 @@ export class ShowObjectTypeComponent implements OnInit {
     });
   }
 
+
+  get objectTypeData(): [string, string, (string | number)[]?][] {
+    const objectType = this.objectType.objectType;
+
+    const arr: [string, string, (string | number)[]?][] = [
+      ['DESCRIPTION', objectType.description],
+      this.objectType.inconvStorageLocationObject ? ['STOCKAGE (CONVENTION)', storageLocationToString(this.objectType.inconvStorageLocationObject), ['/', 'storages', objectType.inconvStorageLocation]] : undefined,
+      this.objectType.storageLocationObject ? ['STOCKAGE (ANNÉE)', storageLocationToString(this.objectType.storageLocationObject), ['/', 'storages', objectType.storageLocation]] : undefined,
+      this.objectType.partOfLoanObject ? ['EMPRUNT PARENT', this.objectType.partOfLoanObject?.externalLoan?.loanTitle, ['/', 'external-loans', objectType.partOfLoan]] : undefined,
+      objectType.requiresSignature ? ['PARTICULARITÉS', 'Signature obligatoire'] : undefined
+    ];
+
+    return arr.filter(e => e);
+  }
+
   refreshObjects() {
     this.objectsService.getObjectsForType(this.id).subscribe(objs => this.objects = objs);
   }

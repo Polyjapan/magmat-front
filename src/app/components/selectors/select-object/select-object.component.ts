@@ -4,7 +4,6 @@ import {Observable, Subscriber} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import {CompleteObject} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-select-object',
@@ -29,7 +28,7 @@ export class SelectObjectComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.inputObservable
       .pipe(
-        filter(text => !isNullOrUndefined(text)),
+        filter(text => text !== null && text != undefined),
         filter(text => text.length >= 1),
         debounceTime(200)
       ).subscribe(val => {

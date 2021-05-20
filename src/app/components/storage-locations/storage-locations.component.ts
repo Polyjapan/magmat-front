@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {StorageLocationsService} from '../../services/storage-locations.service';
 import {Observable} from 'rxjs';
-import {StorageLocation} from '../../data/storage-location';
-import { MatDialog } from '@angular/material/dialog';
+import {StorageTree} from '../../data/storage-location';
+import {MatDialog} from '@angular/material/dialog';
 import {CreateStorageLocationComponent} from './create-storage-location/create-storage-location.component';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-storage-locations',
@@ -11,12 +12,13 @@ import {CreateStorageLocationComponent} from './create-storage-location/create-s
   styleUrls: ['./storage-locations.component.css']
 })
 export class StorageLocationsComponent implements OnInit {
-  storageLocations: Observable<StorageLocation[]>;
+  storageLocations: Observable<StorageTree[]>;
 
-  constructor(private locations: StorageLocationsService, private dialog: MatDialog) { }
+  constructor(private locations: StorageLocationsService, private dialog: MatDialog) {
+  }
 
   ngOnInit() {
-    this.storageLocations = this.locations.getStorageLocations();
+    this.storageLocations = this.locations.getStorages().pipe(tap(t => console.log(t)));
   }
 
   create() {

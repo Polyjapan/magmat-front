@@ -1,4 +1,4 @@
-import {StorageLocation} from './storage-location';
+import {StorageLocation, StorageTree, StorageWithParents} from './storage-location';
 import {CompleteExternalLoan} from './external-loan';
 
 export class ObjectType {
@@ -13,7 +13,7 @@ export class ObjectType {
 
 export class CompleteObjectType {
   objectType: ObjectType;
-  storageLocationObject?: StorageLocation;
-  inconvStorageLocationObject?: StorageLocation;
+  storageLocationObject?: StorageTree;
+  inconvStorageLocationObject?: StorageTree;
   partOfLoanObject?: CompleteExternalLoan;
 }

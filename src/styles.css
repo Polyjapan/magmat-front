@@ -6,3 +6,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .sig-container canvas {
   border: 2px dashed rgba(0,0,0,.16);
 }
+
+.hover:hover {
+  background: whitesmoke;
+}
+
+.fullWidth {
+  width: calc(100% + 32px);
+  margin-left: -16px
+}
+
+
+.success {background-color: #05bb7a;} /* Green */
+.info {background-color: #2196F3;} /* Blue */
+.info-secondary {background-color: #7ac0ff;} /* Blue */
+.warning {background-color: #ff9800;} /* Orange */
+.danger {background-color: #f44336;} /* Red */
+.other {background-color: #e7e7e7; color: black;} /* Gray */

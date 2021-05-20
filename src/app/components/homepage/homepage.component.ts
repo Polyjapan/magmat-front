@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CompleteObject, ObjectStatus, statusToString} from '../../data/object';
 import {Router} from '@angular/router';
-import {isNullOrUndefined} from 'util';
 import {FormControl} from '@angular/forms';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {ObjectsService} from '../../services/objects.service';
@@ -72,7 +71,7 @@ export class HomepageComponent implements OnInit {
   ngOnInit() {
     this.quickLoanMultiTags.valueChanges
       .pipe(
-        map(v => isNullOrUndefined(v) ? [] : v.split('\n').map(o => o.trim()).filter(o => o.length > 0)),
+        map(v => (v ?? []).split('\n').map(o => o.trim()).filter(o => o.length > 0)),
         switchMap(lst =>
           forkJoin(
             lst.map(elem => this.objectsService.getObjectByTag(elem)
@@ -83,8 +82,8 @@ export class HomepageComponent implements OnInit {
   }
 
 
-  redirectTo($event: CompleteObject) {
-    if (!isNullOrUndefined($event) && !isNullOrUndefined($event.object)) {
+  redirectTo($event?: CompleteObject | null) {
+    if ($event?.object !== null) {
       this.router.navigate(['/', 'objects', $event.object.objectId]);
     }
   }

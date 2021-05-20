@@ -69,6 +69,10 @@ import { SelectObjectTypeComponent } from './components/selectors/select-object-
 import {EventSelectorComponent} from './components/selectors/event-selector/event-selector.component';
 import {GuestsComponent} from './components/users/guests.component';
 import {ViewUserComponent} from './components/users/view-user/view-user.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { StatusLabelComponent } from './components/utils/status-label/status-label.component';
+import { LocationTreeComponent } from './components/utils/location-tree/location-tree.component';
+import { MatNestedTreeNode, MatTreeModule} from '@angular/material/tree';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -113,7 +117,9 @@ export function tokenGetter() {
     SelectObjectTypeComponent,
     EventSelectorComponent,
     GuestsComponent,
-    ViewUserComponent
+    ViewUserComponent,
+    StatusLabelComponent,
+    LocationTreeComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,
@@ -156,6 +162,8 @@ export function tokenGetter() {
     MatSlideToggleModule,
     MatSortModule,
     ReactiveFormsModule,
+    MatTooltipModule,
+    MatTreeModule
 
   ],
   providers: [

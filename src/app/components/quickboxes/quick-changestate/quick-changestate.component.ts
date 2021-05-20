@@ -17,7 +17,7 @@ export class QuickChangestateComponent implements OnInit {
   @Input() object: CompleteObject;
   @Output() update = new EventEmitter();
 
-  @ViewChild('selectUserComponent', {static: true}) userSelector: SelectUserComponent;
+  @ViewChild('selectUserComponent') userSelector: SelectUserComponent;
 
   statusToString = statusToString;
   ObjectStatus = ObjectStatus;

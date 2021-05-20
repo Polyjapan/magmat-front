@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {ExternalLoan, LoanState, LoanStates, loanStateToText} from '../../../data/external-loan';
-import {isNullOrUndefined} from 'util';
 import {Guest} from '../../../data/guest';
 import {LoansService} from '../../../services/loans.service';
 import {Router} from '@angular/router';
@@ -23,7 +22,7 @@ export class CreateExternalLoanComponent implements OnInit {
   }
 
   get isUpdate(): boolean {
-    return !isNullOrUndefined(this.loan.externalLoanId);
+    return this.loan.externalLoanId !== undefined && this.loan.externalLoanId !== null;
   }
 
   get isValid() {

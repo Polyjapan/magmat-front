@@ -26,7 +26,7 @@
         </ng-container>
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef> Etat</th>
-          <td mat-cell *matCellDef="let elem"> {{statusToString(elem.object.status)}} </td>
+          <td mat-cell *matCellDef="let elem"> <app-status-label [status]="elem.object.status"></app-status-label> </td>
         </ng-container>
         <ng-container matColumnDef="see">
           <th mat-header-cell *matHeaderCellDef></th>

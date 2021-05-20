@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CompleteExternalLoan, LoanState} from '../../data/external-loan';
-import {CompleteObject, ObjectStatus, statusToString} from '../../data/object';
+import {CompleteObject, ObjectStatus} from '../../data/object';
 import {LoansService} from '../../services/loans.service';
 import {ObjectsService} from '../../services/objects.service';
 
@@ -12,8 +12,6 @@ import {ObjectsService} from '../../services/objects.service';
 export class ReturnsComponent implements OnInit {
   loans: CompleteExternalLoan[];
   loansItems = new Map<number, CompleteObject[]>();
-
-  statusToString = statusToString;
 
   constructor(private ls: LoansService, private os: ObjectsService) {
   }

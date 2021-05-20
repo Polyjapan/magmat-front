@@ -2,16 +2,12 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {CompleteExternalLoan, LoanState, loanStateToText} from '../../../data/external-loan';
 import {ActivatedRoute} from '@angular/router';
 import {LoansService} from '../../../services/loans.service';
-import {CompleteObject, ObjectStatus, statusToString} from '../../../data/object';
+import {CompleteObject, ObjectStatus} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
 import {ObjectType} from '../../../data/object-type';
 import {StorageLocation, storageLocationToString} from '../../../data/storage-location';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
-import {isNullOrUndefined} from 'util';
 import Swal from 'sweetalert2';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {filter, map, startWith} from 'rxjs/operators';
 import {SelectObjectTypeComponent} from '../../selectors/select-object-type/select-object-type.component';
 
 @Component({
@@ -24,7 +20,6 @@ export class ViewExternalLoanComponent implements OnInit {
   id: number;
   loan: CompleteExternalLoan;
   loanStateToText = loanStateToText;
-  statusToString = statusToString;
   items: CompleteObject[]; // For objects listing
   locations = new Map<number, StorageLocation>();
   createdType: ObjectType;
@@ -59,7 +54,7 @@ export class ViewExternalLoanComponent implements OnInit {
 
   ngOnInit() {
     this.sls.getStorageLocations(true).subscribe(l => {
-      if (!isNullOrUndefined(l)) {
+      if (l !== null) {
         this.locations.clear();
         l.forEach(loc => this.locations.set(loc.storageLocationId, loc));
       }
@@ -138,11 +133,6 @@ export class ViewExternalLoanComponent implements OnInit {
       }
     }, err => this.changingState = false);
   }
-
-  getStorageLocation(location: number) {
-    return storageLocationToString(this.locations.get(location));
-  }
-
 
   create() {
     if (this.creating) {

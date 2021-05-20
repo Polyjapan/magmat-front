@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Guest} from '../../../data/guest';
-import {isNullOrUndefined} from "util";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {GuestsService} from '../../../services/guests.service';
 import Swal from 'sweetalert2';
@@ -26,7 +25,7 @@ export class CreateGuestComponent implements OnInit {
   }
 
   get isUpdate(): boolean {
-    return !isNullOrUndefined(this.lender.guestId);
+    return this.lender.guestId !== null && this.lender.guestId !== undefined;
   }
 
   submit($event: any) {

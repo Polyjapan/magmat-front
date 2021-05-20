@@ -3,7 +3,6 @@ import {Observable} from 'rxjs';
 import {Guest} from '../../data/guest';
 import {GuestsService} from '../../services/guests.service';
 import {CreateGuestComponent} from './create-guest/create-guest.component';
-import {isNumber} from 'util';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({

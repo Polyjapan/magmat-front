@@ -1,13 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CompleteExternalLoan} from '../../../data/external-loan';
-import {LoansService} from '../../../services/loans.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {Guest} from '../../../data/guest';
 import {GuestsService} from '../../../services/guests.service';
 import { MatDialog } from '@angular/material/dialog';
 import {CreateGuestComponent} from '../../users/create-guest/create-guest.component';
-import {isNumber} from 'util';
 
 @Component({
   selector: 'app-select-lender',
@@ -43,7 +38,7 @@ export class SelectLenderComponent implements OnInit {
 
   create() {
     this.dialog.open(CreateGuestComponent).afterClosed().subscribe(res => {
-      if (isNumber(res)) {
+      if (typeof res === 'number') {
         let messages = 0;
         const subscriber = this.service.getGuests().subscribe(ans => {
           messages ++;

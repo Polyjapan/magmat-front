@@ -1,14 +1,14 @@
 <form>
 
-  <mat-form-field style="width: 80%">
+  <mat-form-field style="width: 100%">
     <input matInput type="text" placeholder="Préfixe du suffixe" name="name" [ngModel]="prefix" (ngModelChange)="updatePrefix($event)">
   </mat-form-field>
 
-  <mat-form-field style="width: 80%">
+  <mat-form-field style="width: 100%">
     <input matInput type="number" placeholder="Numéro de départ du suffixe" required name="startNumber" [(ngModel)]="suffixStart">
   </mat-form-field>
 
-  <mat-form-field style="width: 80%">
+  <mat-form-field style="width: 100%">
     <textarea matInput placeholder="Liste des asset tags (1 par ligne)" required name="assetTags" [(ngModel)]="tags"></textarea>
   </mat-form-field>
 

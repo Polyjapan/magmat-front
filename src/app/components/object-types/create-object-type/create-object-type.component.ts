@@ -5,7 +5,6 @@ import {LoansService} from '../../../services/loans.service';
 import {ObjectType} from '../../../data/object-type';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import {isNullOrUndefined} from 'util';
 import {ActivatedRoute, Router} from '@angular/router';
 
 
@@ -23,7 +22,7 @@ export class CreateObjectTypeComponent implements OnInit {
   }
 
   get isUpdate(): boolean {
-    return !isNullOrUndefined(this.type.objectTypeId);
+    return this.type.objectTypeId !== null && this.type.objectTypeId !== undefined;
   }
 
   ngOnInit() {

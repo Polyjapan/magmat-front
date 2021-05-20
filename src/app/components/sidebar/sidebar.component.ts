@@ -1,4 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {EventsService} from '../../services/events.service';
+import {map, tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,8 +11,11 @@ import {Component, Input, OnInit} from '@angular/core';
 export class SidebarComponent implements OnInit {
 
   @Input('url') subUrl: string;
+  inEvent: Observable<boolean>;
 
-  constructor() { }
+  constructor(private events: EventsService) {
+    this.inEvent = events.getCurrentEvent().pipe(map(e => e !== null), tap(b => console.log("received " + b)));
+  }
 
   ngOnInit() {
   }

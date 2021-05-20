@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ProfileService} from '../../../services/profile.service';
 import {UserProfile} from '../../../data/user';
-import {Observable} from 'rxjs';
+import {merge, Observable, partition} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map, startWith, switchMap, tap} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {Guest} from '../../../data/guest';
@@ -33,25 +33,29 @@ export class SelectUserComponent implements OnInit {
     console.log(val);
     console.log(typeof val);
 
-    if (typeof val === 'string') {
+    if (val && typeof val === 'string') {
       this.service.getUserProfile(val).subscribe(data => {
         this.userIdChange.emit(data.id);
         this.selectedUser.emit(data);
         this.currentProfile = data;
         this.selected.setErrors(null);
       }, err => this.selected.setErrors({noProfile: true}));
-    } else if (has(val, 'guestId') && this.allowGuests) {
+    } else if (val && has(val, 'guestId') && this.allowGuests) {
       const guest = val as Guest;
       this.userIdChange.emit(undefined);
       this.selectedUser.emit(guest);
       this.currentProfile = guest;
       this.selected.setErrors(null);
-    } else if (has(val, 'id')) {
+    } else if (val && has(val, 'id')) {
       const user = val as UserProfile;
       this.userIdChange.emit(user.id);
       this.selectedUser.emit(user);
       this.currentProfile = user;
       this.selected.setErrors(null);
+    } else {
+      this.userIdChange.emit(undefined);
+      this.selectedUser.emit(undefined);
+      this.currentProfile = undefined;
     }
   }
 
@@ -72,14 +76,11 @@ export class SelectUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.autoComplete = this.selected.valueChanges
-      .pipe(
-        startWith(''),
-        filter(text => text.length >= 1),
-        filter(text => text.match('[0-9]+') !== null || text.length >= 3),
-        debounceTime(200),
-        distinctUntilChanged(),
+    let [complete, resets] = partition(this.selected.valueChanges.pipe(debounceTime(100), distinctUntilChanged()), text => text && typeof text === 'string' && (text.match('[0-9]+') !== null || text.length >= 3));
 
+    resets = resets.pipe(filter(el => !el || typeof el !== 'object'))
+
+    const completeValues = complete.pipe(
         map(value => typeof value === 'string' ? value.toLowerCase() : this.displayFunc(value)),
         switchMap(name => {
           if (name.match('^s?[0-9]+$') !== null) {
@@ -116,6 +117,9 @@ export class SelectUserComponent implements OnInit {
         })
       );
 
+    this.autoComplete = merge(completeValues, resets.pipe(tap(v => console.log("reseet " + v)), map(r => [])));
+    resets.subscribe(reset => this.onValueChange(null))
+
     if (this.userId) {
       this.onValueChange(this.userId + '');
       this.selected.setValue('' + this.userId);
@@ -129,9 +133,7 @@ export class SelectUserComponent implements OnInit {
 
   public reset() {
     this.selected.reset();
-    this.currentProfile = undefined;
-    this.selectedUser.emit(undefined);
-    this.userIdChange.emit(undefined);
+    this.onValueChange(null);
   }
 
   private triggerSearch(val: string) {
