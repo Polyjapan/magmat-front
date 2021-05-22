@@ -5,6 +5,8 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ObjectsService} from '../../services/objects.service';
 import {externalLoanToString} from 'src/app/data/external-loan';
+import {ObjectTypesService} from '../../services/object-types.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-object-types',
@@ -18,7 +20,7 @@ export class ObjectTypesComponent implements OnInit {
   typesSource = new MatTableDataSource<ObjectType>();
   filter: string = '';
 
-  constructor(private service: ObjectsService) {
+  constructor(private service: ObjectTypesService) {
   }
 
   dataAccessor(o: ObjectType, column: string): string {
@@ -33,7 +35,7 @@ export class ObjectTypesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.types = this.service.getObjectTypes();
+    this.types = this.service.getObjectTypes().pipe(map(e => e.map(v => v.objectType)));
     this.types.subscribe(data => this.typesSource.data = data);
     this.typesSource.sort = this.sort;
     this.typesSource.sortingDataAccessor = this.dataAccessor;

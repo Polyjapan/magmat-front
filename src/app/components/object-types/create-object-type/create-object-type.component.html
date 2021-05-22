@@ -5,58 +5,55 @@
   <mat-spinner></mat-spinner>
 </ng-template>
 
-<mat-dialog-content *ngIf="objectType ; else loading">
+<ng-container *ngIf="objectType ; else loading">
 
-  <p>Ce formulaire vous permet de {{isUpdate ? "modifier" : "créer"}} une catégorie d'objet. Une catégorie d'objets regroupe
-    tous les objets qui ont, globalement, les mêmes caractéristiques : nom, lieu de stockage...</p>
-  <p *ngIf="!isUpdate">Une fois la catégorie créée, vous pourrez créer plusieurs objets au sein de cette catégorie, puis leur donner
-    des <i>asset tags</i>, identifiants uniques pour ces objets (en général, indiqué sur un
-    code barre).</p>
-  <p>Même si les objets d'une même catégorie ont en général les mêmes caractéristiques, il est possible de redéfinir un de ces
-    paramètres pour un des objets. Si, par exemple, un des objets <i>tablette</i>
-    est stocké à un endroit différent du reste, vous pourrez changer cette valeur directement sur l'objet, et n'avez pas
-    besoin de changer ça au niveau du type d'objet/créer un nouveau type
-    d'objet.</p>
+  <mat-dialog-content>
 
-  <form #form="ngForm">
-    <mat-form-field>
-      <mat-label>Nom</mat-label>
-      <input matInput placeholder="Transpalette" required [(ngModel)]="objectType.name" name="name">
-    </mat-form-field>
+    <form #form="ngForm">
+      <mat-form-field>
+        <mat-label>Nom</mat-label>
+        <input matInput placeholder="Transpalette" required [(ngModel)]="objectType.name" name="name">
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Un truc qui roule et qui sert à déplacer des palettes"
-                [(ngModel)]="objectType.description" name="description"></textarea>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Un truc qui roule et qui sert à déplacer des palettes"
+                  [(ngModel)]="objectType.description" name="description"></textarea>
+      </mat-form-field>
 
-    <app-select-object-type></app-select-object-type>
+      <app-select-object-type [(selected)]="objectType.parentObjectTypeId" (selectedObjectChange)="parent = $event" [excludeChildrenOf]="isUpdate ? objectType.objectTypeId : undefined" label="Catégorie parente (facultatif)"></app-select-object-type>
 
-    <h4>Prêt parent</h4>
-    <p>Information facultative. Si vous la renseignez, tous les objets de la catégories, toutes les sous catégories, ainsi que tous les objets des sous catégories seront aussi liés à ce prêt, et ces objets/catégories ne seront pas visibles dans d'autres événements ou une fois le prêt rendu.</p>
+      <h4>Prêt parent {{lastChild(parent).name}}</h4>
 
-    <app-select-loan [(selected)]="objectType.partOfLoan"></app-select-loan>
+      <ng-template #noParentLoan>
+        <p>Information facultative. Si vous la renseignez, tous les objets de la catégorie, toutes les sous catégories, ainsi que tous les objets des sous catégories seront aussi liés à ce prêt, et ces objets/catégories ne seront pas visibles dans d'autres événements ou une fois le prêt rendu.</p>
 
-    <br>
+        <app-select-loan [(selected)]="objectType.partOfLoan" label="Prêt parent (facultatif)"></app-select-loan>
+      </ng-template>
 
-    <div fxLayout="row" fxLayoutGap="5%" fxLayoutAlign="center center" *ngIf="!isUpdate">
-      <button fxFlex="1 1 30%" (click)="create('scan')" mat-raised-button color="warn"
-              [disabled]="form.invalid || sending">Créer et scanner des objets
+      <ng-container *ngIf="parent && lastChild(parent).partOfLoanObject ; let loan ; else noParentLoan">
+        Cette catégorie est une sous catégorie de {{objectTypeToString(parent)}}, qui fait partie du prêt {{externalLoanToString(loan)}}. Vous ne pouvez pas modifier cet attribut.
+      </ng-container>
+      <br>
+
+
+    </form>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <ng-container *ngIf="!isUpdate">
+      <button (click)="create('scan')" mat-button color="primary"
+              [disabled]="form.invalid || sending">CRÉER ET OUVRIR
       </button>
-      <button fxFlex="1 1 30%" (click)="create('stay')" mat-raised-button color="accent"
-              [disabled]="form.invalid || sending">Créer et rester sur cette page
+      <button (click)="create('stay')" mat-button color="accent"
+              [disabled]="form.invalid || sending">CRÉER ET RESTER
       </button>
-    </div>
+    </ng-container>
 
-    <div fxLayout="row" fxLayoutGap="5%" fxLayoutAlign="center center" *ngIf="isUpdate">
-      <button fxFlex="1 1 30%" (click)="create('page')" mat-raised-button color="warn"
-              [disabled]="form.invalid || sending">Mettre à jour et afficher
-      </button>
-      <button fxFlex="1 1 30%" (click)="create('list')" mat-raised-button color="accent"
-              [disabled]="form.invalid || sending">Mettre à jour et voir la liste
-      </button>
-    </div>
-
-  </form>
-
-</mat-dialog-content>
+    <ng-container *ngIf="isUpdate">
+      <button (click)="create('page')" mat-button [disabled]="form.invalid || sending">ENREGISTRER</button>
+    </ng-container>
+  </mat-dialog-actions>
+</ng-container>

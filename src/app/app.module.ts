@@ -74,6 +74,8 @@ import { StatusLabelComponent } from './components/utils/status-label/status-lab
 import { LocationTreeComponent } from './components/utils/location-tree/location-tree.component';
 import { MatNestedTreeNode, MatTreeModule} from '@angular/material/tree';
 import {MatSliderModule} from '@angular/material/slider';
+import {AbstractSelectorComponent} from './components/selectors/abstract-selector/abstract-selector.component';
+import { ObjectTypeTreeComponent } from './components/utils/object-type-tree/object-type-tree.component';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -120,7 +122,8 @@ export function tokenGetter() {
     GuestsComponent,
     ViewUserComponent,
     StatusLabelComponent,
-    LocationTreeComponent
+    LocationTreeComponent,
+    ObjectTypeTreeComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,

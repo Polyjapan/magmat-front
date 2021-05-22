@@ -1,13 +1,13 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {ObjectsService} from '../../../services/objects.service';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import {LoansService} from '../../../services/loans.service';
-import {ObjectType, ObjectTypeAncestry} from '../../../data/object-type';
+import {lastChild, ObjectType, ObjectTypeAncestry, objectTypeToString} from '../../../data/object-type';
+import {externalLoanToString} from '../../../data/external-loan';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectTypesService} from '../../../services/object-types.service';
-import {Storage} from '../../../data/storage-location';
 
 
 @Component({
@@ -20,6 +20,9 @@ export class CreateObjectTypeComponent {
   parent: ObjectTypeAncestry;
 
   sending = false;
+  lastChild = lastChild;
+  objectTypeToString = objectTypeToString;
+  externalLoanToString = externalLoanToString;
 
   constructor(private objects: ObjectsService, private objectTypes: ObjectTypesService, private storagesService: StorageLocationsService, private loansService: LoansService,
               private dialog: MatDialog, private route: ActivatedRoute, private router: Router,
@@ -27,11 +30,11 @@ export class CreateObjectTypeComponent {
 
     if (data) {
       if (data.parentObjectTypeId) {
-        const s = this.objectTypes.getObjectTypeWithParents(data.parentObjectTypeId).subscribe(r => {
+        this.objectTypes.getObjectTypeWithParents(data.parentObjectTypeId).subscribe(r => {
           this.parent = r;
+          console.log(r)
           this.objectType = data;
-          s.unsubscribe()
-        })
+        });
       } else {
         this.objectType = data;
       }
@@ -44,7 +47,6 @@ export class CreateObjectTypeComponent {
     return this.objectType.objectTypeId !== null && this.objectType.objectTypeId !== undefined;
   }
 
-
   create(next: 'stay' | 'scan' | 'list' | 'page') {
     if (this.sending) {
       return;
@@ -52,7 +54,7 @@ export class CreateObjectTypeComponent {
 
     this.sending = true;
     this.objectTypes.createOrUpdateObjectType(this.objectType).subscribe(id => {
-
+      this.objectTypes.refresh();
       switch (next) {
         case 'stay':
           Swal.fire({title: 'Objet ajouté', icon: 'success', timer: 3000, timerProgressBar: true}).then(() => {
@@ -61,13 +63,13 @@ export class CreateObjectTypeComponent {
           });
           break;
         case 'scan':
-        case 'page':
           this.sending = false;
           this.router.navigate(['object-types', id]);
+          this.dialogRef.close();
           break;
-        case 'list':
+        case 'page':
           this.sending = false;
-          this.router.navigate(['object-types']);
+          this.dialogRef.close();
           break;
       }
 

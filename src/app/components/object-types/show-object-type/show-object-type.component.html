@@ -1,8 +1,10 @@
 <mat-spinner *ngIf="!(parents$ | async) && !(errors | async)"></mat-spinner>
 
 <ng-container *ngIf="errors | async ; let err">
-  <h1>Une erreur s'est produite</h1>
-  <p>{{err }}</p>
+  <ng-container *ngIf="!(parents$ | async)">
+    <h1>Une erreur s'est produite</h1>
+    <p>{{err }}</p>
+  </ng-container>
 </ng-container>
 
 <ng-container *ngIf="parents$ | async ; let parent">
@@ -18,8 +20,11 @@
 
     <div fxFlex>
       <mat-card>
+        <div style="float: right;" *ngIf="(tree$ | async)?.children?.length > 0">
+          <mat-slide-toggle name="displayAll" [(ngModel)]="displayAll" (ngModelChange)="refresh()">Voir aussi les sous catégories</mat-slide-toggle>
+        </div>
         <mat-card-header>
-          <mat-card-title>Objets du type</mat-card-title>
+          <mat-card-title>Objets dans cette catégorie</mat-card-title>
         </mat-card-header>
 
         <ng-template #loadingItems><mat-spinner></mat-spinner></ng-template>
@@ -50,6 +55,29 @@
           <button [routerLink]="['..', 'edit', id]" mat-button>MODIFIER</button>
           <button (click)="delete()" mat-button>SUPPRIMER</button>
         </mat-card-actions>
+      </mat-card>
+
+
+      <mat-card *ngIf="parent.child">
+        <mat-card-header>
+          <mat-card-title>Hiérarchie</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <app-object-type-tree [ancestry]="parent"></app-object-type-tree>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card *ngIf="tree$ && (tree$ | async)?.children?.length ?? 0 > 0">
+        <mat-card-header>
+          <mat-card-title>Enfants</mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content *ngIf="tree$ | async ; let tree">
+          <app-object-type-tree [trees]="[tree]"></app-object-type-tree>
+        </mat-card-content>
+
       </mat-card>
 
       <mat-card>

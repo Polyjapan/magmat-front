@@ -15,7 +15,7 @@
       <input matInput placeholder="Asset Tag (code barre)" required [(ngModel)]="object.object.assetTag" name="assetTag">
     </mat-form-field>
 
-    <app-select-object-type [(selectedType)]="object.objectType"></app-select-object-type>
+    <app-select-object-type [(selectedObject)]="object.objectType"></app-select-object-type>
 
     <mat-form-field>
       <mat-label>Description (héritée par défaut de la catégorie)</mat-label>

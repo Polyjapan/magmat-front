@@ -92,7 +92,7 @@
         <p>Très pratique lors de la récupération d'un prêt, vous permet de rapidement inventorier le contenu d'un
           prêt.</p>
 
-        <app-select-object-type [(selectedType)]="selectedType"></app-select-object-type>
+        <app-select-object-type [(selectedObject)]="selectedType"></app-select-object-type>
 
         <app-quick-item-create *ngIf="selectedType" [objectType]="selectedType" style="width: 100%;"
                                (createSuccess)="selectedType = undefined; refreshObjects()"

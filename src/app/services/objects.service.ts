@@ -63,7 +63,7 @@ export class ObjectsService {
   getObjectTypes(): Observable<ObjectType[]> {
     return this.events.getCurrentEventId().pipe(switchMap(evId => {
       const param = evId ? '?eventId=' + evId : '';
-      return this.http.get<ObjectType[]>(environment.apiurl + '/objects/types/complete' + param);
+      return this.http.get<ObjectType[]>(environment.apiurl + '/objects/types' + param);
     }), this.embedExternalLoan);
   }
 

@@ -48,7 +48,7 @@ export class ObjectComponent implements OnInit {
 
         const arr: [string, string, boolean, (string | number)[]?][] = [
             ['ASSET TAG', object.assetTag, false],
-            ['TYPE', objectType.name, false, ['/', 'object-types', object.objectTypeId]],
+            ['CATÉGORIE', objectType.name, false, ['/', 'object-types', object.objectTypeId]],
             (object.description ?? objectType.description) ? ['DESCRIPTION', object.description ?? objectType.description, object.description === null || object.description === undefined] : undefined,
             object.inconvStorageLocation ? ['STOCKAGE (CONVENTION)', storageLocationToString(this.object.inconvStorageLocationObject), false, ['/', 'storages', lastChild(this.object.inconvStorageLocationObject).storageId]] : undefined,
             object.storageLocation ? ['STOCKAGE (ANNÉE)', storageLocationToString(this.object.storageLocationObject), false, ['/', 'storages', lastChild(this.object.storageLocationObject).storageId]] : undefined,

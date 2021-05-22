@@ -23,12 +23,19 @@ export class ObjectTypesService {
         const getParam = (evId ? '?eventId=' + evId : '');
         return this.http.get<ObjectTypeTree[]>(environment.apiurl + '/objects/types/tree' + getParam);
       }),
-      switchMap(objects => loans.getLoansMap().pipe(map(loans => objects.map(obj => {
-        if (obj.objectType.partOfLoan) {
-          obj.objectType.partOfLoanObject = loans.get(obj.objectType.partOfLoan);
+      switchMap(objects => loans.getLoansMap().pipe(map(loans => {
+        const transform: ObjectTypeTree[] = [];
+        objects.forEach(o => transform.push(o))
+        while (transform.length != 0) {
+          const elem = transform.pop();
+          elem.children.forEach(c => transform.push(c))
+
+          if (elem.objectType.partOfLoan) {
+            elem.objectType.partOfLoanObject = loans.get(elem.objectType.partOfLoan);
+          }
         }
-        return obj;
-      })))),
+        return objects; // objects modified directly, no need to return a diff. array
+      }))),
       shareReplay(1)
     );
 

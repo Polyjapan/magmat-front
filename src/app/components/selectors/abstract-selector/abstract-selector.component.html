@@ -1,11 +1,11 @@
 <mat-form-field style="width: 100%;">
-  <mat-label>{{label ? label : defaultLabel}}</mat-label>
+  <mat-label>{{ label ? label : defaultLabel }}</mat-label>
   <input type="text" matInput [formControl]="searchControl" (ngModelChange)="onValueChange($event)" name="selected" [matAutocomplete]="auto">
 
   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayValue"
                     (optionSelected)="onValueChange($event.option.value)">
-    <mat-option *ngFor="let location of possibleValues | async"
+    <mat-option *ngFor="let location of filteredValues | async"
                 [value]="location">{{displayValue(location)}}</mat-option>
   </mat-autocomplete>
 

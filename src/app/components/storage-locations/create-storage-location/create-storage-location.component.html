@@ -10,10 +10,7 @@
     <input matInput placeholder="Nom" [(ngModel)]="storageLocation.storageName" name="name" required maxlength="100">
   </mat-form-field>
 
-  <app-select-storage *ngIf="isUpdate" label="Stockage parent" [(selected)]="storageLocation.parentStorageId" [excludeChildrenOf]="storageLocation.storageId"
-                      (selectLocationChange)="parent = $event"></app-select-storage>
-  <app-select-storage *ngIf="!isUpdate" label="Stockage parent" [(selected)]="storageLocation.parentStorageId"
-                      (selectLocationChange)="parent = $event"></app-select-storage>
+  <app-select-storage label="Stockage parent" [(selected)]="storageLocation.parentStorageId" [excludeChildrenOf]="storageLocation.storageId" (selectedObjectChange)="parent = $event"></app-select-storage>
 
   <mat-checkbox name="inConv" [ngModel]="parent ? parent.event !== undefined : inConv" (ngModelChange)="inConv = $event"
                 [disabled]="storageLocation.parentStorageId"

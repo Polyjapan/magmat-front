@@ -62,7 +62,7 @@ export class ShowObjectTypeComponent implements OnInit {
     this.errors = err.pipe(map(err => "Impossible de trouver cette catégorie."))
 
     this.items$ = this.tree$.pipe(switchMap(v => this.objectsService.getObjects()
-      .pipe(map(allObj => allObj.filter(o => objectHasParentObjectType(o.objectTypeAncestry, this.id))))))
+      .pipe(map(allObj => allObj.filter(o => this.displayAll ? objectHasParentObjectType(o.objectTypeAncestry, this.id) : o.object.objectTypeId === this.id )))))
     this.parents$ = this.objectTypeService.getObjectTypeWithParents(this.id);
   }
 

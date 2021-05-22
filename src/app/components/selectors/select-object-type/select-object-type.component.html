@@ -1,5 +1,5 @@
 <mat-form-field *ngIf="types" style="width: 100%;">
-  <mat-label>{{label ? label : 'Choisissez une catégorie d\'objet...' }}}</mat-label>
+  <mat-label>{{label ? label : 'Choisissez une catégorie d\'objet...' }}</mat-label>
   <input type="text" matInput [formControl]="objectTypeSearchControl" (ngModelChange)="onValueChange($event)" name="selected" [matAutocomplete]="auto">
 
   <mat-autocomplete #auto="matAutocomplete"
