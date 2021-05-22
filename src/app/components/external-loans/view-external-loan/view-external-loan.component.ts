@@ -8,6 +8,7 @@ import {ObjectType} from '../../../data/object-type';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import Swal from 'sweetalert2';
 import {SelectObjectTypeComponent} from '../../selectors/select-object-type/select-object-type.component';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-view-external-loan',
@@ -17,7 +18,7 @@ import {SelectObjectTypeComponent} from '../../selectors/select-object-type/sele
 export class ViewExternalLoanComponent implements OnInit {
 
   id: number;
-  loan: CompleteExternalLoan;
+  loan$: Observable<CompleteExternalLoan>;
   loanStateToText = loanStateToText;
   items: CompleteObject[]; // For objects listing
   createdType: ObjectType;
@@ -30,12 +31,12 @@ export class ViewExternalLoanComponent implements OnInit {
   constructor(private ar: ActivatedRoute, private ls: LoansService, private os: ObjectsService, private sls: StorageLocationsService) {
   }
 
-  get isPickedUp() {
-    return this.loan.externalLoan.status !== LoanState.AWAITING_PICKUP;
+  isPickedUp(loan: CompleteExternalLoan) {
+    return loan.externalLoan.status !== LoanState.AWAITING_PICKUP;
   }
 
-  get isReturned() {
-    return this.loan.externalLoan.status === LoanState.RETURNED;
+  isReturned(loan: CompleteExternalLoan) {
+    return loan.externalLoan.status === LoanState.RETURNED;
   }
 
   get canGiveBack() {
@@ -53,12 +54,10 @@ export class ViewExternalLoanComponent implements OnInit {
   ngOnInit() {
     this.ar.paramMap.subscribe(map => {
       this.id = Number.parseInt(map.get('id'), 10);
-      this.refresh();
+      this.loan$ = this.ls.getLoan(this.id);
     });
 
     this.resetCreatedType();
-
-
   }
 
   refreshObjects() {
@@ -66,7 +65,8 @@ export class ViewExternalLoanComponent implements OnInit {
   }
 
   refreshLoan() {
-    this.ls.getLoanDirect(this.id).subscribe(l => this.loan = l);
+    this.ls.forceRefreshLoans();
+    // this.ls.getLoanDirect(this.id).subscribe(l => this.loan = l);
   }
 
   refresh() {

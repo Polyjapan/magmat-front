@@ -1,36 +1,41 @@
-<mat-spinner *ngIf="!loan"></mat-spinner>
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>
 
-<ng-container *ngIf="loan">
+<ng-container *ngIf="loan$ | async ; let loan ; else loading">
   <h1>Prêt de {{loan.guest ? loan.guest.name : (loan.user.details.firstName + ' ' + loan.user.details.lastName)}}</h1>
 
   <div fxLayout.lt-md="column" fxLayout="row" fxLayoutGap="30px">
-    <div fxFlex.lt-md fxFlexOrder="2" fxFlexOrder.lt-md="0" [fxFlex]="isReturned ? '100%' : '30%'">
+    <div fxFlex.lt-md fxFlexOrder="2" fxFlexOrder.lt-md="0" [fxFlex]="isReturned(loan) ? '100%' : '30%'">
       <mat-card>
         <mat-card-title>Informations sur le prêt</mat-card-title>
         <ul>
           <li *ngIf="loan.externalLoan.loanDetails"><b>Description :</b> {{loan.externalLoan.loanDetails}}</li>
-          <li *ngIf="!isPickedUp"><b>Heure de prise :</b> {{dateFormat(loan.externalLoan.pickupTime)}}</li>
-          <li *ngIf="!isPickedUp"><b>Lieu de prise :</b> {{loan.externalLoan.pickupPlace}}</li>
-          <li *ngIf="isPickedUp && !isReturned"><b>Heure de retour :</b> {{dateFormat(loan.externalLoan.returnTime)}}
+          <li *ngIf="!isPickedUp(loan)"><b>Heure de prise :</b> {{dateFormat(loan.externalLoan.pickupTime)}}</li>
+          <li *ngIf="!isPickedUp(loan)"><b>Lieu de prise :</b> {{loan.externalLoan.pickupPlace}}</li>
+          <li *ngIf="isPickedUp(loan) && !isReturned(loan)"><b>Heure de retour :</b> {{dateFormat(loan.externalLoan.returnTime)}}
           </li>
-          <li *ngIf="isPickedUp && !isReturned"><b>Lieu de retour :</b> {{loan.externalLoan.returnPlace}}</li>
+          <li *ngIf="isPickedUp(loan) && !isReturned(loan)"><b>Lieu de retour :</b> {{loan.externalLoan.returnPlace}}</li>
           <li><b>Etat :</b> {{loanStateToText(loan.externalLoan.status)}}</li>
         </ul>
 
         <br>
 
-        <ng-container *ngIf="isPickedUp && !isReturned">
+        <ng-container *ngIf="isPickedUp(loan) && !isReturned(loan)">
           <p *ngIf="!canGiveBack">Pour pouvoir rendre un prêt, tous ses objets doivent être en stock ou perdus. Assurez
             vous de récupérer tous les objets avant de rendre !</p>
 
-          <button [disabled]="!canGiveBack || changingState" (click)="closeLoan()" mat-stroked-button>Marquer le prêt comme rendu</button>
+          <button [disabled]="!canGiveBack || changingState" (click)="closeLoan()" mat-stroked-button>Marquer le prêt
+            comme rendu
+          </button>
         </ng-container>
 
-        <ng-container *ngIf="!isPickedUp">
-          <button (click)="takeLoan()" [disabled]="changingState" mat-stroked-button>Marquer le prêt comme récupéré</button>
+        <ng-container *ngIf="!isPickedUp(loan)">
+          <button (click)="takeLoan()" [disabled]="changingState" mat-stroked-button>Marquer le prêt comme récupéré
+          </button>
         </ng-container>
 
-        <p *ngIf="isReturned">
+        <p *ngIf="isReturned(loan)">
           Ce prêt a été retourné. Vous n'avez plus rien à faire !
         </p>
       </mat-card>
@@ -55,7 +60,7 @@
       </mat-card>
     </div>
 
-    <div fxFlex *ngIf="!isReturned">
+    <div fxFlex *ngIf="!isReturned(loan)">
       <mat-card>
         <mat-card-title>Objets du prêt</mat-card-title>
 
@@ -70,11 +75,14 @@
           </ng-container>
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef> Etat</th>
-            <td mat-cell *matCellDef="let elem"> <app-status-label [status]="elem.object.status"></app-status-label> </td>
+            <td mat-cell *matCellDef="let elem">
+              <app-status-label [status]="elem.object.status"></app-status-label>
+            </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="['tag', 'name', 'status']"></tr>
-          <tr mat-row *matRowDef="let row; columns: ['tag', 'name', 'status'];"  [routerLink]="['/', 'objects', row.object.objectId]"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['tag', 'name', 'status'];"
+              [routerLink]="['/', 'objects', row.object.objectId]"></tr>
 
         </table>
       </mat-card>
@@ -87,7 +95,8 @@
         <app-select-object-type [(selectedType)]="selectedType"></app-select-object-type>
 
         <app-quick-item-create *ngIf="selectedType" [objectType]="selectedType" style="width: 100%;"
-                               (createSuccess)="selectedType = undefined; refreshObjects()" [setLoan]="selectedType.partOfLoan ? undefined : loan.externalLoan.externalLoanId"></app-quick-item-create>
+                               (createSuccess)="selectedType = undefined; refreshObjects()"
+                               [setLoan]="selectedType.partOfLoan ? undefined : loan.externalLoan.externalLoanId"></app-quick-item-create>
       </mat-card>
 
       <mat-card>
@@ -107,8 +116,8 @@
             <input matInput [(ngModel)]="createdType.description" name="description"/>
           </mat-form-field>
 
-          <app-select-storage fxFlex [(selected)]="createdType.inconvStorageLocation" [inconv]="true"
-                              label="Rangement pendant JI (opt.)"></app-select-storage>
+          <!--<app-select-storage fxFlex [(selected)]="createdType.inconvStorageLocation" [inconv]="true"
+                              label="Rangement pendant JI (opt.)"></app-select-storage>-->
 
           <button mat-button [disabled]="creating" (click)="create()">Créer</button>
         </form>

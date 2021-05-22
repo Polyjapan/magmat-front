@@ -3,17 +3,10 @@ import {CompleteExternalLoan} from './external-loan';
 
 export class ObjectType {
   objectTypeId?: number;
+  parentObjectTypeId?: number;
   name: string;
   description?: string;
-  storageLocation?: number;
-  inconvStorageLocation?: number;
   partOfLoan?: number;
-  requiresSignature: boolean = false;
-}
-
-export class CompleteObjectType {
-  objectType: ObjectType;
-  storageLocationObject?: StorageTree;
-  inconvStorageLocationObject?: StorageTree;
   partOfLoanObject?: CompleteExternalLoan;
+  requiresSignature: boolean = false;
 }

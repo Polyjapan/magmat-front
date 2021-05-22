@@ -1,10 +1,10 @@
 <mat-spinner *ngIf="!objectType"></mat-spinner>
 
 <div style="float: right;">
-  <button mat-raised-button [routerLink]="['..', 'edit', objectType.objectType.objectTypeId]" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier</button>
+  <button mat-raised-button [routerLink]="['..', 'edit', objectType.objectTypeId]" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier</button>
   <button mat-raised-button (click)="delete()" color="accent"><mat-icon>delete</mat-icon> Supprimer</button>
 </div>
-<h1>Type d'objets #{{objectType.objectType.objectTypeId}} :: {{objectType.objectType.name}}</h1>
+<h1>Type d'objets #{{objectType.objectTypeId}} :: {{objectType.name}}</h1>
 <br>
 
 <div *ngIf="objectType" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
@@ -39,7 +39,7 @@
       </mat-table>
 
       <mat-card-actions>
-        <button [routerLink]="['..', 'edit', objectType.objectType.objectTypeId]" mat-button>MODIFIER</button>
+        <button [routerLink]="['..', 'edit', objectType.objectTypeId]" mat-button>MODIFIER</button>
         <button (click)="delete()" mat-button>SUPPRIMER</button>
       </mat-card-actions>
     </mat-card>
@@ -53,8 +53,8 @@
           du préfixe de suffixe, et d'un numéro qui est incrémenté pour chaque objet ajouté. Le préfixe de suffixe est
           facultatif.</p>
         <p><i>Exemple: si le préfixe de suffixe est "Asus" et le numéro de départ "03", les objets auront pour nom
-          <b>{{objectType.objectType.name}} Asus 03</b>, <b>{{objectType.objectType.name}} Asus 04</b>, ...</i></p>
-        <app-quick-item-create [objectType]="objectType.objectType" (createSuccess)="refreshObjects()"
+          <b>{{objectType.name}} Asus 03</b>, <b>{{objectType.name}} Asus 04</b>, ...</i></p>
+        <app-quick-item-create [objectType]="objectType" (createSuccess)="refreshObjects()"
                                style="width: 100%;"></app-quick-item-create>
       </mat-card-content>
     </mat-card>

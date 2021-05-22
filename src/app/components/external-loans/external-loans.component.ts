@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {CompleteExternalLoan, loanStateToText} from '../../data/external-loan';
+import {CompleteExternalLoan, LoanState, loanStateToText, loanStateToColor} from '../../data/external-loan';
 import {LoansService} from '../../services/loans.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class ExternalLoansComponent implements OnInit {
   }
 
   loanStateToText = loanStateToText;
+  loanStateToColor = loanStateToColor;
 
   dateFormat(date) {
     if (typeof date === 'string') {
@@ -25,6 +26,13 @@ export class ExternalLoansComponent implements OnInit {
     } else {
       return date.toLocaleString();
     }
+  }
+
+  isLate(loan: CompleteExternalLoan) {
+    const now = Date.now()
+    const date = typeof loan.externalLoan.returnTime === 'string' ? new Date(Date.parse(loan.externalLoan.returnTime as string)) : loan.externalLoan.returnTime
+
+    return loan.externalLoan.status === LoanState.AWAITING_RETURN && date.getTime() < now;
   }
 
 }

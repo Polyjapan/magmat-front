@@ -58,7 +58,8 @@ export class CreateExternalLoanComponent implements OnInit {
     this.ls.createLoan(this.loan)
       .subscribe(res => {
         if (type === 'see') {
-          this.ls.forceRefreshLoans().subscribe(n => this.router.navigate(['/', 'external-loans', res]));
+          this.ls.forceRefreshLoans();
+          this.router.navigate(['/', 'external-loans', res]);
         } else {
           Swal.fire('Prêt créé', undefined, 'success');
           this.resetLoan();

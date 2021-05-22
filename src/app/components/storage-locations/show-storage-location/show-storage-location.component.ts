@@ -75,7 +75,7 @@ export class ShowStorageLocationComponent implements OnInit {
 
 
     this.dataSource.filterPredicate = (obj, f) => {
-      return this.displayAll || (this.inConv ? (obj.object.inconvStorageLocation ?? obj.objectType.inconvStorageLocation) === this.id : (obj.object.storageLocation ?? obj.objectType.storageLocation) === this.id);
+      return this.displayAll || (this.inConv ? obj.object.inconvStorageLocation === this.id : obj.object.storageLocation === this.id);
     };
     this.dataSource.filter = 'true';
     this.items.subscribe(r => this.dataSource.data = r);

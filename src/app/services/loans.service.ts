@@ -3,30 +3,51 @@ import {HttpClient} from '@angular/common/http';
 import {AsyncSubject, BehaviorSubject, Observable} from 'rxjs';
 import {CompleteExternalLoan, ExternalLoan, LoanState} from '../data/external-loan';
 import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
+import {map, shareReplay, switchMap} from 'rxjs/operators';
+import {EventsService} from './events.service';
 
 @Injectable({providedIn: 'root'})
 export class LoansService {
-  private loans = new BehaviorSubject<CompleteExternalLoan[]>([]);
+  private refresh$ = new BehaviorSubject(0);
+  private loans$: Observable<CompleteExternalLoan[]>; // = new BehaviorSubject<CompleteExternalLoan[]>([]);
+  private loansMap$: Observable<Map<number, CompleteExternalLoan>>; // = new BehaviorSubject<CompleteExternalLoan[]>([]);
   private lastPull = 0;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, events: EventsService) {
+    const refresh = this.refresh$.pipe(switchMap(_ => events.getCurrentEventId()));
+
+    this.loans$ = refresh.pipe(
+      switchMap(evId => {
+        const getParam = (evId ? '?eventId=' + evId : '');
+        return this.http.get<CompleteExternalLoan[]>(environment.apiurl + '/external-loans' + getParam);
+      }),
+      shareReplay(1)
+    );
+
+    this.loansMap$ = this.loans$.pipe(map(loans => {
+      const map = new Map<number, CompleteExternalLoan>();
+      loans.forEach(loan => map.set(loan.externalLoan.externalLoanId, loan));
+      return map;
+    }))
   }
 
-  forceRefreshLoans(): Observable<void> {
+  forceRefreshLoans() {
     this.lastPull = 0;
-    return this.pullIfNeeded();
+    this.pullIfNeeded();
   }
 
   getLoans(): Observable<CompleteExternalLoan[]> {
     this.pullIfNeeded();
-    return this.loans;
+    return this.loans$;
+  }
+
+  getLoansMap(): Observable<Map<number, CompleteExternalLoan>> {
+    this.pullIfNeeded();
+    return this.loansMap$;
   }
 
   getLoan(id: number): Observable<CompleteExternalLoan> {
-    this.pullIfNeeded();
-
-    return this.loans.pipe(map(loans => loans.filter(loan => loan.externalLoan.externalLoanId === id)[0]));
+    return this.getLoansMap().pipe(map(loans => loans.get(id)));
   }
 
   changeState(loan: number, targetState: LoanState): Observable<void> {
@@ -34,30 +55,17 @@ export class LoansService {
       {targetState});
   }
 
-  getLoanDirect(id: number): Observable<CompleteExternalLoan> {
-    return this.http.get<CompleteExternalLoan>(environment.apiurl + '/external-loans/complete/' + id);
-  }
-
   createLoan(loan: ExternalLoan): Observable<number> {
-    return this.http.post<number>(environment.apiurl + '/external-loans/', loan);
+    return this.http.post<number>(environment.apiurl + '/external-loans', loan);
   }
 
-  private pullIfNeeded(): Observable<void> {
+  private pullIfNeeded() {
     const now = Date.now();
-    const update = new AsyncSubject<void>();
-    update.next(null);
 
 
     if (now - this.lastPull > (60 * 1000)) {
-      this.http.get<CompleteExternalLoan[]>(environment.apiurl + '/external-loans/complete').subscribe(res => {
-        this.loans.next(res);
-        update.complete();
-      });
+      this.refresh$.next(now);
       this.lastPull = now;
-    } else {
-      update.complete();
     }
-
-    return update;
   }
 }

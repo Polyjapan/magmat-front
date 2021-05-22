@@ -17,6 +17,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 
+
+.label {
+  display: inline-block;
+  color: white;
+  padding: .35em .65em;
+  border-radius: .25rem;
+}
+
 .success {background-color: #05bb7a;} /* Green */
 .info {background-color: #2196F3;} /* Blue */
 .info-secondary {background-color: #7ac0ff;} /* Blue */

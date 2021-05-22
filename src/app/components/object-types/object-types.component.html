@@ -18,29 +18,18 @@
     <td mat-cell *matCellDef="let element" > {{dataAccessor(element, 'name')}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="inConvStorage">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Stockage </th>
-    <td mat-cell *matCellDef="let element"> {{dataAccessor(element, 'inConvStorage')}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="offConvStorage">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Stockage Hors Conv </th>
-    <td mat-cell *matCellDef="let element"> {{dataAccessor(element, 'offConvStorage')}} </td>
-  </ng-container>
-
   <ng-container matColumnDef="sourceLoan">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Matériel prêté par </th>
     <td mat-cell *matCellDef="let element"> {{dataAccessor(element, 'sourceLoan')}} </td>
   </ng-container>
 
-
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> </th>
     <td mat-cell *matCellDef="let element">
-      <button mat-icon-button color="primary" [routerLink]="['edit', element.objectType.objectTypeId]"><mat-icon>edit</mat-icon></button>
+      <button mat-icon-button color="primary" [routerLink]="['edit', element.objectTypeId]"><mat-icon>edit</mat-icon></button>
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['name', 'inConvStorage', 'offConvStorage', 'sourceLoan', 'actions']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['name', 'inConvStorage', 'offConvStorage', 'sourceLoan', 'actions'];" [routerLink]="row.objectType.objectTypeId"></tr>
+  <tr mat-header-row *matHeaderRowDef="['name', 'sourceLoan', 'actions']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'sourceLoan', 'actions'];" [routerLink]="row.objectTypeId"></tr>
 </table>

@@ -1,57 +1,62 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, ObservedValueOf, OperatorFunction} from 'rxjs';
-import {CompleteObjectType, ObjectType} from '../data/object-type';
+import {Observable, OperatorFunction} from 'rxjs';
+import {ObjectType} from '../data/object-type';
 import {StorageLocationsService} from './storage-locations.service';
 import {environment} from '../../environments/environment';
 import {map, switchMap} from 'rxjs/operators';
 import {CompleteObject, CompleteObjectWithUser, ObjectCreateResult, ObjectStatus, SingleObject} from '../data/object';
 import {ObjectLogWithObject, ObjectLogWithUser} from '../data/object-log';
-import {TidyingTree, TopTidyingTree} from '../data/tidying';
+import {TidyingTree} from '../data/tidying';
 import {CompleteObjectComment} from '../data/object-comment';
 import {EventsService} from './events.service';
 import {StorageTree} from '../data/storage-location';
+import {LoansService} from './loans.service';
 
 @Injectable({providedIn: 'root'})
 export class ObjectsService {
   private storagesWithParents: Observable<Map<number, StorageTree>>;
-  private embedStorageList: OperatorFunction<CompleteObjectType[], CompleteObjectType[]>;
-  private embedStorage: OperatorFunction<CompleteObjectType, CompleteObjectType>;
+  private embedExternalLoan: OperatorFunction<ObjectType[], ObjectType[]>;
   private embedStorageListInObject: OperatorFunction<CompleteObject[], CompleteObject[]>;
   private embedStorageInObject: OperatorFunction<CompleteObject, CompleteObject>;
 
 
-  constructor(private http: HttpClient, private events: EventsService, private storages: StorageLocationsService) {
+  constructor(private http: HttpClient, private events: EventsService, private storages: StorageLocationsService, private loans: LoansService) {
     this.storagesWithParents = storages.getStoragesWithParents();
-    this.embedStorageList = switchMap(objects => this.storagesWithParents.pipe(map(locations => objects.map(obj => {
-      if (obj.objectType.storageLocation) obj.storageLocationObject = locations.get(obj.objectType.storageLocation);
-      if (obj.objectType.inconvStorageLocation) obj.inconvStorageLocationObject = locations.get(obj.objectType.inconvStorageLocation);
+    this.embedExternalLoan = switchMap(objects => this.loans.getLoansMap().pipe(map(loans => objects.map(obj => {
+      if (obj.partOfLoan) {
+        obj.partOfLoanObject = loans.get(obj.partOfLoan);
+      }
       return obj;
     }))));
 
-    this.embedStorage = switchMap(obj => this.storagesWithParents.pipe(map(locations => {
-      if (obj.objectType.storageLocation) obj.storageLocationObject = locations.get(obj.objectType.storageLocation);
-      if (obj.objectType.inconvStorageLocation) obj.inconvStorageLocationObject = locations.get(obj.objectType.inconvStorageLocation);
-      return obj;
-    })));
-
     this.embedStorageListInObject = switchMap(objects => this.storagesWithParents.pipe(map(locations => objects.map(obj => {
-      if (obj.object.storageLocation ?? obj.objectType.storageLocation) obj.storageLocationObject = locations.get(obj.object.storageLocation ?? obj.objectType.storageLocation);
-      if (obj.object.inconvStorageLocation ?? obj.objectType.inconvStorageLocation) obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation ?? obj.objectType.inconvStorageLocation);
+      if (obj.object.storageLocation) {
+        obj.storageLocationObject = locations.get(obj.object.storageLocation);
+      }
+      if (obj.object.inconvStorageLocation) {
+        obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation);
+      }
       return obj;
     }))));
 
     this.embedStorageInObject = switchMap(obj => this.storagesWithParents.pipe(map(locations => {
-      if (obj.object.storageLocation ?? obj.objectType.storageLocation) obj.storageLocationObject = locations.get(obj.object.storageLocation ?? obj.objectType.storageLocation);
-      if (obj.object.inconvStorageLocation ?? obj.objectType.inconvStorageLocation) obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation ?? obj.objectType.inconvStorageLocation);
+      if (obj.object.storageLocation) {
+        obj.storageLocationObject = locations.get(obj.object.storageLocation);
+      }
+      if (obj.object.inconvStorageLocation) {
+        obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation);
+      }
       return obj;
     })));
   }
 
 
-  getObjectTypes(): Observable<CompleteObjectType[]> {
-    return this.http.get<CompleteObjectType[]>(environment.apiurl + '/objects/types/complete')
-      .pipe(this.embedStorageList);
+  getObjectTypes(): Observable<ObjectType[]> {
+    return this.events.getCurrentEventId().pipe(switchMap(evId => {
+      const param = evId ? '?eventId=' + evId : '';
+      return this.http.get<ObjectType[]>(environment.apiurl + '/objects/types/complete' + param);
+    }), this.embedExternalLoan);
   }
 
   getTidyingData(inverted: boolean, leftDepth: number, rightDepth: number): Observable<TidyingTree[]> {
@@ -67,9 +72,14 @@ export class ObjectsService {
     }
   }
 
-  getObjectType(id: number): Observable<CompleteObjectType> {
-    return this.http.get<CompleteObjectType>(environment.apiurl + '/objects/types/complete/' + id)
-      .pipe(this.embedStorage);
+  getObjectType(id: number): Observable<ObjectType> {
+    return this.http.get<ObjectType>(environment.apiurl + '/objects/types/' + id)
+      .pipe(switchMap(obj => this.loans.getLoansMap().pipe(map(loans => {
+        if (obj.partOfLoan) {
+          obj.partOfLoanObject = loans.get(obj.partOfLoan);
+        }
+        return obj;
+      }))));
   }
 
   updateObject(object: CompleteObject): Observable<void> {
@@ -98,8 +108,12 @@ export class ObjectsService {
   getObjectsLoaned(): Observable<CompleteObjectWithUser[]> {
     return this.http.get<CompleteObjectWithUser[]>(environment.apiurl + '/objects/loaned/')
       .pipe(switchMap(objects => this.storagesWithParents.pipe(map(locations => objects.map(obj => {
-        if (obj.object.object.storageLocation) obj.object.storageLocationObject = locations.get(obj.object.object.storageLocation);
-        if (obj.object.object.inconvStorageLocation) obj.object.inconvStorageLocationObject = locations.get(obj.object.object.inconvStorageLocation);
+        if (obj.object.object.storageLocation) {
+          obj.object.storageLocationObject = locations.get(obj.object.object.storageLocation);
+        }
+        if (obj.object.object.inconvStorageLocation) {
+          obj.object.inconvStorageLocationObject = locations.get(obj.object.object.inconvStorageLocation);
+        }
         return obj;
       })))));
   }
@@ -109,7 +123,7 @@ export class ObjectsService {
   }
 
   getObjectsForImpreciseLocation(room: string, space?: string) {
-    const extra = space ? ('&space=' + space) : ''
+    const extra = space ? ('&space=' + space) : '';
     return this.http.get<ObjectLogWithObject[]>(environment.apiurl + '/objects/complete?room=' + room + extra);
   }
 
@@ -160,6 +174,7 @@ export class ObjectsService {
 
   getObjectByTag(tag: string): Observable<CompleteObject> {
     return this.http.get<CompleteObject>(environment.apiurl + '/objects/by-tag/' + tag)
-      .pipe(this.embedStorageInObject);;
+      .pipe(this.embedStorageInObject);
+    ;
   }
 }

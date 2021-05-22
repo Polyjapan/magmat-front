@@ -35,6 +35,7 @@ export class SingleObject {
   depositPlace?: string;
   assetTag?: string;
   status: ObjectStatus;
+  requiresSignature: boolean = false;
 }
 
 export class CompleteObject {

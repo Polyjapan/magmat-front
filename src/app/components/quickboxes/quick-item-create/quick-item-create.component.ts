@@ -95,6 +95,7 @@ export class QuickItemCreateComponent implements OnChanges {
         assetTag: tag,
         status: ObjectStatus.IN_STOCK,
         partOfLoan: this.setLoan,
+        requiresSignature: false, // todo
       };
     });
   }

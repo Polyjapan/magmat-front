@@ -21,7 +21,7 @@ export class SelectObjectTypeComponent implements OnInit, OnChanges {
   constructor(private os: ObjectsService) { }
 
   refreshTypes() {
-    this.os.getObjectTypes().subscribe(tpes => this.types = tpes.map(o => o.objectType));
+    this.os.getObjectTypes().subscribe(tpes => this.types = tpes);
   }
 
   ngOnInit() {

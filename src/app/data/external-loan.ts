@@ -9,16 +9,29 @@ export enum LoanState {
 
 export const LoanStates = [LoanState.AWAITING_RETURN, LoanState.AWAITING_PICKUP, LoanState.RETURNED];
 
-export function loanStateToText(loanState: LoanState) {
+export function loanStateToText(loanState: LoanState, isLate?: boolean) {
   switch (loanState) {
     case LoanState.AWAITING_PICKUP:
-      return 'Non récupéré';
+      return 'À récupérer';
     case LoanState.AWAITING_RETURN:
-      return 'Récupéré, non retourné';
+      return isLate ? 'À rendre' : 'En stock';
     case LoanState.RETURNED:
-      return 'Retourné et clos';
+      return 'Rendu';
     default:
       return 'Etat inconnu ' + loanState;
+  }
+}
+
+export function loanStateToColor(loanState: LoanState, isLate?: boolean) {
+  switch (loanState) {
+    case LoanState.AWAITING_PICKUP:
+      return 'warning';
+    case LoanState.AWAITING_RETURN:
+      return isLate ? 'danger' : 'info';
+    case LoanState.RETURNED:
+      return 'success';
+    default:
+      return 'danger';
   }
 }
 

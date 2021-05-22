@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectsService} from '../../../services/objects.service';
-import {CompleteObjectType} from '../../../data/object-type';
+import {ObjectType} from '../../../data/object-type';
 import {storageLocationToString} from '../../../data/storage-location';
-import {CompleteObject, ObjectStatus, SingleObject} from '../../../data/object';
-import {externalLoanToString} from 'src/app/data/external-loan';
-import { MatTableDataSource } from '@angular/material/table';
+import {CompleteObject} from '../../../data/object';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,7 +12,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./show-object-type.component.css']
 })
 export class ShowObjectTypeComponent implements OnInit {
-  objectType: CompleteObjectType;
+  objectType: ObjectType;
   storageLocationToString = storageLocationToString;
   objects: CompleteObject[] = [];
   id: number;
@@ -23,27 +21,24 @@ export class ShowObjectTypeComponent implements OnInit {
   constructor(private route: ActivatedRoute, private objectsService: ObjectsService, private router: Router) {
   }
 
+  get objectTypeData(): [string, string, (string | number)[]?][] {
+    const objectType = this.objectType;
+
+    const arr: [string, string, (string | number)[]?][] = [
+      objectType.description ? ['DESCRIPTION', objectType.description] : undefined,
+      objectType.partOfLoanObject ? ['EMPRUNT PARENT', objectType.partOfLoanObject?.externalLoan?.loanTitle, ['/', 'external-loans', objectType.partOfLoan]] : undefined,
+      objectType.requiresSignature ? ['PARTICULARITÉS', 'Signature obligatoire'] : undefined
+    ];
+
+    return arr.filter(e => e);
+  }
+
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.id = Number.parseInt(map.get('typeId'), 10);
       this.objectsService.getObjectType(this.id).subscribe(tpe => this.objectType = tpe);
       this.refreshObjects();
     });
-  }
-
-
-  get objectTypeData(): [string, string, (string | number)[]?][] {
-    const objectType = this.objectType.objectType;
-
-    const arr: [string, string, (string | number)[]?][] = [
-      objectType.description ? ['DESCRIPTION', objectType.description] : undefined,
-      this.objectType.inconvStorageLocationObject ? ['STOCKAGE (CONVENTION)', storageLocationToString(this.objectType.inconvStorageLocationObject), ['/', 'storages', objectType.inconvStorageLocation]] : undefined,
-      this.objectType.storageLocationObject ? ['STOCKAGE (ANNÉE)', storageLocationToString(this.objectType.storageLocationObject), ['/', 'storages', objectType.storageLocation]] : undefined,
-      this.objectType.partOfLoanObject ? ['EMPRUNT PARENT', this.objectType.partOfLoanObject?.externalLoan?.loanTitle, ['/', 'external-loans', objectType.partOfLoan]] : undefined,
-      objectType.requiresSignature ? ['PARTICULARITÉS', 'Signature obligatoire'] : undefined
-    ];
-
-    return arr.filter(e => e);
   }
 
   refreshObjects() {

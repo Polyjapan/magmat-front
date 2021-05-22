@@ -4,11 +4,15 @@
 
   <h1>{{isUpdate ? "Modifier" : "Créer"}} un type d'objets</h1>
 
-  <p>Ce formulaire vous permet de {{isUpdate ? "modifier" : "créer"}} un <b>type d'objets</b>. Un type d'objets regroupe tous les objets qui ont, globalement, les mêmes caractéristiques : nom, lieu de stockage...</p>
-  <p *ngIf="!isUpdate">Une fois le type créé, vous pourrez créer plusieurs objets au sein de ce type, puis leur donner des <i>asset tags</i>, identifiants uniques pour ces objets (en général, indiqué sur un
+  <p>Ce formulaire vous permet de {{isUpdate ? "modifier" : "créer"}} un <b>type d'objets</b>. Un type d'objets regroupe
+    tous les objets qui ont, globalement, les mêmes caractéristiques : nom, lieu de stockage...</p>
+  <p *ngIf="!isUpdate">Une fois le type créé, vous pourrez créer plusieurs objets au sein de ce type, puis leur donner
+    des <i>asset tags</i>, identifiants uniques pour ces objets (en général, indiqué sur un
     code barre).</p>
-  <p>Même si les objets d'un même type ont en général les mêmes caractéristiques, il est possible de redéfinir un de ces paramètres pour un des objets. Si, par exemple, un des objets <i>tablette</i>
-    est stocké à un endroit différent du reste, vous pourrez changer cette valeur directement sur l'objet, et n'avez pas besoin de changer ça au niveau du type d'objet/créer un nouveau type
+  <p>Même si les objets d'un même type ont en général les mêmes caractéristiques, il est possible de redéfinir un de ces
+    paramètres pour un des objets. Si, par exemple, un des objets <i>tablette</i>
+    est stocké à un endroit différent du reste, vous pourrez changer cette valeur directement sur l'objet, et n'avez pas
+    besoin de changer ça au niveau du type d'objet/créer un nouveau type
     d'objet.</p>
 
   <form #form="ngForm">
@@ -20,34 +24,39 @@
 
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Un truc qui roule et qui sert à déplacer des palettes" [(ngModel)]="type.description" name="description"></textarea>
+      <textarea matInput placeholder="Un truc qui roule et qui sert à déplacer des palettes"
+                [(ngModel)]="type.description" name="description"></textarea>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)]="type.requiresSignature" name="requiresSignature">Demander une signature pour la prise et le rendu de l'objet</mat-checkbox>
+    <mat-checkbox [(ngModel)]="type.requiresSignature" name="requiresSignature">Demander une signature pour la prise et
+      le rendu de l'objet
+    </mat-checkbox>
 
     <h2>Rangement de l'objet</h2>
-    <p>Ces informations sont facultatives. Vous pouvez les modifier ultérieurement si vous ne les connaissez pas entièrement.</p>
+    <p>Ces informations sont facultatives. Vous pouvez les modifier ultérieurement si vous ne les connaissez pas
+      entièrement.</p>
 
-    <app-select-storage [(selected)]="type.inconvStorageLocation" [inconv]="true" label="Lieu de rangement durant JI"></app-select-storage>
 
-    <div fxLayout="row">
-      <app-select-storage fxFlex="1 1 40%" [(selected)]="type.storageLocation" [inconv]="false" label="Lieu de rangement hors JI"></app-select-storage>
-
-      <p fxFlex="1 1 20%" style="text-align: center;"><b>OU</b></p>
-
-      <app-select-loan fxFlex="1 1 40%" [(selected)]="type.partOfLoan"></app-select-loan>
-    </div>
+    <app-select-loan fxFlex="1 1 40%" [(selected)]="type.partOfLoan"></app-select-loan>
 
     <br>
 
     <div fxLayout="row" fxLayoutGap="5%" fxLayoutAlign="center center" *ngIf="!isUpdate">
-      <button fxFlex="1 1 30%" (click)="create('scan')" mat-raised-button color="warn" [disabled]="form.invalid || sending">Créer et scanner des objets</button>
-      <button fxFlex="1 1 30%" (click)="create('stay')" mat-raised-button color="accent" [disabled]="form.invalid || sending">Créer et rester sur cette page</button>
+      <button fxFlex="1 1 30%" (click)="create('scan')" mat-raised-button color="warn"
+              [disabled]="form.invalid || sending">Créer et scanner des objets
+      </button>
+      <button fxFlex="1 1 30%" (click)="create('stay')" mat-raised-button color="accent"
+              [disabled]="form.invalid || sending">Créer et rester sur cette page
+      </button>
     </div>
 
     <div fxLayout="row" fxLayoutGap="5%" fxLayoutAlign="center center" *ngIf="isUpdate">
-      <button fxFlex="1 1 30%" (click)="create('page')" mat-raised-button color="warn" [disabled]="form.invalid || sending">Mettre à jour et afficher</button>
-      <button fxFlex="1 1 30%" (click)="create('list')" mat-raised-button color="accent" [disabled]="form.invalid || sending">Mettre à jour et voir la liste</button>
+      <button fxFlex="1 1 30%" (click)="create('page')" mat-raised-button color="warn"
+              [disabled]="form.invalid || sending">Mettre à jour et afficher
+      </button>
+      <button fxFlex="1 1 30%" (click)="create('list')" mat-raised-button color="accent"
+              [disabled]="form.invalid || sending">Mettre à jour et voir la liste
+      </button>
     </div>
 
   </form>
