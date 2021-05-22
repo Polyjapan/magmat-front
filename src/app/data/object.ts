@@ -40,11 +40,12 @@ export class SingleObject {
 
 export class CompleteObject {
   object: SingleObject;
-  objectType: ObjectType;
+  objectType?: ObjectType;
   objectTypeAncestry?: ObjectTypeAncestry;
   storageLocationObject?: StorageTree;
   inconvStorageLocationObject?: StorageTree;
   partOfLoanObject?: CompleteExternalLoan;
+
   reservedFor?: UserProfile;
 }
 

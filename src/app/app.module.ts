@@ -76,6 +76,8 @@ import { MatNestedTreeNode, MatTreeModule} from '@angular/material/tree';
 import {MatSliderModule} from '@angular/material/slider';
 import {AbstractSelectorComponent} from './components/selectors/abstract-selector/abstract-selector.component';
 import { ObjectTypeTreeComponent } from './components/utils/object-type-tree/object-type-tree.component';
+import { AllObjectsComponent } from './components/object-types/all-objects/all-objects.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -123,7 +125,8 @@ export function tokenGetter() {
     ViewUserComponent,
     StatusLabelComponent,
     LocationTreeComponent,
-    ObjectTypeTreeComponent
+    ObjectTypeTreeComponent,
+    AllObjectsComponent
   ],
   entryComponents: [
     CreateStorageLocationComponent,
@@ -168,7 +171,8 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatTooltipModule,
     MatTreeModule,
-    MatSliderModule
+    MatSliderModule,
+    MatPaginatorModule
 
   ],
   providers: [

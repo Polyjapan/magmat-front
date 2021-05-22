@@ -4,9 +4,12 @@
   <a mat-list-item [class.active]="subUrl === ''" [routerLink]="['.']">
     <mat-icon>home</mat-icon>
     Homepage</a>
-  <a mat-list-item [class.active]="subUrl === 'object-types'" [routerLink]="['object-types']">
+  <a mat-list-item [class.active]="subUrl === 'objects'" [routerLink]="['objects']">
     <mat-icon>emoji_objects</mat-icon>
-    Objets</a>
+    Tous les objets</a>
+  <a mat-list-item [class.active]="subUrl === 'object-types'" [routerLink]="['object-types']">
+    <mat-icon>category</mat-icon>
+    Catégories d'objets</a>
   <a mat-list-item [class.active]="subUrl === 'storages'" [routerLink]="['storages']">
     <mat-icon>storage</mat-icon>
     Stockages</a>

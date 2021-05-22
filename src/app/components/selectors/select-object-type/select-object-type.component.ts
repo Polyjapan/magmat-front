@@ -32,21 +32,8 @@ export class SelectObjectTypeComponent extends AbstractSelectorComponent<ObjectT
     return lastChild(v)?.objectTypeId;
   }
 
-  /*
-  @Input() label: string;
-  @Input() emptyLabel: string = 'Aucun';
-
-  @Input() selected: number;
-  @Input() selectedObject: ObjectType;
-  @Output() selectedTypeChange = new EventEmitter<ObjectType>();
-  @Output() selectedObjectChange = new EventEmitter<number>();
-
-  types: [number, ObjectTypeAncestry, string][];
-  objectTypeSearchControl = new FormControl();
-  filteredTypes: Observable<ObjectType[]>;*/
-
   displayValue(val?: [number, ObjectTypeAncestry]): string {
-    return (val ? objectTypeToString(val[1], undefined) : undefined) ?? 'Aucune catégorie sélectionnée';
+    return (val ? objectTypeToString(val[1], undefined) : undefined) ?? undefined;
   }
 
   /**
@@ -56,59 +43,4 @@ export class SelectObjectTypeComponent extends AbstractSelectorComponent<ObjectT
     this.refresh();
   }
 
-  /*
-  refreshTypes() {
-    const s = this.os.getObjectTypesWithParents()
-      .subscribe(types => {
-        this.types = Array.from(types.entries()).map(e => [e[0], e[1], normalizeString(objectTypeToString(e[1]))]);
-
-        const selected = this.selectedObject?.objectTypeId ?? this.selected;
-        if (selected) {
-          this.objectTypeSearchControl.setValue(this.types.find(tpe => tpe[0] === selected));
-        }
-
-        s.unsubscribe()
-      });
-  }
-
-  ngOnInit() {
-
-   /* this.filteredTypes = this.objectTypeSearchControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this.types.filter(t => t.name.toLowerCase().indexOf(name.toLowerCase()) === 0) : this.types)
-      );
-*//*
-    this.objectTypeSearchControl.valueChanges.subscribe(v => {
-      if (typeof v === 'object' && v.name && v.objectTypeId) {
-        this.selectedTypeChange.emit(v as ObjectType);
-      } else {
-        this.selectedTypeChange.emit(undefined);
-      }
-    });
-
-    this.refreshTypes();
-  }
-
-
-  displayFunc(tpe?: ObjectTypeAncestry | null): string {
-    const child = lastChild(tpe);
-    return tpe === null ? this.emptyLabel : objectTypeToString(tpe) + ' (#' + child.objectTypeId + ')';
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.selectedType && changes.selectedType.firstChange) {
-      if (changes.selectedType.currentValue !== undefined && changes.selectedType.currentValue !== null) {
-        this.objectTypeSearchControl.setValue(changes.selectedType.currentValue as ObjectType);
-      } else {
-        this.objectTypeSearchControl.reset();
-      }
-    }
-  }
-
-
-  onValueChange($event: any) {
-
-  }*/
 }

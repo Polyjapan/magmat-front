@@ -23,7 +23,7 @@
 
       <app-select-object-type [(selected)]="objectType.parentObjectTypeId" (selectedObjectChange)="parent = $event" [excludeChildrenOf]="isUpdate ? objectType.objectTypeId : undefined" label="Catégorie parente (facultatif)"></app-select-object-type>
 
-      <h4>Prêt parent {{lastChild(parent).name}}</h4>
+      <h4>Prêt parent</h4>
 
       <ng-template #noParentLoan>
         <p>Information facultative. Si vous la renseignez, tous les objets de la catégorie, toutes les sous catégories, ainsi que tous les objets des sous catégories seront aussi liés à ce prêt, et ces objets/catégories ne seront pas visibles dans d'autres événements ou une fois le prêt rendu.</p>

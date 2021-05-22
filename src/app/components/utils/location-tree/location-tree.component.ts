@@ -12,6 +12,8 @@ export class LocationTreeComponent implements OnInit, OnChanges {
   @Input() trees: StorageTree[];
   @Input() expandSingle: boolean = false;
 
+  query: string;
+
   datasource: MatTreeNestedDataSource<StorageTree> = new MatTreeNestedDataSource<StorageTree>();
   treeControl = new NestedTreeControl<StorageTree>(node => node.children);
 
@@ -29,7 +31,6 @@ export class LocationTreeComponent implements OnInit, OnChanges {
     } else if (this.trees.length === 1) {
       this.treeControl.expand(this.trees[0])
     }
-
   }
 
   hasChild = (_, node: StorageTree) => node.children.length > 0

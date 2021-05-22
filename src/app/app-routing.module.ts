@@ -21,6 +21,7 @@ import {UserLogsComponent} from './components/user-logs/user-logs.component';
 import {AllObjectsOutComponent} from './components/all-objects-out/all-objects-out.component';
 import {GuestsComponent} from './components/users/guests.component';
 import {ViewUserComponent} from './components/users/view-user/view-user.component';
+import {AllObjectsComponent} from './components/object-types/all-objects/all-objects.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,7 @@ const routes: Routes = [
   {path: 'object-types/:typeId', component: ShowObjectTypeComponent, canActivate: [PermissionAuthGuard]},
   {path: 'object-types/edit/:typeId', component: CreateObjectTypeComponent, canActivate: [PermissionAuthGuard]},
 
+  {path: 'objects', component: AllObjectsComponent, canActivate: [PermissionAuthGuard]},
   {path: 'objects/:id', component: ObjectComponent, canActivate: [PermissionAuthGuard]},
   {path: 'objects/update/:objectId', component: UpdateObjectComponent, canActivate: [PermissionAuthGuard]},
 

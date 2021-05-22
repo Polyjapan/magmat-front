@@ -1,0 +1,5 @@
+<h1>Tous les objets</h1>
+
+<ng-template #loading><mat-spinner></mat-spinner></ng-template>
+
+<app-objects-list *ngIf="objects$ | async ; let objects ; else loading" [objects]="objects"></app-objects-list>

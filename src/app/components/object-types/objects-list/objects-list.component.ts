@@ -1,36 +1,30 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, ViewChild} from '@angular/core';
 import {CompleteObject, CompleteObjectWithUser, statusToString} from '../../../data/object';
 import {storageLocationToString} from 'src/app/data/storage-location';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {normalizeString} from '../../../utils/normalize.string';
 
 @Component({
   selector: 'app-objects-list',
   templateUrl: './objects-list.component.html',
   styleUrls: ['./objects-list.component.css']
 })
-export class ObjectsListComponent implements OnChanges, OnInit {
+export class ObjectsListComponent implements OnChanges, AfterViewInit {
   @Input() fullWidth: boolean = false;
   @Input() objects: (CompleteObject | CompleteObjectWithUser)[];
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  dataSource: MatTableDataSource<CompleteObject | CompleteObjectWithUser>;
+  dataSource: MatTableDataSource<CompleteObject | CompleteObjectWithUser> = new MatTableDataSource();
 
   constructor() {
   }
 
-  ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.objects);
-  }
-
-  getObjectId(o: (CompleteObject | CompleteObjectWithUser)) {
-    const object = (o instanceof CompleteObjectWithUser || (o as any).user) ? ((o as CompleteObjectWithUser).object) : o as CompleteObject;
-    return object.object.objectId;
-  }
-
   get columns() {
     const hasUsers = this.objects.filter(o => (o instanceof CompleteObjectWithUser || (o as any).user)).length > 0;
-    const base =  ['assetTag', 'name', 'inConvStorage', 'plannedUse', 'reservedFor', 'status'];
+    const base = ['assetTag', 'name', 'inConvStorage', 'plannedUse', 'reservedFor', 'status'];
 
     if (hasUsers) {
       base.push('user');
@@ -40,6 +34,28 @@ export class ObjectsListComponent implements OnChanges, OnInit {
     // base.push('actions');
     return base;
 
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    this.dataSource.sortingDataAccessor = this.dataAccessor;
+
+    this.dataSource.filterPredicate = (data: (CompleteObject | CompleteObjectWithUser), search: string) => {
+      const query = normalizeString(search.toLowerCase());
+      const element = normalizeString(['assetTag', 'name', 'reservedFor'].map(s => this.dataAccessor(data, s)).join(' ').toLowerCase());
+
+      return !query.split(' ').find(word => !element.includes(word))
+    }
+
+
+    this.ngOnChanges({});
+  }
+
+  getObjectId(o: (CompleteObject | CompleteObjectWithUser)) {
+    const object = (o instanceof CompleteObjectWithUser || (o as any).user) ? ((o as CompleteObjectWithUser).object) : o as CompleteObject;
+    return object.object.objectId;
   }
 
   dataAccessor(_o: (CompleteObject | CompleteObjectWithUser), column: string): string {
@@ -59,7 +75,7 @@ export class ObjectsListComponent implements OnChanges, OnInit {
       case 'inConvStorage':
         return storageLocationToString(o.inconvStorageLocationObject);
       case 'name':
-        return o.objectType.name + ' ' + o.object.suffix;
+        return o?.objectType?.name + ' ' + o.object.suffix;
       case 'reservedFor':
         return o.reservedFor ? o.reservedFor.details.firstName + ' ' + o.reservedFor.details.lastName : '';
       default:
@@ -69,13 +85,6 @@ export class ObjectsListComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes) {
     this.dataSource.data = this.objects;
-    this.dataSource.sort = this.sort;
-    this.dataSource.sortingDataAccessor = this.dataAccessor;
-
-    this.dataSource.filterPredicate = (data: (CompleteObject | CompleteObjectWithUser), search: string) =>
-      ['name']
-        .map(s => this.dataAccessor(data, s))
-        .join(' ').toLowerCase().includes(search.toLowerCase());
   }
 
 }

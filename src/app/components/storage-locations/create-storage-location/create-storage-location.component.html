@@ -4,7 +4,7 @@
   <mat-spinner></mat-spinner>
 </ng-template>
 
-<form mat-dialog-content (ngSubmit)="submit($event)" #ngform="ngForm" *ngIf="storageLocation && eventId !== undefined ; else loading">
+<form mat-dialog-content (ngSubmit)="submit($event)" #ngform="ngForm" *ngIf="storageLocation ; else loading">
 
   <mat-form-field style="width: 100%;">
     <input matInput placeholder="Nom" [(ngModel)]="storageLocation.storageName" name="name" required maxlength="100">
@@ -12,7 +12,7 @@
 
   <app-select-storage label="Stockage parent" [(selected)]="storageLocation.parentStorageId" [excludeChildrenOf]="storageLocation.storageId" (selectedObjectChange)="parent = $event"></app-select-storage>
 
-  <mat-checkbox name="inConv" [ngModel]="parent ? parent.event !== undefined : inConv" (ngModelChange)="inConv = $event"
+  <mat-checkbox name="inConv" [ngModel]="parent ? parent.event !== undefined : inConv" (ngModelChange)="inConv = $event" *ngIf="eventId"
                 [disabled]="storageLocation.parentStorageId"
                 [matTooltip]="storageLocation.parentStorageId ? 'Vous ne pouvez changer cette valeur que pour les stockages de premier niveau' : ''"
   >

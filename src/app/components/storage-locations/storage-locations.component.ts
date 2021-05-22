@@ -5,6 +5,7 @@ import {StorageTree} from '../../data/storage-location';
 import {MatDialog} from '@angular/material/dialog';
 import {CreateStorageLocationComponent} from './create-storage-location/create-storage-location.component';
 import {tap} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-storage-locations',
@@ -14,11 +15,11 @@ import {tap} from 'rxjs/operators';
 export class StorageLocationsComponent implements OnInit {
   storageLocations: Observable<StorageTree[]>;
 
-  constructor(private locations: StorageLocationsService, private dialog: MatDialog) {
+  constructor(private locations: StorageLocationsService, private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
-    this.storageLocations = this.locations.getStorages().pipe(tap(t => console.log(t)));
+    this.storageLocations = this.locations.getStorages();
   }
 
   create() {
@@ -29,4 +30,7 @@ export class StorageLocationsComponent implements OnInit {
     this.locations.refresh();
   }
 
+  goTo($event: number) {
+    this.router.navigate(['/', 'storages', $event])
+  }
 }
