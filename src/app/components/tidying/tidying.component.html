@@ -39,8 +39,8 @@
   <mat-tree [dataSource]="tree" [treeControl]="treeControl">
 
     <!-- This is the tree node template for leaf nodes -->
-    <mat-tree-node #elem *matTreeNodeDef="let node" [class.no-child]="elem.parentElement.tagName === 'MAT-TREE'" matTreeNodeToggle>
-      {{node.storage?.storageName ?? node.loan?.externalLoan?.loanTitle ?? node.suffix}}
+    <mat-tree-node #elem *matTreeNodeDef="let node" [class.no-child]="elem.parentElement.tagName === 'MAT-TREE'" matTreeNodeToggle class="hover" [routerLink]="['/', 'objects', node.objectId]">
+      <app-status-label [status]="node.status" style="margin-right: 1em;"></app-status-label> {{node.suffix ?? '[unknown object]'}}
     </mat-tree-node>
 
     <!-- This is the tree node template for expandable nodes -->
@@ -49,7 +49,7 @@
         <button mat-icon-button matTreeNodeToggle>
           <mat-icon class="mat-icon-rtl-mirror">{{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}</mat-icon>
         </button>
-        {{node.storage?.storageName ?? node.loan?.externalLoan?.loanTitle ?? node.suffix}}
+        {{node.storage?.storageName ?? node.loan?.externalLoan?.loanTitle ?? node.suffix ?? (node.leaf?.length ? (node.leaf[0].objectId ? 'Objets' : 'Cible') : '???') }}
       </div>
       <!-- There is inline padding applied to this div using styles.
           This padding value depends on the mat-icon-button width.  -->
