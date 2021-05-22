@@ -36,11 +36,6 @@
     <td mat-cell *matCellDef="let element">  {{dataAccessor(element, 'reservedFor')}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="depositPlace">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Lieu de dépose </th>
-    <td mat-cell *matCellDef="let element"> {{dataAccessor(element, 'depositPlace')}} </td>
-  </ng-container>
-
   <ng-container matColumnDef="user">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Utilisateur </th>
     <td mat-cell *matCellDef="let element"> {{dataAccessor(element, 'user')}} </td>

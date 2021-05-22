@@ -18,7 +18,7 @@
     <app-select-object-type [(selectedType)]="object.objectType"></app-select-object-type>
 
     <mat-form-field>
-      <mat-label>Description (héritée par défaut du type d'objet)</mat-label>
+      <mat-label>Description (héritée par défaut de la catégorie)</mat-label>
       <textarea matInput placeholder="{{object.objectType.description}}" [(ngModel)]="object.object.description" name="description"></textarea>
     </mat-form-field>
 

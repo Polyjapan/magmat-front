@@ -1,10 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectsService} from '../../../services/objects.service';
-import {ObjectType} from '../../../data/object-type';
-import {storageLocationToString} from '../../../data/storage-location';
+import {
+  objectHasParentObjectType,
+  lastChild,
+  ObjectType,
+  ObjectTypeAncestry,
+  ObjectTypeTree,
+  objectTypeToString
+} from '../../../data/object-type';
+import {Storage, storageLocationToString, StorageTree} from '../../../data/storage-location';
 import {CompleteObject} from '../../../data/object';
 import Swal from 'sweetalert2';
+import {ObjectTypesService} from '../../../services/object-types.service';
+import {Observable, partition} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+import {CreateStorageLocationComponent} from '../../storage-locations/create-storage-location/create-storage-location.component';
+import {MatDialog} from '@angular/material/dialog';
+import {CreateObjectTypeComponent} from '../create-object-type/create-object-type.component';
 
 @Component({
   selector: 'app-show-object-type',
@@ -12,43 +25,74 @@ import Swal from 'sweetalert2';
   styleUrls: ['./show-object-type.component.css']
 })
 export class ShowObjectTypeComponent implements OnInit {
-  objectType: ObjectType;
   storageLocationToString = storageLocationToString;
-  objects: CompleteObject[] = [];
   id: number;
   deleting: boolean;
 
-  constructor(private route: ActivatedRoute, private objectsService: ObjectsService, private router: Router) {
-  }
+  objectTypeToString = objectTypeToString;
+  errors: Observable<string>;
+  tree$: Observable<ObjectTypeTree>;
+  parents$: Observable<ObjectTypeAncestry>;
+  items$: Observable<CompleteObject[]>;
+  displayAll: boolean = true;
 
-  get objectTypeData(): [string, string, (string | number)[]?][] {
-    const objectType = this.objectType;
+  lastChild = lastChild
 
-    const arr: [string, string, (string | number)[]?][] = [
-      objectType.description ? ['DESCRIPTION', objectType.description] : undefined,
-      objectType.partOfLoanObject ? ['EMPRUNT PARENT', objectType.partOfLoanObject?.externalLoan?.loanTitle, ['/', 'external-loans', objectType.partOfLoan]] : undefined,
-      objectType.requiresSignature ? ['PARTICULARITÉS', 'Signature obligatoire'] : undefined
-    ];
-
-    return arr.filter(e => e);
+  constructor(private route: ActivatedRoute, private objectsService: ObjectsService, private objectTypeService: ObjectTypesService,
+              private router: Router, private dialog: MatDialog) {
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.id = Number.parseInt(map.get('typeId'), 10);
-      this.objectsService.getObjectType(this.id).subscribe(tpe => this.objectType = tpe);
-      this.refreshObjects();
+
+      this.tree$ = undefined;
+      this.parents$ = undefined;
+      this.items$ = undefined;
+
+
+      this.refresh();
     });
   }
 
-  refreshObjects() {
-    this.objectsService.getObjectsForType(this.id).subscribe(objs => this.objects = objs);
+  refresh() {
+    const [succ, err] = partition(this.objectTypeService.getObjectTypeTree(this.id), el => (el ?? null) !== null)
+
+    this.tree$ = succ.pipe();
+    this.errors = err.pipe(map(err => "Impossible de trouver cette catégorie."))
+
+    this.items$ = this.tree$.pipe(switchMap(v => this.objectsService.getObjects()
+      .pipe(map(allObj => allObj.filter(o => objectHasParentObjectType(o.objectTypeAncestry, this.id))))))
+    this.parents$ = this.objectTypeService.getObjectTypeWithParents(this.id);
   }
+
+
+  objectTypeData(objectType: ObjectTypeAncestry): [string, string, (string | number)[]?][] {
+    const arr: [string, string, (string | number)[]?][] = [
+      objectType.objectType.description ? ['DESCRIPTION', objectType.objectType.description] : undefined,
+      objectType.objectType.partOfLoanObject ? ['EMPRUNT PARENT', objectType.objectType.partOfLoanObject?.externalLoan?.loanTitle, ['/', 'external-loans', objectType.objectType.partOfLoan]] : undefined,
+    ];
+
+    return arr.filter(e => e);
+  }
+
+  update(ot: ObjectTypeAncestry) {
+    const tree = {...lastChild(ot) }
+    this.dialog.open(CreateObjectTypeComponent, {data: tree});
+  }
+
+  create(ot: ObjectTypeAncestry) {
+    const tree = lastChild(ot);
+    const data = new ObjectType();
+    data.parentObjectTypeId = tree.objectTypeId;
+    this.dialog.open(CreateObjectTypeComponent, {data: data});
+  }
+
 
   delete() {
     Swal.fire({
       titleText: 'Voulez vous vraiment faire cela ?',
-      text: 'Le type d\'objet sera caché des listes, et tous les objets encore dans cet objet passeront à l\'état remisé (supprimé - irréversible !).',
+      text: 'La catégorie d\'objet sera caché des listes, et tous les objets encore dans cette catégorie passeront à l\'état remisé (supprimé - irréversible !).',
       icon: 'warning',
       confirmButtonText: 'Oui, je le veux',
       cancelButtonText: 'Non surtout pas !',
@@ -61,7 +105,7 @@ export class ShowObjectTypeComponent implements OnInit {
         }
         this.deleting = true;
 
-        this.objectsService.deleteObjectType(this.id)
+        this.objectTypeService.deleteObjectType(this.id)
           .subscribe(_ => {
             this.router.navigate(['..'], {relativeTo: this.route});
           }, _ => {

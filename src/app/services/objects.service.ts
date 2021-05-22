@@ -12,16 +12,18 @@ import {CompleteObjectComment} from '../data/object-comment';
 import {EventsService} from './events.service';
 import {StorageTree} from '../data/storage-location';
 import {LoansService} from './loans.service';
+import {ObjectTypesService} from './object-types.service';
 
 @Injectable({providedIn: 'root'})
 export class ObjectsService {
   private storagesWithParents: Observable<Map<number, StorageTree>>;
   private embedExternalLoan: OperatorFunction<ObjectType[], ObjectType[]>;
-  private embedStorageListInObject: OperatorFunction<CompleteObject[], CompleteObject[]>;
-  private embedStorageInObject: OperatorFunction<CompleteObject, CompleteObject>;
+  private embedStorageAndTypeInObjects: OperatorFunction<CompleteObject[], CompleteObject[]>;
+  private embedStorageAndTypeInObject: OperatorFunction<CompleteObject, CompleteObject>;
 
 
-  constructor(private http: HttpClient, private events: EventsService, private storages: StorageLocationsService, private loans: LoansService) {
+  constructor(private http: HttpClient, private events: EventsService, private storages: StorageLocationsService,
+              private loans: LoansService, private objectTypes: ObjectTypesService) {
     this.storagesWithParents = storages.getStoragesWithParents();
     this.embedExternalLoan = switchMap(objects => this.loans.getLoansMap().pipe(map(loans => objects.map(obj => {
       if (obj.partOfLoan) {
@@ -30,25 +32,31 @@ export class ObjectsService {
       return obj;
     }))));
 
-    this.embedStorageListInObject = switchMap(objects => this.storagesWithParents.pipe(map(locations => objects.map(obj => {
-      if (obj.object.storageLocation) {
-        obj.storageLocationObject = locations.get(obj.object.storageLocation);
-      }
-      if (obj.object.inconvStorageLocation) {
-        obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation);
-      }
-      return obj;
-    }))));
+    this.embedStorageAndTypeInObjects = switchMap(objects =>
+      this.objectTypes.getObjectTypesWithParents().pipe(switchMap(types =>
+        this.storagesWithParents.pipe(map(locations => objects.map(obj => {
+          if (obj.object.storageLocation) {
+            obj.storageLocationObject = locations.get(obj.object.storageLocation);
+          }
+          if (obj.object.inconvStorageLocation) {
+            obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation);
+          }
+          obj.objectTypeAncestry = types.get(obj.object.objectTypeId);
+          return obj;
+        })))
+      ))
+    );
 
-    this.embedStorageInObject = switchMap(obj => this.storagesWithParents.pipe(map(locations => {
+    this.embedStorageAndTypeInObject = switchMap(obj => this.objectTypes.getObjectTypeWithParents(obj.object.objectTypeId).pipe(switchMap(type => this.storagesWithParents.pipe(map(locations => {
       if (obj.object.storageLocation) {
         obj.storageLocationObject = locations.get(obj.object.storageLocation);
       }
       if (obj.object.inconvStorageLocation) {
         obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation);
       }
+      obj.objectTypeAncestry = type
       return obj;
-    })));
+    })))));
   }
 
 
@@ -61,15 +69,6 @@ export class ObjectsService {
 
   getTidyingData(inverted: boolean, leftDepth: number, rightDepth: number): Observable<TidyingTree[]> {
     return this.http.get<TidyingTree[]>(environment.apiurl + '/objects/tidying?inverted=' + inverted + '&leftDepth=' + leftDepth + '&rightDepth=' + rightDepth);
-  }
-
-  createOrUpdateObjectType(type: ObjectType): Observable<number> {
-    if (type.objectTypeId) {
-      const id = type.objectTypeId;
-      return this.http.put(environment.apiurl + '/objects/types/' + type.objectTypeId, type).pipe(map(u => id));
-    } else {
-      return this.http.post<number>(environment.apiurl + '/objects/types', type);
-    }
   }
 
   getObjectType(id: number): Observable<ObjectType> {
@@ -86,10 +85,6 @@ export class ObjectsService {
     return this.http.put<void>(environment.apiurl + '/objects/' + object.object.objectId, object.object);
   }
 
-  deleteObjectType(id: number): Observable<void> {
-    return this.http.delete<void>(environment.apiurl + '/objects/types/' + id);
-  }
-
   getSimpleObjectType(id: number): Observable<ObjectType> {
     return this.http.get<ObjectType>(environment.apiurl + '/objects/types/' + id);
   }
@@ -97,12 +92,12 @@ export class ObjectsService {
   // Objects
   getObjectsForType(typeId: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-type/complete/' + typeId)
-      .pipe(this.embedStorageListInObject);
+      .pipe(this.embedStorageAndTypeInObjects);
   }
 
   getObjectsLoanedToUser(userId: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/loanedTo/' + userId)
-      .pipe(this.embedStorageListInObject);
+      .pipe(this.embedStorageAndTypeInObjects);
   }
 
   getObjectsLoaned(): Observable<CompleteObjectWithUser[]> {
@@ -129,17 +124,17 @@ export class ObjectsService {
 
   getObjects(): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/complete')
-      .pipe(this.embedStorageListInObject);
+      .pipe(this.embedStorageAndTypeInObjects);
   }
 
   getObjectsForLocation(location: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-location/complete/' + location)
-      .pipe(this.embedStorageListInObject);
+      .pipe(this.embedStorageAndTypeInObjects);
   }
 
   getObjectsForLoan(loan: number): Observable<CompleteObject[]> {
     return this.http.get<CompleteObject[]>(environment.apiurl + '/objects/by-loan/complete/' + loan)
-      .pipe(this.embedStorageListInObject);
+      .pipe(this.embedStorageAndTypeInObjects);
   }
 
   getObjectLogs(typeId: number): Observable<ObjectLogWithUser[]> {
@@ -152,7 +147,7 @@ export class ObjectsService {
 
   getObjectById(objectId: number): Observable<CompleteObject> {
     return this.http.get<CompleteObject>(environment.apiurl + '/objects/complete/' + objectId)
-      .pipe(this.embedStorageInObject);
+      .pipe(this.embedStorageAndTypeInObject);
   }
 
   createObjects(objects: SingleObject[]): Observable<ObjectCreateResult> {
@@ -174,7 +169,7 @@ export class ObjectsService {
 
   getObjectByTag(tag: string): Observable<CompleteObject> {
     return this.http.get<CompleteObject>(environment.apiurl + '/objects/by-tag/' + tag)
-      .pipe(this.embedStorageInObject);
+      .pipe(this.embedStorageAndTypeInObject);
     ;
   }
 }

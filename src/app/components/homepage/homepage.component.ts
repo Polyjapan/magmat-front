@@ -64,7 +64,7 @@ export class HomepageComponent implements OnInit {
       return false;
     }
 
-    const targetStatuses = this.quickLoanFoundObjects.map(e => e.objectType.requiresSignature);
+    const targetStatuses = this.quickLoanFoundObjects.map(e => e.object.requiresSignature);
     return targetStatuses.indexOf(true) !== -1 && this.targetState === ObjectStatus.OUT;
   }
 
@@ -96,7 +96,7 @@ export class HomepageComponent implements OnInit {
 
     if (this.requiresSignature) {
       const sgnObjects = this.quickLoanFoundObjects
-        .filter(o => o.objectType.requiresSignature).map(o => o.objectType.name + ' ' + o.object.suffix).join(', ');
+        .filter(o => o.object.requiresSignature).map(o => o.objectType.name + ' ' + o.object.suffix).join(', ');
       const snapObjects = this.quickLoanFoundObjects;
       const snapState = this.targetState;
       requestSignature(this.dialog, sgnObjects,
@@ -124,7 +124,7 @@ export class HomepageComponent implements OnInit {
       if (data.value) {
         const observables = objects.map(o =>
           this.objectsService
-            .changeState(o.object.objectId, targetState, userId, o.objectType.requiresSignature ? signature : undefined)
+            .changeState(o.object.objectId, targetState, userId, o.object.requiresSignature ? signature : undefined)
             .pipe(
               map(res => ({obj: o, success: true})),
               catchError(err => of({obj: o, success: false}))

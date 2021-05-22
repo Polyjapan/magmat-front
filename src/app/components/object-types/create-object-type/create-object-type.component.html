@@ -1,43 +1,41 @@
-<mat-spinner *ngIf="!type"></mat-spinner>
+<h2 mat-dialog-title>{{isUpdate ? 'Modifier une' : 'Créer une nouvelle' }} catégorie d'objets</h2>
 
-<ng-container *ngIf="type">
 
-  <h1>{{isUpdate ? "Modifier" : "Créer"}} un type d'objets</h1>
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>
 
-  <p>Ce formulaire vous permet de {{isUpdate ? "modifier" : "créer"}} un <b>type d'objets</b>. Un type d'objets regroupe
+<mat-dialog-content *ngIf="objectType ; else loading">
+
+  <p>Ce formulaire vous permet de {{isUpdate ? "modifier" : "créer"}} une catégorie d'objet. Une catégorie d'objets regroupe
     tous les objets qui ont, globalement, les mêmes caractéristiques : nom, lieu de stockage...</p>
-  <p *ngIf="!isUpdate">Une fois le type créé, vous pourrez créer plusieurs objets au sein de ce type, puis leur donner
+  <p *ngIf="!isUpdate">Une fois la catégorie créée, vous pourrez créer plusieurs objets au sein de cette catégorie, puis leur donner
     des <i>asset tags</i>, identifiants uniques pour ces objets (en général, indiqué sur un
     code barre).</p>
-  <p>Même si les objets d'un même type ont en général les mêmes caractéristiques, il est possible de redéfinir un de ces
+  <p>Même si les objets d'une même catégorie ont en général les mêmes caractéristiques, il est possible de redéfinir un de ces
     paramètres pour un des objets. Si, par exemple, un des objets <i>tablette</i>
     est stocké à un endroit différent du reste, vous pourrez changer cette valeur directement sur l'objet, et n'avez pas
     besoin de changer ça au niveau du type d'objet/créer un nouveau type
     d'objet.</p>
 
   <form #form="ngForm">
-    <h2>Informations sur l'objet</h2>
     <mat-form-field>
-      <mat-label>Nom de l'objet</mat-label>
-      <input matInput placeholder="Transpalette" required [(ngModel)]="type.name" name="name">
+      <mat-label>Nom</mat-label>
+      <input matInput placeholder="Transpalette" required [(ngModel)]="objectType.name" name="name">
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Description</mat-label>
       <textarea matInput placeholder="Un truc qui roule et qui sert à déplacer des palettes"
-                [(ngModel)]="type.description" name="description"></textarea>
+                [(ngModel)]="objectType.description" name="description"></textarea>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)]="type.requiresSignature" name="requiresSignature">Demander une signature pour la prise et
-      le rendu de l'objet
-    </mat-checkbox>
+    <app-select-object-type></app-select-object-type>
 
-    <h2>Rangement de l'objet</h2>
-    <p>Ces informations sont facultatives. Vous pouvez les modifier ultérieurement si vous ne les connaissez pas
-      entièrement.</p>
+    <h4>Prêt parent</h4>
+    <p>Information facultative. Si vous la renseignez, tous les objets de la catégories, toutes les sous catégories, ainsi que tous les objets des sous catégories seront aussi liés à ce prêt, et ces objets/catégories ne seront pas visibles dans d'autres événements ou une fois le prêt rendu.</p>
 
-
-    <app-select-loan fxFlex="1 1 40%" [(selected)]="type.partOfLoan"></app-select-loan>
+    <app-select-loan [(selected)]="objectType.partOfLoan"></app-select-loan>
 
     <br>
 
@@ -61,4 +59,4 @@
 
   </form>
 
-</ng-container>
+</mat-dialog-content>

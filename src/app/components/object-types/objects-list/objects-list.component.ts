@@ -30,7 +30,7 @@ export class ObjectsListComponent implements OnChanges, OnInit {
 
   get columns() {
     const hasUsers = this.objects.filter(o => (o instanceof CompleteObjectWithUser || (o as any).user)).length > 0;
-    const base =  ['assetTag', 'name', 'inConvStorage', 'plannedUse', 'reservedFor', 'depositPlace', 'status'];
+    const base =  ['assetTag', 'name', 'inConvStorage', 'plannedUse', 'reservedFor', 'status'];
 
     if (hasUsers) {
       base.push('user');

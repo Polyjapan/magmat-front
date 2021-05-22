@@ -1,11 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {ObjectsService} from '../../../services/objects.service';
 import {StorageLocationsService} from '../../../services/storage-locations.service';
 import {LoansService} from '../../../services/loans.service';
-import {ObjectType} from '../../../data/object-type';
-import { MatDialog } from '@angular/material/dialog';
+import {ObjectType, ObjectTypeAncestry} from '../../../data/object-type';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ObjectTypesService} from '../../../services/object-types.service';
+import {Storage} from '../../../data/storage-location';
 
 
 @Component({
@@ -13,28 +15,35 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './create-object-type.component.html',
   styleUrls: ['./create-object-type.component.css']
 })
-export class CreateObjectTypeComponent implements OnInit {
-  type = new ObjectType();
+export class CreateObjectTypeComponent {
+  objectType: ObjectType;
+  parent: ObjectTypeAncestry;
+
   sending = false;
 
-  constructor(private objects: ObjectsService, private storagesService: StorageLocationsService, private loansService: LoansService,
-              private dialog: MatDialog, private route: ActivatedRoute, private router: Router) {
+  constructor(private objects: ObjectsService, private objectTypes: ObjectTypesService, private storagesService: StorageLocationsService, private loansService: LoansService,
+              private dialog: MatDialog, private route: ActivatedRoute, private router: Router,
+              private dialogRef: MatDialogRef<CreateObjectTypeComponent>, @Inject(MAT_DIALOG_DATA) private data?: ObjectType) {
+
+    if (data) {
+      if (data.parentObjectTypeId) {
+        const s = this.objectTypes.getObjectTypeWithParents(data.parentObjectTypeId).subscribe(r => {
+          this.parent = r;
+          this.objectType = data;
+          s.unsubscribe()
+        })
+      } else {
+        this.objectType = data;
+      }
+    } else {
+      this.objectType = new ObjectType();
+    }
   }
 
   get isUpdate(): boolean {
-    return this.type.objectTypeId !== null && this.type.objectTypeId !== undefined;
+    return this.objectType.objectTypeId !== null && this.objectType.objectTypeId !== undefined;
   }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(map => {
-      if (map.has('typeId')) {
-        this.type = undefined;
-        this.objects.getSimpleObjectType(Number.parseInt(map.get('typeId'), 10)).subscribe(tpe => this.type = tpe);
-      } else {
-        this.type.requiresSignature = false;
-      }
-    });
-  }
 
   create(next: 'stay' | 'scan' | 'list' | 'page') {
     if (this.sending) {
@@ -42,13 +51,13 @@ export class CreateObjectTypeComponent implements OnInit {
     }
 
     this.sending = true;
-    this.objects.createOrUpdateObjectType(this.type).subscribe(id => {
+    this.objectTypes.createOrUpdateObjectType(this.objectType).subscribe(id => {
 
       switch (next) {
         case 'stay':
           Swal.fire({title: 'Objet ajouté', icon: 'success', timer: 3000, timerProgressBar: true}).then(() => {
             this.sending = false;
-            this.type = new ObjectType();
+            this.objectType = new ObjectType();
           });
           break;
         case 'scan':

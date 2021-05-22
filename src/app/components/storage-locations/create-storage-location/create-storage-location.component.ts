@@ -22,9 +22,10 @@ export class CreateStorageLocationComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) private data?: Storage) {
     if (data) {
       if (data.parentStorageId) {
-        this.service.getStorageWithParents(data.parentStorageId).subscribe(r => {
+        const s = this.service.getStorageWithParents(data.parentStorageId).subscribe(r => {
           this.parent = r;
           this.storageLocation = data;
+          s.unsubscribe()
         })
       } else {
         this.storageLocation = data;

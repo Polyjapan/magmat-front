@@ -34,6 +34,7 @@ export class ShowStorageLocationComponent implements OnInit {
   locationWithParents: Observable<StorageTree>;
   items: Observable<CompleteObject[]>;
 
+  // TODO - use objects-list instead
   dataSource: MatTableDataSource<CompleteObject> = new MatTableDataSource();
 
   displayAll: boolean = true;

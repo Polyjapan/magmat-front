@@ -9,6 +9,7 @@ import {StorageLocationsService} from '../../../services/storage-locations.servi
 import Swal from 'sweetalert2';
 import {SelectObjectTypeComponent} from '../../selectors/select-object-type/select-object-type.component';
 import {Observable} from 'rxjs';
+import {ObjectTypesService} from '../../../services/object-types.service';
 
 @Component({
   selector: 'app-view-external-loan',
@@ -28,7 +29,7 @@ export class ViewExternalLoanComponent implements OnInit {
   selectedType: ObjectType;
   @ViewChild(SelectObjectTypeComponent) selectObjectTypeComponent: SelectObjectTypeComponent;
 
-  constructor(private ar: ActivatedRoute, private ls: LoansService, private os: ObjectsService, private sls: StorageLocationsService) {
+  constructor(private ar: ActivatedRoute, private ls: LoansService, private os: ObjectsService, private ots: ObjectTypesService, private sls: StorageLocationsService) {
   }
 
   isPickedUp(loan: CompleteExternalLoan) {
@@ -135,7 +136,7 @@ export class ViewExternalLoanComponent implements OnInit {
     }
 
     this.creating = true;
-    this.os.createOrUpdateObjectType(this.createdType).subscribe(id => {
+    this.ots.createOrUpdateObjectType(this.createdType).subscribe(id => {
       Swal.fire({title: 'Objet ajouté', icon: 'success', timer: 3000, timerProgressBar: true}).then(() => {
         this.creating = false;
         this.refreshTypes();

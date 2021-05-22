@@ -1,6 +1,6 @@
 import {StorageTree} from './storage-location';
 import {CompleteExternalLoan} from './external-loan';
-import {ObjectType} from './object-type';
+import {ObjectType, ObjectTypeAncestry} from './object-type';
 import {UserProfile} from './user';
 
 export enum ObjectStatus {
@@ -41,6 +41,7 @@ export class SingleObject {
 export class CompleteObject {
   object: SingleObject;
   objectType: ObjectType;
+  objectTypeAncestry?: ObjectTypeAncestry;
   storageLocationObject?: StorageTree;
   inconvStorageLocationObject?: StorageTree;
   partOfLoanObject?: CompleteExternalLoan;

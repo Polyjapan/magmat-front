@@ -1,63 +1,69 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Storage, StorageTree} from '../data/storage-location';
 import {environment} from '../../environments/environment';
 import {map, shareReplay, switchMap} from 'rxjs/operators';
 import {EventsService} from './events.service';
+import {ObjectType, ObjectTypeAncestry, ObjectTypeTree} from '../data/object-type';
+import {LoansService} from './loans.service';
 
 @Injectable({providedIn: 'root'})
-export class StorageLocationsService {
+export class ObjectTypesService {
   private refresh$ = new BehaviorSubject(0);
-  private trees$: Observable<StorageTree[]>;
-  private treesMap$: Observable<Map<number, StorageTree>>;
-  private storagesWithParents$: Observable<Map<number, StorageTree>>;
+  private trees$: Observable<ObjectTypeTree[]>;
+  private treesMap$: Observable<Map<number, ObjectTypeTree>>;
+  private typesWithParents: Observable<Map<number, ObjectTypeAncestry>>;
   private lastPull = 0;
 
-  constructor(private http: HttpClient, events: EventsService) {
+  constructor(private http: HttpClient, events: EventsService, loans: LoansService) {
     const refresh = this.refresh$.pipe(switchMap(_ => events.getCurrentEventId()));
 
     this.trees$ = refresh.pipe(
       switchMap((evId) => {
         const getParam = (evId ? '?eventId=' + evId : '');
-        return this.http.get<StorageTree[]>(environment.apiurl + '/storage/tree' + getParam)
+        return this.http.get<ObjectTypeTree[]>(environment.apiurl + '/objects/types/tree' + getParam);
       }),
+      switchMap(objects => loans.getLoansMap().pipe(map(loans => objects.map(obj => {
+        if (obj.objectType.partOfLoan) {
+          obj.objectType.partOfLoanObject = loans.get(obj.objectType.partOfLoan);
+        }
+        return obj;
+      })))),
       shareReplay(1)
     );
 
     this.treesMap$ = this.trees$.pipe(
       map(locations => {
-        const locToAdd: StorageTree[] = [];
+        const locToAdd: ObjectTypeTree[] = [];
         locations.forEach(l => locToAdd.push(l));
 
-        const map = new Map<number, StorageTree>();
+        const map = new Map<number, ObjectTypeTree>();
         while (locToAdd.length !== 0) {
           const elem = locToAdd.pop();
           elem.children.forEach(c => locToAdd.push(c));
-          map.set(elem.storageId, elem);
+          map.set(elem.objectType.objectTypeId, elem);
         }
 
         return map;
       })
     );
 
-    this.storagesWithParents$ = this.treesMap$.pipe(map(m => {
-      const returnMap = new Map<number, StorageTree>();
+    this.typesWithParents = this.treesMap$.pipe(map(m => {
+      const returnMap = new Map<number, ObjectTypeAncestry>();
 
       for (let entry of m.entries()) {
 
         let elem = entry[1];
-        let tree: StorageTree = null;
+        let tree: ObjectTypeAncestry = null;
         while (elem != null) {
-          const swp = new StorageTree();
-          swp.storageId = elem.storageId;
-          swp.event = elem.event;
-          swp.storageName = elem.storageName;
-          swp.parentStorageId = elem.parentStorageId;
-          swp.children = (tree == null ? [] : [tree]);
+          const swp = new ObjectTypeAncestry();
+          swp.objectType = elem.objectType;
+          if (tree) {
+            swp.child = tree;
+          }
 
           tree = swp;
-          elem = m.get(elem.parentStorageId);
+          elem = m.get(elem.objectType.parentObjectTypeId);
         }
 
         returnMap.set(entry[0], tree);
@@ -66,40 +72,31 @@ export class StorageLocationsService {
     }));
   }
 
-  getStorages(): Observable<StorageTree[]> {
+  getObjectTypes(): Observable<ObjectTypeTree[]> {
     this.refreshIfNeeded();
     return this.trees$;
   }
 
-  getStorageTree(storage: number): Observable<StorageTree> {
+  getObjectTypeTree(type: number): Observable<ObjectTypeTree> {
     this.refreshIfNeeded();
-    return this.treesMap$.pipe(map(m => m.get(storage)));
+    return this.treesMap$.pipe(map(m => m.get(type)));
   }
 
-  getStorageByParent(parent?: number): Observable<StorageTree[]> {
-    return this.getStorages().pipe(map(lst => lst.filter(elem => elem.parentStorageId === parent)));
+  getObjectType(type: number): Observable<ObjectType> {
+    return this.getObjectTypeTree(type).pipe(map(t => t?.objectType));
   }
 
-  getStorageWithParents(storage: number): Observable<StorageTree> {
-    this.refreshIfNeeded();
-    return this.storagesWithParents$.pipe(map(m => m.get(storage)));
+  getObjectTypesByParent(parent?: number): Observable<ObjectTypeTree[]> {
+    return this.getObjectTypes().pipe(map(lst => lst.filter(elem => elem.objectType.parentObjectTypeId === parent)));
   }
 
-  getStoragesWithParents(inevent?: boolean, eventId?: number): Observable<Map<number, StorageTree>> {
+  getObjectTypeWithParents(type: number): Observable<ObjectTypeAncestry> {
+    return this.getObjectTypesWithParents().pipe(map(m => m.get(type)));
+  }
+
+  getObjectTypesWithParents(): Observable<Map<number, ObjectTypeAncestry>> {
     this.refreshIfNeeded();
-    if (inevent === undefined && eventId === undefined) {
-      return this.storagesWithParents$;
-    } else {
-      return this.storagesWithParents$.pipe(map(m => {
-        const copy = new Map<number, StorageTree>();
-        m.forEach((elem, key) => {
-          if (elem.event === eventId || elem.event === undefined && inevent === false) {
-            copy.set(key, elem);
-          }
-        });
-        return copy;
-      }));
-    }
+    return this.typesWithParents;
   }
 
   refresh() {
@@ -107,24 +104,18 @@ export class StorageLocationsService {
     this.refresh$.next(0);
   }
 
-  createUpdateStorage(loc: Storage): Observable<void> {
-    if (loc.storageId) {
-      return this.http.put<void>(environment.apiurl + '/storage/' + loc.storageId, loc);
+  createOrUpdateObjectType(type: ObjectType): Observable<number> {
+    if (type.objectTypeId) {
+      const id = type.objectTypeId;
+      return this.http.put(environment.apiurl + '/objects/types/' + type.objectTypeId, type).pipe(map(u => id));
     } else {
-      return this.http.post<void>(environment.apiurl + '/storage', loc);
+      return this.http.post<number>(environment.apiurl + '/objects/types', type);
     }
   }
 
-  deleteStorage(loc: number): Observable<void> {
-    return this.http.delete<void>(environment.apiurl + '/locations/' + loc);
+  deleteObjectType(id: number): Observable<void> {
+    return this.http.delete<void>(environment.apiurl + '/objects/types/' + id);
   }
-
-  moveItems(loc: number, items: string[], moveType: boolean, moveAll: boolean): Observable<void> {
-    return this.http.post<void>(environment.apiurl + '/locations/move/' + loc, {
-      items, moveType, moveAll
-    });
-  }
-
 
   private refreshIfNeeded() {
     const now = Date.now();

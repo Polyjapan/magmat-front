@@ -1,64 +1,72 @@
-<mat-spinner *ngIf="!objectType"></mat-spinner>
+<mat-spinner *ngIf="!(parents$ | async) && !(errors | async)"></mat-spinner>
 
-<div style="float: right;">
-  <button mat-raised-button [routerLink]="['..', 'edit', objectType.objectTypeId]" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier</button>
-  <button mat-raised-button (click)="delete()" color="accent"><mat-icon>delete</mat-icon> Supprimer</button>
-</div>
-<h1>Type d'objets #{{objectType.objectTypeId}} :: {{objectType.name}}</h1>
-<br>
+<ng-container *ngIf="errors | async ; let err">
+  <h1>Une erreur s'est produite</h1>
+  <p>{{err }}</p>
+</ng-container>
 
-<div *ngIf="objectType" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
-
-  <div fxFlex>
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Objets du type</mat-card-title>
-      </mat-card-header>
-
-      <app-objects-list class="fullWidth" [fullWidth]="true" [objects]="objects"></app-objects-list>
-
-    </mat-card>
+<ng-container *ngIf="parents$ | async ; let parent">
+  <div style="float: right;">
+    <button mat-raised-button (click)="update(parent)" color="primary" style="margin-right: 10px"><mat-icon>edit</mat-icon> Modifier</button>
+    <button mat-raised-button (click)="create(parent)" color="accent" style="margin-right: 10px"><mat-icon>add</mat-icon> Créer un nouveau</button>
+    <button mat-raised-button (click)="delete()" color="warn"><mat-icon>delete</mat-icon> Supprimer</button>
   </div>
+  <h1>Catégorie {{objectTypeToString(parent)}}</h1>
+  <br>
 
-  <div fxFlex fxLayout="column" fxLayoutGap="20px">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Propriétés du type d'objet</mat-card-title>
-      </mat-card-header>
-      <mat-table mat-card-content [dataSource]="objectTypeData" class="fullWidth">
-        <ng-container matColumnDef="property">
-          <mat-cell *matCellDef="let elem"><b>{{elem[0]}}</b></mat-cell>
-        </ng-container>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
 
-        <ng-container matColumnDef="value">
-          <mat-cell *matCellDef="let elem">{{elem[1]}} </mat-cell>
-        </ng-container>
+    <div fxFlex>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Objets du type</mat-card-title>
+        </mat-card-header>
 
-        <mat-row style="height: 40px" *matRowDef="let row; columns: ['property', 'value'];" [routerLink]="row[2]"
-                 [class.hover]="row[2]"></mat-row>
-      </mat-table>
+        <ng-template #loadingItems><mat-spinner></mat-spinner></ng-template>
+        <app-objects-list class="fullWidth" [fullWidth]="true" *ngIf="items$ | async ; let items ; else loadingItems" [objects]="items"></app-objects-list>
 
-      <mat-card-actions>
-        <button [routerLink]="['..', 'edit', objectType.objectTypeId]" mat-button>MODIFIER</button>
-        <button (click)="delete()" mat-button>SUPPRIMER</button>
-      </mat-card-actions>
-    </mat-card>
+      </mat-card>
+    </div>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Ajout rapide d'objets</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Les objets ainsi ajoutés auront tous leurs paramètres par défaut. Le suffixe de l'objet est généré à partir
-          du préfixe de suffixe, et d'un numéro qui est incrémenté pour chaque objet ajouté. Le préfixe de suffixe est
-          facultatif.</p>
-        <p><i>Exemple: si le préfixe de suffixe est "Asus" et le numéro de départ "03", les objets auront pour nom
-          <b>{{objectType.name}} Asus 03</b>, <b>{{objectType.name}} Asus 04</b>, ...</i></p>
-        <app-quick-item-create [objectType]="objectType" (createSuccess)="refreshObjects()"
-                               style="width: 100%;"></app-quick-item-create>
-      </mat-card-content>
-    </mat-card>
+    <div fxFlex fxLayout="column" fxLayoutGap="20px">
+      <mat-card *ngIf="objectTypeData(parent).length > 0">
+        <mat-card-header>
+          <mat-card-title>Propriétés</mat-card-title>
+        </mat-card-header>
+        <mat-table mat-card-content [dataSource]="objectTypeData(parent)" class="fullWidth">
+          <ng-container matColumnDef="property">
+            <mat-cell *matCellDef="let elem"><b>{{elem[0]}}</b></mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="value">
+            <mat-cell *matCellDef="let elem">{{elem[1]}} </mat-cell>
+          </ng-container>
+
+          <mat-row style="height: 40px" *matRowDef="let row; columns: ['property', 'value'];" [routerLink]="row[2]"
+                   [class.hover]="row[2]"></mat-row>
+        </mat-table>
+
+        <mat-card-actions>
+          <button [routerLink]="['..', 'edit', id]" mat-button>MODIFIER</button>
+          <button (click)="delete()" mat-button>SUPPRIMER</button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Ajout rapide d'objets</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Les objets ainsi ajoutés auront tous leurs paramètres par défaut. Le suffixe de l'objet est généré à partir
+            du préfixe de suffixe, et d'un numéro qui est incrémenté pour chaque objet ajouté. Le préfixe de suffixe est
+            facultatif.</p>
+          <p><i>Exemple: si le préfixe de suffixe est "Asus" et le numéro de départ "03", les objets auront pour nom
+            <b>{{lastChild(parent).name}} Asus 03</b>, <b>{{lastChild(parent).name}} Asus 04</b>, ...</i></p>
+          <app-quick-item-create [objectType]="lastChild(parent)" (createSuccess)="refresh()"
+                                 style="width: 100%;"></app-quick-item-create>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
   </div>
-
-</div>
-
+</ng-container>
