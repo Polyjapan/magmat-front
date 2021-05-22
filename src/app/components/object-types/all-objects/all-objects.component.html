@@ -1,5 +1,7 @@
 <h1>Tous les objets</h1>
 
-<ng-template #loading><mat-spinner></mat-spinner></ng-template>
+<ng-container *ngIf="!(objects$ | async)">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-container>
 
-<app-objects-list *ngIf="objects$ | async ; let objects ; else loading" [objects]="objects"></app-objects-list>
+<app-objects-list [objects]="(objects$ | async) ?? []"></app-objects-list>

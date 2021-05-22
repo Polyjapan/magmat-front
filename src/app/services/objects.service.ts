@@ -39,18 +39,18 @@ export class ObjectsService {
       this.objectTypes.getObjectTypesWithParents().pipe(switchMap(types =>
         this.loans.getLoansMap().pipe(switchMap(loans =>
           this.storagesWithParents.pipe(map(locations => objects.map(obj => {
-            if (obj.object.storageLocation) {
-              obj.storageLocationObject = locations.get(obj.object.storageLocation);
-            }
-            if (obj.object.inconvStorageLocation) {
-              obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation);
-            }
-            obj.objectTypeAncestry = types.get(obj.object.objectTypeId);
-            obj.objectType = lastChild(obj.objectTypeAncestry);
-            obj.partOfLoanObject = obj.objectType.partOfLoanObject ?? loans.get(obj.object.partOfLoan ?? -1);
+              if (obj.object.storageLocation) {
+                obj.storageLocationObject = locations.get(obj.object.storageLocation);
+              }
+              if (obj.object.inconvStorageLocation) {
+                obj.inconvStorageLocationObject = locations.get(obj.object.inconvStorageLocation);
+              }
+              obj.objectTypeAncestry = types.get(obj.object.objectTypeId);
+              obj.objectType = lastChild(obj.objectTypeAncestry);
+              obj.partOfLoanObject = obj.objectType.partOfLoanObject ?? loans.get(obj.object.partOfLoan ?? -1);
 
-            return obj;
-          })))))
+              return obj;
+            })))))
       ))
     );
 
