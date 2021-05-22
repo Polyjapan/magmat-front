@@ -9,4 +9,5 @@ export class UserProfile {
   id: number;
   email: string;
   details: UserDetails;
+  staffNumber?: number;
 }

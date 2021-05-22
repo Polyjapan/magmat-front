@@ -7,12 +7,12 @@
     <mat-card>
       <mat-card-title>Changement d'état rapide</mat-card-title>
 
-      <app-select-object [(selected)]="quickLoanTag" (selectedObject)="quickLoanObject = $event"></app-select-object>
+      <app-select-object #quickChangeState (selectedObjectChange)="quickLoanObject = $event"></app-select-object>
 
       <p *ngIf="quickLoanObject && quickLoanObject.object.description"><b>Description : </b>{{quickLoanObject.object.description}}</p>
 
       <app-quick-changestate *ngIf="quickLoanObject" [object]="quickLoanObject"
-                             (update)="quickLoanTag = undefined"></app-quick-changestate>
+                             (update)="quickChangeState.reset()"></app-quick-changestate>
     </mat-card>
   </div>
   <div fxFlex>
@@ -52,7 +52,7 @@
     <mat-card>
       <mat-card-title>Accès rapide</mat-card-title>
 
-      <app-select-object (selectedObject)="redirectTo($event)"></app-select-object>
+      <app-select-object (selectedObjectChange)="redirectTo($event)"></app-select-object>
     </mat-card>
 
     <mat-card style="margin-top: 10px;">

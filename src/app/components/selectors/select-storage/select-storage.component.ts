@@ -29,7 +29,7 @@ export class SelectStorageComponent extends AbstractSelectorComponent<StorageTre
   }
 
 
-  toString(v: StorageTree): string {
+  toSearchableString(v: StorageTree): string {
     return storageLocationToString(v, undefined);
   }
 

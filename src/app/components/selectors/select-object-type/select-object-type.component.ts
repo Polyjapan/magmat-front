@@ -18,7 +18,7 @@ export class SelectObjectTypeComponent extends AbstractSelectorComponent<ObjectT
     super();
   }
 
-  toString(v: ObjectTypeAncestry): string {
+  toSearchableString(v: ObjectTypeAncestry): string {
     return objectTypeToString(v, undefined);
   }
 

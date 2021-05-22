@@ -1,16 +1,42 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {NgModel} from '@angular/forms';
-import {Observable, Subscriber} from 'rxjs';
-import {debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {Observable} from 'rxjs';
 import {CompleteObject} from '../../../data/object';
 import {ObjectsService} from '../../../services/objects.service';
+import {AbstractSelectorComponent} from '../abstract-selector/abstract-selector.component';
 
 @Component({
   selector: 'app-select-object',
-  templateUrl: './select-object.component.html',
+  templateUrl: '../abstract-selector/abstract-selector.component.html',
   styleUrls: ['./select-object.component.css']
 })
-export class SelectObjectComponent implements OnInit, OnChanges {
+export class SelectObjectComponent extends AbstractSelectorComponent<CompleteObject> {
+
+  defaultLabel: string = 'Choisir un objet (asset tag ou nom)';
+
+  autoSelect = true;
+
+  constructor(private service: ObjectsService) {
+    super();
+  }
+
+  toSearchableString(v: CompleteObject): string {
+    return v ? (v.object.assetTag ?? '') + ' ' + v.objectType.name + ' ' + v.object.suffix : undefined;
+  }
+
+  getPossibleValues(): Observable<CompleteObject[]> {
+    return this.service.getObjects();
+  }
+
+  getId(v: CompleteObject): number {
+    return v?.object?.objectId;
+  }
+
+  displayValue(val?: [number, CompleteObject]): string {
+    const v = val ? val[1] : undefined;
+    return v ? v.objectType.name + ' ' + v.object.suffix + ' (' + (v.object.assetTag ?? 'no tag') + ')' : undefined;
+  }
+
+  /*
   @Input() label = 'Choisir un objet';
   @Output() selectedObject = new EventEmitter<CompleteObject>();
   @Input() selected: string;
@@ -53,5 +79,5 @@ export class SelectObjectComponent implements OnInit, OnChanges {
     if (changes.selected) {
       this.update(changes.selected.currentValue as string);
     }
-  }
+  }*/
 }

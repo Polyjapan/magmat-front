@@ -4,10 +4,11 @@
 
   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayValue"
-                    (optionSelected)="onValueChange($event.option.value)">
+                    (optionSelected)="onValueChange($event.option.value)"
+                    [autoActiveFirstOption]="autoSelect">
     <mat-option *ngFor="let location of filteredValues | async"
                 [value]="location">{{displayValue(location)}}</mat-option>
   </mat-autocomplete>
 
-  <mat-error>Aucun stockage trouvé</mat-error>
+  <mat-error>Aucune entrée correspondante trouvée.</mat-error>
 </mat-form-field>

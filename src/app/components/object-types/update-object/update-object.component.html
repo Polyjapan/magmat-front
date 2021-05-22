@@ -34,7 +34,7 @@
     </mat-form-field>
 
 
-    <app-select-user label="Objet réservé pour..." [(userId)]="object.object.reservedFor" [allowGuests]="false"></app-select-user>
+    <app-select-user label="Objet réservé pour..." [(selected)]="object.object.reservedFor" [allowGuests]="false"></app-select-user>
 
     <h2>Rangement de l'objet</h2>
     <p>Ces informations sont facultatives. Par défaut, l'objet hérite des informations de son <strong>type parent</strong>. Il est recommandé de ne pas modifier ces informations depuis ce formulaire, mais depuis le formulaire de déplacement rapide. A vos risques et périls...</p>
